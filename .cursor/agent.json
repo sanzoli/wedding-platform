@@ -1,0 +1,7 @@
+{
+    "autoRun": false,
+    "maxFiles": 3,
+    "maxChangesPerFile": 10,
+    "allowedDirs": ["app", "resources/js", "routes"],
+    "ignoredDirs": ["vendor", "node_modules"]
+}

@@ -1,0 +1,10 @@
+{
+    "defaultMode": "ask",
+    "allowWrite": false,
+    "fileContextStrategy": "minimal",
+    "preferredLanguages": ["php", "vue", "js"],
+    "style": {
+        "php": "laravel",
+        "vue": "script-setup"
+    }
+}
