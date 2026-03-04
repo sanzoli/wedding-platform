@@ -20,7 +20,7 @@ class StoreBudgetRequest extends FormRequest
         return [
             'name' => 'required|string|max:80',
             'importance' => ['nullable', Rule::in(Importance::names())],
-            'expected_amount' => 'bail|nullable|numeric|decimal:0,2|between:0,9999999999999999'
+            'expected_amount' => 'bail|nullable|numeric|decimal:0,2|between:0,9999999999999999',
         ];
     }
 }

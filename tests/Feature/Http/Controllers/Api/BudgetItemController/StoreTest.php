@@ -2,8 +2,8 @@
 
 use App\Models\User;
 use Illuminate\Support\Str;
-use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
+
 use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\assertDatabaseHas;
 
@@ -116,7 +116,7 @@ test('does not store budget item with invalid expected amount', function ($inval
     assertDatabaseCount('budget_items', 0);
 })->with([
     'not numeric' => ['string', 'The expected amount field must be a number.'],
-    'more than 2 decimals' => [ .1234, 'The expected amount field must have 0-2 decimal places.'],
-    'negative number' => [ -1, 'The expected amount field must be between 0 and 9999999999999999.'],
+    'more than 2 decimals' => [.1234, 'The expected amount field must have 0-2 decimal places.'],
+    'negative number' => [-1, 'The expected amount field must be between 0 and 9999999999999999.'],
     'number too big' => [10000000000000000, 'The expected amount field must be between 0 and 9999999999999999.'],
 ]);

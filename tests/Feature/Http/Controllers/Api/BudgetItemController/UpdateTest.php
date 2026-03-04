@@ -5,6 +5,7 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
+
 use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\assertDatabaseMissing;
@@ -12,14 +13,14 @@ use function Pest\Laravel\assertDatabaseMissing;
 test('updates budget item', function () {
     $item = BudgetItem::factory()->create([
         'name' => 'Church',
-        'expected_amount' => 4000
+        'expected_amount' => 4000,
     ]);
 
     Sanctum::actingAs(User::factory()->create(), ['*']);
     $response = $this->putJson(route('api.budgetItems.update', ['budgetItem' => $item->id]), [
         'name' => 'Iglesia',
         'expected_amount' => 2000,
-        'importance' => 'Normal'
+        'importance' => 'Normal',
     ]);
 
     $response->assertOk()
@@ -42,7 +43,7 @@ test('updates budget item', function () {
 test('can update only budget item name', function () {
     $item = BudgetItem::factory()->create([
         'name' => 'Church',
-        'expected_amount' => 4000
+        'expected_amount' => 4000,
     ]);
 
     Sanctum::actingAs(User::factory()->create(), ['*']);
@@ -64,19 +65,19 @@ test('can update only budget item name', function () {
     assertDatabaseHas('budget_items', [
         'name' => 'Iglesia',
         'expected_amount' => 4000,
-        'importance' => null
+        'importance' => null,
     ]);
 });
 
 test('can update only budget item expected amount', function () {
     $item = BudgetItem::factory()->create([
         'name' => 'Church',
-        'expected_amount' => 4000
+        'expected_amount' => 4000,
     ]);
 
     Sanctum::actingAs(User::factory()->create(), ['*']);
     $response = $this->putJson(route('api.budgetItems.update', ['budgetItem' => $item->id]), [
-        'expected_amount' => 2000
+        'expected_amount' => 2000,
     ]);
 
     $response->assertOk()
@@ -93,19 +94,19 @@ test('can update only budget item expected amount', function () {
     assertDatabaseHas('budget_items', [
         'name' => 'Church',
         'expected_amount' => 2000,
-        'importance' => null
+        'importance' => null,
     ]);
 });
 
 test('can update budget item expected amount to null', function () {
     $item = BudgetItem::factory()->create([
         'name' => 'Church',
-        'expected_amount' => 4000
+        'expected_amount' => 4000,
     ]);
 
     Sanctum::actingAs(User::factory()->create(), ['*']);
     $response = $this->putJson(route('api.budgetItems.update', ['budgetItem' => $item->id]), [
-        'expected_amount' => null
+        'expected_amount' => null,
     ]);
 
     $response->assertOk()
@@ -127,12 +128,12 @@ test('can update budget item expected amount to null', function () {
 test('can update only budget item importance', function () {
     $item = BudgetItem::factory()->create([
         'name' => 'Church',
-        'expected_amount' => 2000
+        'expected_amount' => 2000,
     ]);
 
     Sanctum::actingAs(User::factory()->create(), ['*']);
     $response = $this->putJson(route('api.budgetItems.update', ['budgetItem' => $item->id]), [
-        'importance' => 'High'
+        'importance' => 'High',
     ]);
 
     $response->assertOk()
@@ -149,7 +150,7 @@ test('can update only budget item importance', function () {
     assertDatabaseHas('budget_items', [
         'name' => 'Church',
         'expected_amount' => 2000,
-        'importance' => 'High'
+        'importance' => 'High',
     ]);
 });
 
@@ -157,12 +158,12 @@ test('can update budget item importance to null', function () {
     $item = BudgetItem::factory()->create([
         'name' => 'Church',
         'expected_amount' => 4000,
-        'importance' => 'High'
+        'importance' => 'High',
     ]);
 
     Sanctum::actingAs(User::factory()->create(), ['*']);
     $response = $this->putJson(route('api.budgetItems.update', ['budgetItem' => $item->id]), [
-        'importance' => null
+        'importance' => null,
     ]);
 
     $response->assertOk()
@@ -198,7 +199,7 @@ test('does not update unknown budget item', function () {
 
     Sanctum::actingAs(User::factory()->create(), ['*']);
     $this->putJson(route('api.budgetItems.update', ['budgetItem' => $id]), [
-        'expected_amount' => null
+        'expected_amount' => null,
     ])->assertStatus(404);
 
     assertDatabaseMissing('budget_items', compact('id'));
@@ -252,7 +253,7 @@ test('does not update budget item with invalid expected amount', function ($inva
     assertDatabaseMissing('budget_items', ['expected_amount' => $invalidValue]);
 })->with([
     'not numeric' => ['string', 'The expected amount field must be a number.'],
-    'more than 2 decimals' => [ .1234, 'The expected amount field must have 0-2 decimal places.'],
-    'negative number' => [ -1, 'The expected amount field must be between 0 and 9999999999999999.'],
+    'more than 2 decimals' => [.1234, 'The expected amount field must have 0-2 decimal places.'],
+    'negative number' => [-1, 'The expected amount field must be between 0 and 9999999999999999.'],
     'number too big' => [10000000000000000, 'The expected amount field must be between 0 and 9999999999999999.'],
 ]);

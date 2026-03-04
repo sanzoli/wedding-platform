@@ -8,7 +8,7 @@ class StoreBudgetItem
 {
     public function store(array $params): BudgetItem
     {
-        $budgetItem = new BudgetItem();
+        $budgetItem = new BudgetItem;
 
         $budgetItem->name = $params['name'];
         $budgetItem->importance = $params['importance'] ?? null;

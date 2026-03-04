@@ -14,7 +14,7 @@ class BudgetItemFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'expected_amount' => fake()->randomFloat(2, 100, 999999)
+            'expected_amount' => fake()->randomFloat(2, 100, 999999),
         ];
     }
 }

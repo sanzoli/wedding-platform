@@ -23,10 +23,10 @@ test('lists budget items', function () {
                     ->has('importance')
                     ->has('expected_amount')
                 )->first(fn ($json) => $json
-                    ->where('id', $provider->id)
-                    ->where('name', 'LaLinda')
-                    ->whereNull('importance')
-                    ->where('expected_amount', $provider->expected_amount)
+                ->where('id', $provider->id)
+                ->where('name', 'LaLinda')
+                ->whereNull('importance')
+                ->where('expected_amount', $provider->expected_amount)
                 )
             )->etc()
         );
@@ -47,21 +47,21 @@ test('paginates budget items', function () {
                 ->where('prev', route('api.budgetItems.index', ['page' => 1]))
                 ->whereNull('next')
             )->has('meta', fn ($json) => $json
-                ->where('current_page', 2)
-                ->where('from', 16)
-                ->where('to', 20)
-                ->where('last_page', 2)
-                ->where('total', 20)
-                ->where('path', route('api.budgetItems.index'))
-                ->where('per_page', 15)
-                ->has('links', fn ($json) => $json
-                    ->each(fn ($json) => $json
-                        ->has('url')
-                        ->has('label')
-                        ->has('page')
-                        ->has('active')
-                    )
+            ->where('current_page', 2)
+            ->where('from', 16)
+            ->where('to', 20)
+            ->where('last_page', 2)
+            ->where('total', 20)
+            ->where('path', route('api.budgetItems.index'))
+            ->where('per_page', 15)
+            ->has('links', fn ($json) => $json
+                ->each(fn ($json) => $json
+                    ->has('url')
+                    ->has('label')
+                    ->has('page')
+                    ->has('active')
                 )
+            )
             )
         );
 });
@@ -102,14 +102,14 @@ test('returns empty list when empty', function () {
                 ->whereNull('prev')
                 ->whereNull('next')
             )->has('meta', fn ($json) => $json
-                ->where('current_page', 1)
-                ->whereNull('from')
-                ->whereNull('to')
-                ->where('last_page', 1)
-                ->where('total', 0)
-                ->where('path', route('api.budgetItems.index'))
-                ->where('per_page', 15)
-                ->has('links', 3)
+            ->where('current_page', 1)
+            ->whereNull('from')
+            ->whereNull('to')
+            ->where('last_page', 1)
+            ->where('total', 0)
+            ->where('path', route('api.budgetItems.index'))
+            ->where('per_page', 15)
+            ->has('links', 3)
             )
         );
 });

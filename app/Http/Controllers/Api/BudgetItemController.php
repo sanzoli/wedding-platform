@@ -39,6 +39,7 @@ class BudgetItemController extends Controller
     public function destroy(BudgetItem $budgetItem, DeleteBudgetItem $action)
     {
         $action->delete($budgetItem);
+
         return response()->noContent();
     }
 }

@@ -3,8 +3,8 @@
 use App\Http\Controllers\Api\BudgetItemController;
 use Illuminate\Support\Facades\Route;
 
-Route::name('api.')->group(fn() => [
-    Route::middleware('auth:sanctum')->group(fn() => [
-        Route::apiResource('budgetItems', BudgetItemController::class)
-    ])
+Route::name('api.')->group(fn () => [
+    Route::middleware('auth:sanctum')->group(fn () => [
+        Route::apiResource('budgetItems', BudgetItemController::class),
+    ]),
 ]);
