@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Actions\BudgetItems\DeleteBudgetItem;
 use App\Actions\BudgetItems\SearchBudgetItems;
 use App\Actions\BudgetItems\StoreBudgetItem;
 use App\Actions\BudgetItems\UpdateBudgetItem;
@@ -35,8 +36,9 @@ class BudgetItemController extends Controller
         return $action->update($budgetItem, $request->validated())->toResource();
     }
 
-    public function destroy(BudgetItem $provider)
+    public function destroy(BudgetItem $budgetItem, DeleteBudgetItem $action)
     {
-        //
+        $action->delete($budgetItem);
+        return response()->noContent();
     }
 }
