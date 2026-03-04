@@ -13,6 +13,7 @@ class StoreBudgetItem
 
         $budgetItem->name = $params['name'];
         $budgetItem->status = Status::Pending;
+        $budgetItem->importance = $params['importance'] ?? null;
         $budgetItem->expected_amount = $params['expected_amount'] ?? null;
 
         $budgetItem->save();

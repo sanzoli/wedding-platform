@@ -11,7 +11,8 @@ test('stores budget item', function () {
     Sanctum::actingAs(User::factory()->create(), ['*']);
     $response = $this->postJson(route('api.budgetItems.store'), [
         'name' => 'Iglesia',
-        'expected_amount' => 2000
+        'expected_amount' => 2000,
+        'importance' => 'High',
     ]);
 
     $response->assertCreated();
@@ -19,7 +20,9 @@ test('stores budget item', function () {
     assertDatabaseHas('budget_items', [
         'name' => 'Iglesia',
         'expected_amount' => 2000,
-        'status' => 'Pending'
+        'status' => 'Pending',
+        'importance' => 'High',
+
     ]);
 });
 
@@ -27,13 +30,31 @@ test('stores budget item without expected amount', function () {
     Sanctum::actingAs(User::factory()->create(), ['*']);
     $response = $this->postJson(route('api.budgetItems.store'), [
         'name' => 'Iglesia',
+        'importance' => 'High',
     ]);
 
     $response->assertCreated();
     assertDatabaseCount('budget_items', 1);
     assertDatabaseHas('budget_items', [
         'name' => 'Iglesia',
+        'importance' => 'High',
         'expected_amount' => null,
+    ]);
+});
+
+test('stores budget item without importance', function () {
+    Sanctum::actingAs(User::factory()->create(), ['*']);
+    $response = $this->postJson(route('api.budgetItems.store'), [
+        'name' => 'Iglesia',
+        'expected_amount' => 2000,
+    ]);
+
+    $response->assertCreated();
+    assertDatabaseCount('budget_items', 1);
+    assertDatabaseHas('budget_items', [
+        'name' => 'Iglesia',
+        'expected_amount' => 2000,
+        'importance' => null,
     ]);
 });
 
@@ -51,7 +72,9 @@ test('ignores status when store budget', function () {
                 ->has('id')
                 ->where('name', 'Iglesia')
                 ->where('status', 'Pending')
-                ->where('expected_amount', 2000))
+                ->where('expected_amount', 2000)
+                ->etc()
+            )
         );
 
     assertDatabaseCount('budget_items', 1);
@@ -94,6 +117,19 @@ test('does not store budget item with invalid name', function ($invalidValue, $e
     'not string' => [['array'], 'The name field must be a string.'],
     'too long' => [Str::repeat('a', 81), 'The name field must not be greater than 80 characters.'],
 ]);
+
+test('does not store budget item with invalid importance', function () {
+    Sanctum::actingAs(User::factory()->create(), ['*']);
+    $response = $this->postJson(route('api.budgetItems.store'), [
+        'name' => 'Iglesia',
+        'importance' => 'invalid-value',
+    ]);
+    $response->assertStatus(422)
+        ->assertJsonFragment(['message' => 'The selected importance is invalid.'])
+        ->assertOnlyJsonValidationErrors('importance');
+
+    assertDatabaseCount('budget_items', 0);
+});
 
 test('does not store budget item with invalid expected amount', function ($invalidValue, $errorMessage) {
     Sanctum::actingAs(User::factory()->create(), ['*']);

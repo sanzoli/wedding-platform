@@ -7,7 +7,7 @@ use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
 
 test('shows a budget item', function () {
-    $item = BudgetItem::factory()->create();
+    $item = BudgetItem::factory()->create(['importance' => 'Low']);
 
     Sanctum::actingAs(User::factory()->create(), ['*']);
     $response = $this->getJson(route('api.budgetItems.show', ['budgetItem' => $item->id]));
@@ -18,6 +18,7 @@ test('shows a budget item', function () {
                 ->where('id', $item->id)
                 ->where('name', $item->name)
                 ->where('status', $item->status->name)
+                ->where('importance', $item->importance->name)
                 ->where('expected_amount', $item->expected_amount)
             )
         );
