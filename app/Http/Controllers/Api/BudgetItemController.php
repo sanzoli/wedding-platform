@@ -24,9 +24,9 @@ class BudgetItemController extends Controller
         return $action->store($request->validated())->toResource();
     }
 
-    public function show(BudgetItem $provider)
+    public function show(BudgetItem $budgetItem)
     {
-        //
+        return $budgetItem->toResource();
     }
 
     public function update(UpdateBudgetItemRequest $request, BudgetItem $provider)
