@@ -2,7 +2,6 @@
 
 namespace App\Actions\BudgetItems;
 
-use App\Enum\Status;
 use App\Models\BudgetItem;
 
 class StoreBudgetItem
