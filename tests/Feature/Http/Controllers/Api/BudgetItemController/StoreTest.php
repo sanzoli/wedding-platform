@@ -82,9 +82,9 @@ test('does not store budget item without name', function () {
 
 test('does not store budget item with invalid name', function ($invalidValue, $errorMessage) {
     Sanctum::actingAs(User::factory()->create(), ['*']);
-    $response = $this->postJson(route('api.budgetItems.store', [
+    $response = $this->postJson(route('api.budgetItems.store'), [
         'name' => $invalidValue,
-    ]));
+    ]);
     $response->assertStatus(422)
         ->assertJsonFragment(['message' => $errorMessage])
         ->assertOnlyJsonValidationErrors('name');
@@ -97,10 +97,10 @@ test('does not store budget item with invalid name', function ($invalidValue, $e
 
 test('does not store budget item with invalid expected amount', function ($invalidValue, $errorMessage) {
     Sanctum::actingAs(User::factory()->create(), ['*']);
-    $response = $this->postJson(route('api.budgetItems.store', [
+    $response = $this->postJson(route('api.budgetItems.store'), [
         'name' => 'Iglesia',
         'expected_amount' => $invalidValue,
-    ]));
+    ]);
     $response->assertStatus(422)
         ->assertJsonFragment(['message' => $errorMessage])
         ->assertOnlyJsonValidationErrors('expected_amount');

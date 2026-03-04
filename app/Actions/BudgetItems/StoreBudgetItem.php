@@ -10,6 +10,7 @@ class StoreBudgetItem
     public function store(array $params): BudgetItem
     {
         $budgetItem = new BudgetItem();
+
         $budgetItem->name = $params['name'];
         $budgetItem->status = Status::Pending;
         $budgetItem->expected_amount = $params['expected_amount'] ?? null;
