@@ -20,7 +20,6 @@ test('stores budget item', function () {
     assertDatabaseHas('budget_items', [
         'name' => 'Iglesia',
         'expected_amount' => 2000,
-        'status' => 'Pending',
         'importance' => 'High',
 
     ]);
@@ -55,33 +54,6 @@ test('stores budget item without importance', function () {
         'name' => 'Iglesia',
         'expected_amount' => 2000,
         'importance' => null,
-    ]);
-});
-
-test('ignores status when store budget', function () {
-    Sanctum::actingAs(User::factory()->create(), ['*']);
-    $response = $this->postJson(route('api.budgetItems.store'), [
-        'name' => 'Iglesia',
-        'expected_amount' => 2000,
-        'status' => 'Cancelled'
-    ]);
-
-    $response->assertCreated()
-        ->assertJson(fn (AssertableJson $json) => $json
-            ->has('data', fn ($json) => $json
-                ->has('id')
-                ->where('name', 'Iglesia')
-                ->where('status', 'Pending')
-                ->where('expected_amount', 2000)
-                ->etc()
-            )
-        );
-
-    assertDatabaseCount('budget_items', 1);
-    assertDatabaseHas('budget_items', [
-        'name' => 'Iglesia',
-        'expected_amount' => 2000,
-        'status' => 'Pending'
     ]);
 });
 

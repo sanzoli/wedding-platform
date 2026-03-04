@@ -12,7 +12,6 @@ class BudgetItemResource extends JsonResource
         return [
             'id' => $this->resource->id,
             'name' => $this->resource->name,
-            'status' => $this->resource->status->name,
             'importance' => $this->resource->importance?->name,
             'expected_amount' => $this->resource->expected_amount,
         ];

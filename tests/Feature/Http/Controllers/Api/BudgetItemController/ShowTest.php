@@ -17,7 +17,6 @@ test('shows a budget item', function () {
             ->has('data', fn ($json) => $json
                 ->where('id', $item->id)
                 ->where('name', $item->name)
-                ->where('status', $item->status->name)
                 ->where('importance', $item->importance->name)
                 ->where('expected_amount', $item->expected_amount)
             )

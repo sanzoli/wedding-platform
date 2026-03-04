@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Enum\Status;
 use App\Models\BudgetItem;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -15,7 +14,6 @@ class BudgetItemFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'status' => Status::Pending,
             'expected_amount' => fake()->randomFloat(2, 100, 999999)
         ];
     }

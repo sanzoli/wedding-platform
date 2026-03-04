@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property string $id
  * @property string $name
- * @property Status $status
  * @property ?Importance $importance
  * @property float $expected_amount
  */
@@ -28,7 +27,6 @@ class BudgetItem extends Model
     {
         return [
             'uuid' => AsBinary::uuid(),
-            'status' => Status::class,
             'importance' => Importance::class,
         ];
     }

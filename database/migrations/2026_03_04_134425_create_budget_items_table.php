@@ -14,7 +14,6 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('name', 80);
             $table->enum('importance', Importance::names())->nullable();
-            $table->enum('status', array_column(Status::cases(), 'name'))->default(Status::Pending);
             $table->decimal('expected_amount', 16)->nullable();
             $table->timestamps();
         });

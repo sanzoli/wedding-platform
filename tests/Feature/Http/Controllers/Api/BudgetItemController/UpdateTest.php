@@ -12,7 +12,6 @@ use function Pest\Laravel\assertDatabaseMissing;
 test('updates budget item', function () {
     $item = BudgetItem::factory()->create([
         'name' => 'Church',
-        'status' => 'Paid',
         'expected_amount' => 4000
     ]);
 
@@ -28,7 +27,6 @@ test('updates budget item', function () {
             ->has('data', fn ($json) => $json
                 ->where('id', $item->id)
                 ->where('name', 'Iglesia')
-                ->where('status', 'Paid')
                 ->where('expected_amount', 2000)
                 ->where('importance', 'Normal')
             )
@@ -38,14 +36,12 @@ test('updates budget item', function () {
     assertDatabaseHas('budget_items', [
         'name' => 'Iglesia',
         'expected_amount' => 2000,
-        'status' => 'Paid'
     ]);
 });
 
 test('can update only budget item name', function () {
     $item = BudgetItem::factory()->create([
         'name' => 'Church',
-        'status' => 'Paid',
         'expected_amount' => 4000
     ]);
 
@@ -59,7 +55,6 @@ test('can update only budget item name', function () {
             ->has('data', fn ($json) => $json
                 ->where('id', $item->id)
                 ->where('name', 'Iglesia')
-                ->where('status', 'Paid')
                 ->where('expected_amount', 4000)
                 ->whereNull('importance')
             )
@@ -69,7 +64,6 @@ test('can update only budget item name', function () {
     assertDatabaseHas('budget_items', [
         'name' => 'Iglesia',
         'expected_amount' => 4000,
-        'status' => 'Paid',
         'importance' => null
     ]);
 });
@@ -77,7 +71,6 @@ test('can update only budget item name', function () {
 test('can update only budget item expected amount', function () {
     $item = BudgetItem::factory()->create([
         'name' => 'Church',
-        'status' => 'Paid',
         'expected_amount' => 4000
     ]);
 
@@ -91,7 +84,6 @@ test('can update only budget item expected amount', function () {
             ->has('data', fn ($json) => $json
                 ->where('id', $item->id)
                 ->where('name', 'Church')
-                ->where('status', 'Paid')
                 ->where('expected_amount', 2000)
                 ->whereNull('importance')
             )
@@ -101,7 +93,6 @@ test('can update only budget item expected amount', function () {
     assertDatabaseHas('budget_items', [
         'name' => 'Church',
         'expected_amount' => 2000,
-        'status' => 'Paid',
         'importance' => null
     ]);
 });
@@ -109,7 +100,6 @@ test('can update only budget item expected amount', function () {
 test('can update budget item expected amount to null', function () {
     $item = BudgetItem::factory()->create([
         'name' => 'Church',
-        'status' => 'Paid',
         'expected_amount' => 4000
     ]);
 
@@ -137,7 +127,6 @@ test('can update budget item expected amount to null', function () {
 test('can update only budget item importance', function () {
     $item = BudgetItem::factory()->create([
         'name' => 'Church',
-        'status' => 'Paid',
         'expected_amount' => 2000
     ]);
 
@@ -151,7 +140,6 @@ test('can update only budget item importance', function () {
             ->has('data', fn ($json) => $json
                 ->where('id', $item->id)
                 ->where('name', 'Church')
-                ->where('status', 'Paid')
                 ->where('expected_amount', 2000)
                 ->where('importance', 'High')
             )
@@ -161,7 +149,6 @@ test('can update only budget item importance', function () {
     assertDatabaseHas('budget_items', [
         'name' => 'Church',
         'expected_amount' => 2000,
-        'status' => 'Paid',
         'importance' => 'High'
     ]);
 });
@@ -169,7 +156,6 @@ test('can update only budget item importance', function () {
 test('can update budget item importance to null', function () {
     $item = BudgetItem::factory()->create([
         'name' => 'Church',
-        'status' => 'Paid',
         'expected_amount' => 4000,
         'importance' => 'High'
     ]);

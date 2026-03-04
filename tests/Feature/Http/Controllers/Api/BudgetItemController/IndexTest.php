@@ -20,13 +20,11 @@ test('lists budget items', function () {
                 ->each(fn ($json) => $json
                     ->has('id')
                     ->has('name')
-                    ->has('status')
                     ->has('importance')
                     ->has('expected_amount')
                 )->first(fn ($json) => $json
                     ->where('id', $provider->id)
                     ->where('name', 'LaLinda')
-                    ->where('status', 'Pending')
                     ->whereNull('importance')
                     ->where('expected_amount', $provider->expected_amount)
                 )
