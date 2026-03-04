@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Actions\BudgetItems\SearchBudgetItems;
 use App\Actions\BudgetItems\StoreBudgetItem;
+use App\Actions\BudgetItems\UpdateBudgetItem;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBudgetRequest;
 use App\Http\Requests\UpdateBudgetItemRequest;
@@ -29,9 +30,9 @@ class BudgetItemController extends Controller
         return $budgetItem->toResource();
     }
 
-    public function update(UpdateBudgetItemRequest $request, BudgetItem $provider)
+    public function update(UpdateBudgetItemRequest $request, BudgetItem $budgetItem, UpdateBudgetItem $action)
     {
-        //
+        return $action->update($budgetItem, $request->validated())->toResource();
     }
 
     public function destroy(BudgetItem $provider)
