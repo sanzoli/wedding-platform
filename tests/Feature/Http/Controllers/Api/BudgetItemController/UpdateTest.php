@@ -17,7 +17,7 @@ test('updates budget item', function () {
     ]);
 
     Sanctum::actingAs(User::factory()->create(), ['*']);
-    $response = $this->putJson(route('api.budgetItems.update', ['budgetItem' => $item->id]), [
+    $response = $this->putJson(route('api.items.update', ['item' => $item->id]), [
         'name' => 'Iglesia',
         'expected_amount' => 2000,
         'importance' => 'Normal',
@@ -47,7 +47,7 @@ test('can update only budget item name', function () {
     ]);
 
     Sanctum::actingAs(User::factory()->create(), ['*']);
-    $response = $this->putJson(route('api.budgetItems.update', ['budgetItem' => $item->id]), [
+    $response = $this->putJson(route('api.items.update', ['item' => $item->id]), [
         'name' => 'Iglesia',
     ]);
 
@@ -76,7 +76,7 @@ test('can update only budget item expected amount', function () {
     ]);
 
     Sanctum::actingAs(User::factory()->create(), ['*']);
-    $response = $this->putJson(route('api.budgetItems.update', ['budgetItem' => $item->id]), [
+    $response = $this->putJson(route('api.items.update', ['item' => $item->id]), [
         'expected_amount' => 2000,
     ]);
 
@@ -105,7 +105,7 @@ test('can update budget item expected amount to null', function () {
     ]);
 
     Sanctum::actingAs(User::factory()->create(), ['*']);
-    $response = $this->putJson(route('api.budgetItems.update', ['budgetItem' => $item->id]), [
+    $response = $this->putJson(route('api.items.update', ['item' => $item->id]), [
         'expected_amount' => null,
     ]);
 
@@ -132,7 +132,7 @@ test('can update only budget item importance', function () {
     ]);
 
     Sanctum::actingAs(User::factory()->create(), ['*']);
-    $response = $this->putJson(route('api.budgetItems.update', ['budgetItem' => $item->id]), [
+    $response = $this->putJson(route('api.items.update', ['item' => $item->id]), [
         'importance' => 'High',
     ]);
 
@@ -162,7 +162,7 @@ test('can update budget item importance to null', function () {
     ]);
 
     Sanctum::actingAs(User::factory()->create(), ['*']);
-    $response = $this->putJson(route('api.budgetItems.update', ['budgetItem' => $item->id]), [
+    $response = $this->putJson(route('api.items.update', ['item' => $item->id]), [
         'importance' => null,
     ]);
 
@@ -185,7 +185,7 @@ test('can update budget item importance to null', function () {
 test('does not update budget item when unauthenticated', function () {
     $item = BudgetItem::factory()->create();
 
-    $this->putJson(route('api.budgetItems.update', ['budgetItem' => $item->id]), [
+    $this->putJson(route('api.items.update', ['item' => $item->id]), [
         'name' => 'new-name',
     ])->assertStatus(401);
 
@@ -198,7 +198,7 @@ test('does not update unknown budget item', function () {
     $id = Str::uuid();
 
     Sanctum::actingAs(User::factory()->create(), ['*']);
-    $this->putJson(route('api.budgetItems.update', ['budgetItem' => $id]), [
+    $this->putJson(route('api.items.update', ['item' => $id]), [
         'expected_amount' => null,
     ])->assertStatus(404);
 
@@ -209,7 +209,7 @@ test('does not update budget item with invalid name', function ($invalidValue, $
     $item = BudgetItem::factory()->create();
 
     Sanctum::actingAs(User::factory()->create(), ['*']);
-    $response = $this->putJson(route('api.budgetItems.update', ['budgetItem' => $item->id]), [
+    $response = $this->putJson(route('api.items.update', ['item' => $item->id]), [
         'name' => $invalidValue,
     ]);
     $response->assertStatus(422)
@@ -227,7 +227,7 @@ test('does not update budget item with invalid importance', function () {
     $item = BudgetItem::factory()->create();
 
     Sanctum::actingAs(User::factory()->create(), ['*']);
-    $response = $this->putJson(route('api.budgetItems.update', ['budgetItem' => $item->id]), [
+    $response = $this->putJson(route('api.items.update', ['item' => $item->id]), [
         'importance' => 'invalid-value',
     ]);
     $response->assertStatus(422)
@@ -242,7 +242,7 @@ test('does not update budget item with invalid expected amount', function ($inva
     $item = BudgetItem::factory()->create();
 
     Sanctum::actingAs(User::factory()->create(), ['*']);
-    $response = $this->putJson(route('api.budgetItems.update', ['budgetItem' => $item->id]), [
+    $response = $this->putJson(route('api.items.update', ['item' => $item->id]), [
         'expected_amount' => $invalidValue,
     ]);
     $response->assertStatus(422)
