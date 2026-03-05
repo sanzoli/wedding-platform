@@ -7,7 +7,7 @@ use App\Actions\BudgetItems\SearchBudgetItems;
 use App\Actions\BudgetItems\StoreBudgetItem;
 use App\Actions\BudgetItems\UpdateBudgetItem;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreBudgetRequest;
+use App\Http\Requests\StoreBudgetItemRequest;
 use App\Http\Requests\UpdateBudgetItemRequest;
 use App\Models\BudgetItem;
 use Illuminate\Http\Request;
@@ -21,7 +21,7 @@ class BudgetItemController extends Controller
             ->toResourceCollection();
     }
 
-    public function store(StoreBudgetRequest $request, StoreBudgetItem $action)
+    public function store(StoreBudgetItemRequest $request, StoreBudgetItem $action)
     {
         return $action->store($request->validated())->toResource();
     }

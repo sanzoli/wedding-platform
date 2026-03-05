@@ -6,7 +6,7 @@ use App\Enum\Importance;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreBudgetRequest extends FormRequest
+class StoreBudgetItemRequest extends FormRequest
 {
     protected $stopOnFirstFailure = true;
 
