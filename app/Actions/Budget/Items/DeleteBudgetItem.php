@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Actions\BudgetItems;
+namespace App\Actions\Budget\Items;
 
 use App\Models\BudgetItem;
 
 class DeleteBudgetItem
 {
-    public function delete(BudgetItem $item)
+    public function delete(BudgetItem $item): ?bool
     {
         return $item->delete();
     }

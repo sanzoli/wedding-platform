@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Budget;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\Sanctum;
@@ -9,7 +10,7 @@ use function Pest\Laravel\assertDatabaseHas;
 
 test('stores budget item', function () {
     Sanctum::actingAs(User::factory()->create(), ['*']);
-    $response = $this->postJson(route('api.budgetItems.store'), [
+    $response = $this->postJson(route('api.budgets.items.store', Budget::factory()->create()), [
         'name' => 'Iglesia',
         'expected_amount' => 2000,
         'importance' => 'High',
@@ -27,7 +28,7 @@ test('stores budget item', function () {
 
 test('stores budget item without expected amount', function () {
     Sanctum::actingAs(User::factory()->create(), ['*']);
-    $response = $this->postJson(route('api.budgetItems.store'), [
+    $response = $this->postJson(route('api.budgets.items.store', Budget::factory()->create()), [
         'name' => 'Iglesia',
         'importance' => 'High',
     ]);
@@ -43,7 +44,7 @@ test('stores budget item without expected amount', function () {
 
 test('stores budget item without importance', function () {
     Sanctum::actingAs(User::factory()->create(), ['*']);
-    $response = $this->postJson(route('api.budgetItems.store'), [
+    $response = $this->postJson(route('api.budgets.items.store', Budget::factory()->create()), [
         'name' => 'Iglesia',
         'expected_amount' => 2000,
     ]);
@@ -58,7 +59,7 @@ test('stores budget item without importance', function () {
 });
 
 test('does not store budget item when unauthenticated', function () {
-    $this->postJson(route('api.budgetItems.store'))
+    $this->postJson(route('api.budgets.items.store', Budget::factory()->create()))
         ->assertStatus(401);
 
     assertDatabaseCount('budget_items', 0);
@@ -66,7 +67,7 @@ test('does not store budget item when unauthenticated', function () {
 
 test('does not store budget item without name', function () {
     Sanctum::actingAs(User::factory()->create(), ['*']);
-    $response = $this->postJson(route('api.budgetItems.store'));
+    $response = $this->postJson(route('api.budgets.items.store', Budget::factory()->create()));
 
     $response->assertStatus(422)
         ->assertJsonFragment(['message' => 'The name field is required.'])
@@ -77,7 +78,7 @@ test('does not store budget item without name', function () {
 
 test('does not store budget item with invalid name', function ($invalidValue, $errorMessage) {
     Sanctum::actingAs(User::factory()->create(), ['*']);
-    $response = $this->postJson(route('api.budgetItems.store'), [
+    $response = $this->postJson(route('api.budgets.items.store', Budget::factory()->create()), [
         'name' => $invalidValue,
     ]);
     $response->assertStatus(422)
@@ -92,7 +93,7 @@ test('does not store budget item with invalid name', function ($invalidValue, $e
 
 test('does not store budget item with invalid importance', function () {
     Sanctum::actingAs(User::factory()->create(), ['*']);
-    $response = $this->postJson(route('api.budgetItems.store'), [
+    $response = $this->postJson(route('api.budgets.items.store', Budget::factory()->create()), [
         'name' => 'Iglesia',
         'importance' => 'invalid-value',
     ]);
@@ -105,7 +106,7 @@ test('does not store budget item with invalid importance', function () {
 
 test('does not store budget item with invalid expected amount', function ($invalidValue, $errorMessage) {
     Sanctum::actingAs(User::factory()->create(), ['*']);
-    $response = $this->postJson(route('api.budgetItems.store'), [
+    $response = $this->postJson(route('api.budgets.items.store', Budget::factory()->create()), [
         'name' => 'Iglesia',
         'expected_amount' => $invalidValue,
     ]);

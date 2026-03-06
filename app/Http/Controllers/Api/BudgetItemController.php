@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Actions\BudgetItems\DeleteBudgetItem;
-use App\Actions\BudgetItems\SearchBudgetItems;
-use App\Actions\BudgetItems\StoreBudgetItem;
-use App\Actions\BudgetItems\UpdateBudgetItem;
+use App\Actions\Budget\Items\DeleteBudgetItem;
+use App\Actions\Budget\Items\SearchBudgetItems;
+use App\Actions\Budget\Items\StoreBudgetItem;
+use App\Actions\Budget\Items\UpdateBudgetItem;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreBudgetRequest;
+use App\Http\Requests\StoreBudgetItemRequest;
 use App\Http\Requests\UpdateBudgetItemRequest;
+use App\Models\Budget;
 use App\Models\BudgetItem;
 use Illuminate\Http\Request;
 
@@ -21,24 +22,24 @@ class BudgetItemController extends Controller
             ->toResourceCollection();
     }
 
-    public function store(StoreBudgetRequest $request, StoreBudgetItem $action)
+    public function store(StoreBudgetItemRequest $request, Budget $budget, StoreBudgetItem $action)
     {
-        return $action->store($request->validated())->toResource();
+        return $action->store($budget, $request->validated())->toResource();
     }
 
-    public function show(BudgetItem $budgetItem)
+    public function show(BudgetItem $item)
     {
-        return $budgetItem->toResource();
+        return $item->toResource();
     }
 
-    public function update(UpdateBudgetItemRequest $request, BudgetItem $budgetItem, UpdateBudgetItem $action)
+    public function update(UpdateBudgetItemRequest $request, BudgetItem $item, UpdateBudgetItem $action)
     {
-        return $action->update($budgetItem, $request->validated())->toResource();
+        return $action->update($item, $request->validated())->toResource();
     }
 
-    public function destroy(BudgetItem $budgetItem, DeleteBudgetItem $action)
+    public function destroy(BudgetItem $item, DeleteBudgetItem $action)
     {
-        $action->delete($budgetItem);
+        $action->delete($item);
 
         return response()->noContent();
     }

@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Actions\BudgetItems;
+namespace App\Actions\Budget\Items;
 
+use App\Models\Budget;
 use App\Models\BudgetItem;
 
 class StoreBudgetItem
 {
-    public function store(array $params): BudgetItem
+    public function store(Budget $budget, array $params): BudgetItem
     {
         $budgetItem = new BudgetItem;
 
@@ -14,6 +15,7 @@ class StoreBudgetItem
         $budgetItem->importance = $params['importance'] ?? null;
         $budgetItem->expected_amount = $params['expected_amount'] ?? null;
 
+        $budgetItem->budget()->associate($budget);
         $budgetItem->save();
 
         return $budgetItem;

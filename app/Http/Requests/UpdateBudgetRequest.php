@@ -4,14 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreBudgetRequest extends FormRequest
+class UpdateBudgetRequest extends FormRequest
 {
     protected $stopOnFirstFailure = true;
 
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:60',
+            'name' => 'string|max:60',
             'draft' => 'boolean',
         ];
     }
