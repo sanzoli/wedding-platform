@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Actions\BudgetItems\DeleteBudgetItem;
-use App\Actions\BudgetItems\SearchBudgetItems;
-use App\Actions\BudgetItems\StoreBudgetItem;
-use App\Actions\BudgetItems\UpdateBudgetItem;
+use App\Actions\Budget\Items\DeleteBudgetItem;
+use App\Actions\Budget\Items\SearchBudgetItems;
+use App\Actions\Budget\Items\StoreBudgetItem;
+use App\Actions\Budget\Items\UpdateBudgetItem;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBudgetItemRequest;
 use App\Http\Requests\UpdateBudgetItemRequest;

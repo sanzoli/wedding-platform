@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\BudgetItems;
+namespace App\Actions\Budget\Items;
 
 use App\Models\Budget;
 use App\Models\BudgetItem;
