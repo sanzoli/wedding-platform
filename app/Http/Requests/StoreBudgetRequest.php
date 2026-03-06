@@ -15,7 +15,7 @@ class StoreBudgetRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:60',
-            'draft' => 'boolean'
+            'draft' => 'boolean',
         ];
     }
 }

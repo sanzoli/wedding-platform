@@ -13,7 +13,7 @@ class BudgetResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'draft' => $this->draft,
-            'items' => BudgetItemResource::collection($this->items)
+            'items' => BudgetItemResource::collection($this->items),
         ];
     }
 }

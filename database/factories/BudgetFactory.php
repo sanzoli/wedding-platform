@@ -20,6 +20,6 @@ class BudgetFactory extends Factory
 
     public function draft(): Factory
     {
-        return $this->state(fn() => ['draft' => true]);
+        return $this->state(fn () => ['draft' => true]);
     }
 }

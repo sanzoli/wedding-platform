@@ -33,17 +33,17 @@ test('lists budgets', function () {
                     ->has('draft')
                     ->has('items')
                 )->first(fn ($json) => $json
-                    ->where('name', 'Budget 1')
-                    ->where('draft', false)
-                    ->has('items', 3)
-                    ->has('items', fn ($json) => $json
-                        ->each(fn ($json) => $json
-                            ->has('id')
-                            ->has('name')
-                            ->has('importance')
-                            ->has('expected_amount')
-                        )
-                    )->etc()
+                ->where('name', 'Budget 1')
+                ->where('draft', false)
+                ->has('items', 3)
+                ->has('items', fn ($json) => $json
+                    ->each(fn ($json) => $json
+                        ->has('id')
+                        ->has('name')
+                        ->has('importance')
+                        ->has('expected_amount')
+                    )
+                )->etc()
                 )
             )->etc()
         );
@@ -64,21 +64,21 @@ test('paginates budgets', function () {
                 ->where('prev', route('api.budgets.index', ['page' => 1]))
                 ->whereNull('next')
             )->has('meta', fn ($json) => $json
-                ->where('current_page', 2)
-                ->where('from', 16)
-                ->where('to', 20)
-                ->where('last_page', 2)
-                ->where('total', 20)
-                ->where('path', route('api.budgets.index'))
-                ->where('per_page', 15)
-                ->has('links', fn ($json) => $json
-                    ->each(fn ($json) => $json
-                        ->has('url')
-                        ->has('label')
-                        ->has('page')
-                        ->has('active')
-                    )
+            ->where('current_page', 2)
+            ->where('from', 16)
+            ->where('to', 20)
+            ->where('last_page', 2)
+            ->where('total', 20)
+            ->where('path', route('api.budgets.index'))
+            ->where('per_page', 15)
+            ->has('links', fn ($json) => $json
+                ->each(fn ($json) => $json
+                    ->has('url')
+                    ->has('label')
+                    ->has('page')
+                    ->has('active')
                 )
+            )
             )
         );
 });
@@ -97,14 +97,14 @@ test('returns empty list when empty', function () {
                 ->whereNull('prev')
                 ->whereNull('next')
             )->has('meta', fn ($json) => $json
-                ->where('current_page', 1)
-                ->whereNull('from')
-                ->whereNull('to')
-                ->where('last_page', 1)
-                ->where('total', 0)
-                ->where('path', route('api.budgets.index'))
-                ->where('per_page', 15)
-                ->has('links', 3)
+            ->where('current_page', 1)
+            ->whereNull('from')
+            ->whereNull('to')
+            ->where('last_page', 1)
+            ->where('total', 0)
+            ->where('path', route('api.budgets.index'))
+            ->where('per_page', 15)
+            ->has('links', 3)
             )
         );
 });
