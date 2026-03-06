@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Actions\Budget\StoreBudget;
+use App\Actions\Budget\UpdateBudget;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBudgetRequest;
 use App\Http\Requests\UpdateBudgetRequest;
@@ -25,9 +26,9 @@ class BudgetController extends Controller
         return $budget->toResource();
     }
 
-    public function update(UpdateBudgetRequest $request, Budget $budget)
+    public function update(UpdateBudgetRequest $request, Budget $budget, UpdateBudget $action)
     {
-        //
+        return $action->update($budget, $request->validated())->toResource();
     }
 
     public function destroy(Budget $budget)
