@@ -22,7 +22,7 @@ class BudgetController extends Controller
 
     public function show(Budget $budget)
     {
-        //
+        return $budget->toResource();
     }
 
     public function update(UpdateBudgetRequest $request, Budget $budget)
