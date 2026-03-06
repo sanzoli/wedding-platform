@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('budgets', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name');
+            $table->string('name', 60);
             $table->boolean('draft');
             $table->timestamps();
         });
