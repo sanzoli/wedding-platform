@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Actions\Budget\DeleteBudget;
 use App\Actions\Budget\StoreBudget;
 use App\Actions\Budget\UpdateBudget;
 use App\Http\Controllers\Controller;
@@ -31,8 +32,10 @@ class BudgetController extends Controller
         return $action->update($budget, $request->validated())->toResource();
     }
 
-    public function destroy(Budget $budget)
+    public function destroy(Budget $budget, DeleteBudget $action)
     {
-        //
+        $action->delete($budget);
+
+        return response()->noContent();
     }
 }
