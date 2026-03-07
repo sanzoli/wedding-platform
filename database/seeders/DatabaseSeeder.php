@@ -3,21 +3,22 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Wedding;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
+        User::factory()
+            ->for(Wedding::factory()->create([
+                'name' => 'Lau & David',
+                'date' => '2026-04-08',
+            ]), 'currentWedding')
+            ->create([
+                'name' => 'Sanzoli Admin',
+                'email' => 'sanzoli.team@gmail.com',
+            ]);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
     }
 }

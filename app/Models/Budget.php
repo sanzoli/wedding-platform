@@ -6,12 +6,15 @@ use Database\Factories\BudgetFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property string $id
  * @property string $name
  * @property bool $draft
+ * @property int $wedding_id
+ * @property Wedding $wedding
  */
 class Budget extends Model
 {
@@ -28,5 +31,10 @@ class Budget extends Model
     public function items(): HasMany
     {
         return $this->hasMany(BudgetItem::class);
+    }
+
+    public function wedding(): BelongsTo
+    {
+        return $this->belongsTo(Wedding::class);
     }
 }

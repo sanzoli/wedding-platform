@@ -8,16 +8,16 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('budgets', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('name', 60);
-            $table->boolean('draft');
+        Schema::create('weddings', function (Blueprint $table) {
+            $table->id();
+            $table->string('name', 120);
+            $table->date('date')->nullable();
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('budgets');
+        Schema::dropIfExists('weddings');
     }
 };

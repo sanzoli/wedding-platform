@@ -7,11 +7,14 @@ use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
 
 test('lists budgets', function () {
+    $user = User::factory()->create();
     Budget::factory()
+        ->for($user->currentWedding)
         ->has(BudgetItem::factory()->count(3), 'items')
         ->create();
 
     Budget::factory()
+        ->for($user->currentWedding)
         ->count(4)
         ->draft()
         ->sequence(
@@ -21,11 +24,12 @@ test('lists budgets', function () {
             ['name' => 'Budget 5'],
         )->create();
 
-    Sanctum::actingAs(User::factory()->create(), ['*']);
+    Sanctum::actingAs($user, ['*']);
     $response = $this->getJson(route('api.budgets.index'));
 
     $response->assertOk()
         ->assertJson(fn (AssertableJson $json) => $json
+            ->has('data', 5)
             ->has('data', fn ($json) => $json
                 ->each(fn ($json) => $json
                     ->has('id')
@@ -49,10 +53,35 @@ test('lists budgets', function () {
         );
 });
 
-test('paginates budgets', function () {
-    Budget::factory()->count(20)->create();
+test('lists only current wedding budgets', function () {
+    $user = User::factory()->create();
+    Budget::factory()
+        ->for($user->currentWedding)
+        ->create();
 
-    Sanctum::actingAs(User::factory()->create(), ['*']);
+    Budget::factory()
+        ->count(4)
+        ->draft()
+        ->sequence(
+            ['name' => 'Budget 2'],
+            ['name' => 'Budget 3'],
+        )->create();
+
+    Sanctum::actingAs($user, ['*']);
+    $response = $this->getJson(route('api.budgets.index'));
+
+    $response->assertOk()
+        ->assertJson(fn (AssertableJson $json) => $json
+            ->has('data', 1)
+            ->etc()
+        );
+});
+
+test('paginates budgets', function () {
+    $user = User::factory()->create();
+    Budget::factory()->for($user->currentWedding)->count(20)->create();
+
+    Sanctum::actingAs($user, ['*']);
     $response = $this->getJson(route('api.budgets.index', ['page' => 2]));
 
     $response

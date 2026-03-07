@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Budget;
+use App\Models\Wedding;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -15,6 +16,7 @@ class BudgetFactory extends Factory
         return [
             'name' => 'Budget 1',
             'draft' => false,
+            'wedding_id' => Wedding::factory(),
         ];
     }
 

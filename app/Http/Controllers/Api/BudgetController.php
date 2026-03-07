@@ -9,12 +9,16 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBudgetRequest;
 use App\Http\Requests\UpdateBudgetRequest;
 use App\Models\Budget;
+use Illuminate\Support\Facades\Auth;
 
 class BudgetController extends Controller
 {
     public function index()
     {
-        return Budget::with('items')->paginate()->toResourceCollection();
+        return Budget::with('items')
+            ->where('wedding_id', Auth::user()->current_wedding_id)
+            ->paginate()
+            ->toResourceCollection();
     }
 
     public function store(StoreBudgetRequest $request, StoreBudget $action)

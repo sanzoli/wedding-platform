@@ -8,7 +8,9 @@ use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\assertDatabaseHas;
 
 test('stores budget', function () {
-    Sanctum::actingAs(User::factory()->create(), ['*']);
+    $user = User::factory()->create();
+
+    Sanctum::actingAs($user, ['*']);
     $response = $this->postJson(route('api.budgets.store'), [
         'name' => 'Budget 1',
         'draft' => true,
@@ -19,11 +21,14 @@ test('stores budget', function () {
     assertDatabaseHas('budgets', [
         'name' => 'Budget 1',
         'draft' => true,
+        'wedding_id' => Auth::user()->current_wedding_id,
     ]);
 });
 
 test('stores budget with default draft', function () {
-    Sanctum::actingAs(User::factory()->create(), ['*']);
+    $user = User::factory()->create();
+
+    Sanctum::actingAs($user, ['*']);
     $response = $this->postJson(route('api.budgets.store'), [
         'name' => 'Budget 1',
     ]);
@@ -33,6 +38,7 @@ test('stores budget with default draft', function () {
     assertDatabaseHas('budgets', [
         'name' => 'Budget 1',
         'draft' => false,
+        'wedding_id' => Auth::user()->current_wedding_id,
     ]);
 });
 
