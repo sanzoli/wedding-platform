@@ -1,0 +1,142 @@
+/* Design Tokens
+* Layers: primitives (--p-*) + semantic (shadcn-like)
+* Theme switching: :root = light, .dark = dark
+*/
+
+:root {
+    /* ----------------------------
+   * Primitives: brand palette
+   * Stored as HSL triplets for easy Tailwind integration (h s% l%)
+   * ---------------------------- */
+    --p-teal-900: hsl(184 100% 15%); /* #00454A */
+    --p-teal-700: hsl(181 64% 30%); /* #1B7B7D */
+
+    --p-olive-600: hsl(76 11% 38%); /* #666C56 */
+
+    --p-sand-200: hsl(33 53% 85%); /* #EDDBC5 */
+    --p-gold-500: hsl(32 41% 52%); /* #B78953 */
+
+    --p-orange-600: hsl(21 77% 41%); /* #B95118 */
+    --p-red-600: hsl(8 73% 42%); /* #B8311D */
+    --p-wine-700: hsl(336 57% 29%); /* #742042 */
+
+    /* ----------------------------
+   * Primitives: neutrals (minimal, for “elegant minimal”)
+   * ---------------------------- */
+    --p-neutral-0: hsl(0 0% 100%);
+    --p-neutral-50: hsl(30 20% 98%);
+    --p-neutral-100: hsl(30 15% 95%);
+    --p-neutral-200: hsl(30 10% 90%);
+    --p-neutral-300: hsl(30 8% 82%);
+    --p-neutral-700: hsl(220 10% 35%);
+    --p-neutral-800: hsl(220 15% 20%);
+    --p-neutral-900: hsl(220 20% 12%);
+
+    /* ----------------------------
+   * Typography tokens
+   * ---------------------------- */
+    --font-sans:
+        ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Inter, sans-serif;
+    --font-serif: ui-serif, Georgia, 'Times New Roman', Playfair Display, serif;
+
+    /* ----------------------------
+   * Semantic tokens
+   * Using shadcn-like naming for interoperability
+   * ---------------------------- */
+    --background: var(--p-neutral-50);
+    --foreground: var(--p-neutral-900);
+
+    --card: var(--p-neutral-0);
+    --card-foreground: var(--p-neutral-900);
+
+    --popover: var(--p-neutral-0);
+    --popover-foreground: var(--p-neutral-900);
+
+    --primary: var(--p-teal-900);
+    --primary-foreground: var(--p-neutral-0);
+
+    --secondary: var(--p-sand-200);
+    --secondary-foreground: var(--p-neutral-900);
+
+    --muted: var(--p-neutral-100);
+    --muted-foreground: var(--p-neutral-700);
+
+    --accent: var(--p-gold-500);
+    --accent-foreground: var(--p-neutral-900);
+
+    --destructive: var(--p-red-600);
+    --destructive-foreground: var(--p-neutral-0);
+
+    --border: var(--p-neutral-200);
+    --input: var(--p-neutral-200);
+    --ring: var(--p-teal-700);
+
+    --surface: var(--p-neutral-0);
+    --surface-foreground: var(--p-neutral-900);
+    --hover: var(--p-neutral-100);
+    --hover-foreground: var(--p-neutral-900);
+
+    /* ----------------------------
+   * Sidebar aliases (map sidebar-* to core semantic tokens)
+   * Ensures shadcn sidebar component CSS var references resolve
+   * ---------------------------- */
+    --sidebar: var(--surface);
+    --sidebar-foreground: var(--foreground);
+    --sidebar-primary: var(--primary);
+    --sidebar-primary-foreground: var(--primary-foreground);
+    --sidebar-accent: var(--hover);
+    --sidebar-accent-foreground: var(--hover-foreground);
+    --sidebar-border: var(--border);
+    --sidebar-ring: var(--ring);
+
+    /* ----------------------------
+   * Radii
+   * ---------------------------- */
+    --radius: 1rem;
+}
+
+.dark {
+    /* Dark mode: keep brand identity, shift surfaces/foregrounds */
+    --background: hsl(220 20% 10%);
+    --foreground: hsl(0 0% 98%);
+
+    --card: hsl(220 20% 13%);
+    --card-foreground: hsl(0 0% 98%);
+
+    --popover: hsl(220 20% 13%);
+    --popover-foreground: hsl(0 0% 98%);
+
+    /* Slightly brighter primary for dark contrast */
+    --primary: hsl(181 64% 36%);
+    --primary-foreground: hsl(0 0% 98%);
+
+    --secondary: hsl(220 15% 18%);
+    --secondary-foreground: hsl(0 0% 98%);
+
+    --muted: hsl(220 15% 18%);
+    --muted-foreground: hsl(220 10% 70%);
+
+    --accent: hsl(32 41% 56%);
+    --accent-foreground: hsl(220 20% 10%);
+
+    --destructive: hsl(8 73% 48%);
+    --destructive-foreground: hsl(0 0% 98%);
+
+    --border: hsl(220 15% 22%);
+    --input: hsl(220 15% 22%);
+    --ring: hsl(181 64% 45%);
+
+    --surface: hsl(220 20% 13%);
+    --surface-foreground: hsl(0 0% 98%);
+    --hover: hsl(220 15% 18%);
+    --hover-foreground: hsl(0 0% 98%);
+
+    --sidebar: var(--surface);
+    --sidebar-foreground: var(--foreground);
+    --sidebar-primary: var(--primary);
+    --sidebar-primary-foreground: var(--primary-foreground);
+    --sidebar-accent: var(--hover);
+    --sidebar-accent-foreground: var(--hover-foreground);
+    --sidebar-border: var(--border);
+    --sidebar-ring: var(--ring);
+}
