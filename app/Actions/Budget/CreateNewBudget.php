@@ -5,14 +5,14 @@ namespace App\Actions\Budget;
 use App\Models\Budget;
 use Illuminate\Support\Facades\Auth;
 
-class StoreBudget
+class CreateNewBudget
 {
-    public function store(array $params): Budget
+    public function create(array $input): Budget
     {
         $budget = new Budget;
 
-        $budget->name = $params['name'];
-        $budget->draft = $params['draft'] ?? false;
+        $budget->name = $input['name'];
+        $budget->draft = $input['draft'] ?? false;
         $budget->wedding_id = Auth::user()->current_wedding_id;
 
         $budget->save();

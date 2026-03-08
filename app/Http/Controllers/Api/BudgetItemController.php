@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Actions\Budget\Items\DeleteBudgetItem;
 use App\Actions\Budget\Items\SearchBudgetItems;
-use App\Actions\Budget\Items\StoreBudgetItem;
+use App\Actions\Budget\Items\CreateNewBudgetItem;
 use App\Actions\Budget\Items\UpdateBudgetItem;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBudgetItemRequest;
@@ -22,7 +22,7 @@ class BudgetItemController extends Controller
             ->toResourceCollection();
     }
 
-    public function store(StoreBudgetItemRequest $request, Budget $budget, StoreBudgetItem $action)
+    public function store(StoreBudgetItemRequest $request, Budget $budget, CreateNewBudgetItem $action)
     {
         return $action->store($budget, $request->validated())->toResource();
     }

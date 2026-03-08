@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Actions\Budget\DeleteBudget;
-use App\Actions\Budget\StoreBudget;
+use App\Actions\Budget\CreateNewBudget;
 use App\Actions\Budget\UpdateBudget;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBudgetRequest;
@@ -20,9 +20,9 @@ class BudgetController extends Controller
             ->toResourceCollection();
     }
 
-    public function store(StoreBudgetRequest $request, StoreBudget $action)
+    public function store(StoreBudgetRequest $request, CreateNewBudget $action)
     {
-        return $action->store($request->validated())->toResource();
+        return $action->create($request->validated())->toResource();
     }
 
     public function show(Budget $budget)

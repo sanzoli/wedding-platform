@@ -6,10 +6,10 @@ use App\Models\Budget;
 
 class UpdateBudget
 {
-    public function update(Budget $budget, array $params): Budget
+    public function update(Budget $budget, array $input): Budget
     {
-        $budget->name = $params['name'] ?? $budget->name;
-        $budget->draft = array_key_exists('draft', $params) ? $params['draft'] : $budget->draft;
+        $budget->name = $input['name'] ?? $budget->name;
+        $budget->draft = array_key_exists('draft', $input) ? $input['draft'] : $budget->draft;
 
         $budget->save();
 
