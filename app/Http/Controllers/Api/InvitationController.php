@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Actions\Invitation\CreateNewInvitation;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreInvitationRequest;
 use App\Http\Requests\UpdateInvitationRequest;
@@ -14,9 +15,9 @@ class InvitationController extends Controller
         return Invitation::paginate()->toResourceCollection();
     }
 
-    public function store(StoreInvitationRequest $request)
+    public function store(StoreInvitationRequest $request, CreateNewInvitation $action)
     {
-        //
+        return $action->create($request->validated())->toResource();
     }
 
     public function show(Invitation $invitation)
