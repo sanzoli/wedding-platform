@@ -1,0 +1,85 @@
+<?php
+
+use App\Models\User;
+use Illuminate\Support\Str;
+use Laravel\Sanctum\Sanctum;
+
+use function Pest\Laravel\assertDatabaseCount;
+use function Pest\Laravel\assertDatabaseHas;
+
+test('stores budget', function () {
+    Sanctum::actingAs(User::factory()->create(), ['*']);
+    $response = $this->postJson(route('api.budgets.store'), [
+        'name' => 'Budget 1',
+        'draft' => true,
+    ]);
+
+    $response->assertCreated();
+    assertDatabaseCount('budgets', 1);
+    assertDatabaseHas('budgets', [
+        'name' => 'Budget 1',
+        'draft' => true,
+    ]);
+});
+
+test('stores budget with default draft', function () {
+    Sanctum::actingAs(User::factory()->create(), ['*']);
+    $response = $this->postJson(route('api.budgets.store'), [
+        'name' => 'Budget 1',
+    ]);
+
+    $response->assertCreated();
+    assertDatabaseCount('budgets', 1);
+    assertDatabaseHas('budgets', [
+        'name' => 'Budget 1',
+        'draft' => false,
+    ]);
+});
+
+test('does not store budget when unauthenticated', function () {
+    $this->postJson(route('api.budgets.store'))
+        ->assertStatus(401);
+
+    assertDatabaseCount('budgets', 0);
+});
+
+test('does not store budget without name', function () {
+    Sanctum::actingAs(User::factory()->create(), ['*']);
+    $response = $this->postJson(route('api.budgets.store', [
+        'draft' => true,
+    ]));
+
+    $response->assertStatus(422)
+        ->assertJsonFragment(['message' => 'The name field is required.'])
+        ->assertOnlyJsonValidationErrors('name');
+
+    assertDatabaseCount('budgets', 0);
+});
+
+test('does not store budget with invalid name', function ($invalidValue, $errorMessage) {
+    Sanctum::actingAs(User::factory()->create(), ['*']);
+    $response = $this->postJson(route('api.budgets.store'), [
+        'name' => $invalidValue,
+    ]);
+    $response->assertStatus(422)
+        ->assertJsonFragment(['message' => $errorMessage])
+        ->assertOnlyJsonValidationErrors('name');
+
+    assertDatabaseCount('budgets', 0);
+})->with([
+    'not string' => [['array'], 'The name field must be a string.'],
+    'too long' => [Str::repeat('a', 61), 'The name field must not be greater than 60 characters.'],
+]);
+
+test('does not store budget with invalid draft', function () {
+    Sanctum::actingAs(User::factory()->create(), ['*']);
+    $response = $this->postJson(route('api.budgets.store'), [
+        'name' => 'Budget 1',
+        'draft' => 'string',
+    ]);
+    $response->assertStatus(422)
+        ->assertJsonFragment(['message' => 'The draft field must be true or false.'])
+        ->assertOnlyJsonValidationErrors('draft');
+
+    assertDatabaseCount('budgets', 0);
+});
