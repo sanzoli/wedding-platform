@@ -2,6 +2,7 @@
 
 use App\Models\Budget;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
@@ -10,13 +11,19 @@ use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\assertDatabaseMissing;
 
-test('updates budget', function () {
-    $budget = Budget::factory()->create([
-        'name' => 'Budget 1',
-        'draft' => false,
-    ]);
+beforeEach(function () {
+    $this->user = User::factory()->create();
+    Sanctum::actingAs($this->user, ['*']);
+});
 
-    Sanctum::actingAs(User::factory()->create(), ['*']);
+test('updates budget', function () {
+    $budget = Budget::factory()
+        ->for($this->user->currentWedding)
+        ->create([
+            'name' => 'Budget 1',
+            'draft' => false,
+        ]);
+
     $response = $this->putJson(route('api.budgets.update', $budget), [
         'name' => 'Main Budget',
         'draft' => true,
@@ -41,12 +48,13 @@ test('updates budget', function () {
 });
 
 test('can update only budget name', function () {
-    $budget = Budget::factory()->create([
-        'name' => 'Budget 1',
-        'draft' => true,
-    ]);
+    $budget = Budget::factory()
+        ->for($this->user->currentWedding)
+        ->create([
+            'name' => 'Budget 1',
+            'draft' => true,
+        ]);
 
-    Sanctum::actingAs(User::factory()->create(), ['*']);
     $response = $this->putJson(route('api.budgets.update', $budget), [
         'name' => 'Main Budget',
     ]);
@@ -70,12 +78,13 @@ test('can update only budget name', function () {
 });
 
 test('can update only budget draft', function () {
-    $budget = Budget::factory()->create([
-        'name' => 'Budget 1',
-        'draft' => true,
-    ]);
+    $budget = Budget::factory()
+        ->for($this->user->currentWedding)
+        ->create([
+            'name' => 'Budget 1',
+            'draft' => true,
+        ]);
 
-    Sanctum::actingAs(User::factory()->create(), ['*']);
     $response = $this->putJson(route('api.budgets.update', $budget), [
         'draft' => false,
     ]);
@@ -101,6 +110,7 @@ test('can update only budget draft', function () {
 test('does not update budget when unauthenticated', function () {
     $budget = Budget::factory()->create();
 
+    Auth::forgetUser();
     $this->putJson(route('api.budgets.update', $budget), [
         'name' => 'new-name',
     ])->assertStatus(401);
@@ -113,7 +123,6 @@ test('does not update budget when unauthenticated', function () {
 test('does not update unknown budget', function () {
     $id = Str::uuid();
 
-    Sanctum::actingAs(User::factory()->create(), ['*']);
     $this->putJson(route('api.budgets.update', ['budget' => $id]), [
         'draft' => null,
     ])->assertStatus(404);
@@ -122,9 +131,10 @@ test('does not update unknown budget', function () {
 });
 
 test('does not update budget with invalid name', function ($invalidValue, $errorMessage) {
-    $budget = Budget::factory()->create();
+    $budget = Budget::factory()
+        ->for($this->user->currentWedding)
+        ->create();
 
-    Sanctum::actingAs(User::factory()->create(), ['*']);
     $response = $this->putJson(route('api.budgets.update', $budget), [
         'name' => $invalidValue,
     ]);
@@ -143,9 +153,10 @@ test('does not update budget with invalid name', function ($invalidValue, $error
 ]);
 
 test('does not update budget with invalid draft', function () {
-    $budget = Budget::factory()->create();
+    $budget = Budget::factory()
+        ->for($this->user->currentWedding)
+        ->create();
 
-    Sanctum::actingAs(User::factory()->create(), ['*']);
     $response = $this->putJson(route('api.budgets.update', $budget), [
         'draft' => 'not-bolean',
     ]);

@@ -8,9 +8,10 @@ use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\assertDatabaseMissing;
 
 test('deletes budget', function () {
-    $budget = Budget::factory()->create();
+    $user = User::factory()->create();
+    $budget = Budget::factory()->for($user->currentWedding)->create();
 
-    Sanctum::actingAs(User::factory()->create(), ['*']);
+    Sanctum::actingAs($user, ['*']);
     $this->deleteJson(route('api.budgets.destroy', $budget))
         ->assertNoContent();
 

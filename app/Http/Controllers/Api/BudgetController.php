@@ -16,7 +16,6 @@ class BudgetController extends Controller
     public function index()
     {
         return Budget::with('items')
-            ->where('wedding_id', Auth::user()->current_wedding_id)
             ->paginate()
             ->toResourceCollection();
     }

@@ -3,18 +3,23 @@
 use App\Models\Budget;
 use App\Models\BudgetItem;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
 
+beforeEach(function () {
+    $this->user = User::factory()->create();
+    Sanctum::actingAs($this->user, ['*']);
+});
+
 test('lists budgets', function () {
-    $user = User::factory()->create();
     Budget::factory()
-        ->for($user->currentWedding)
+        ->for($this->user->currentWedding)
         ->has(BudgetItem::factory()->count(3), 'items')
         ->create();
 
     Budget::factory()
-        ->for($user->currentWedding)
+        ->for($this->user->currentWedding)
         ->count(4)
         ->draft()
         ->sequence(
@@ -24,7 +29,6 @@ test('lists budgets', function () {
             ['name' => 'Budget 5'],
         )->create();
 
-    Sanctum::actingAs($user, ['*']);
     $response = $this->getJson(route('api.budgets.index'));
 
     $response->assertOk()
@@ -54,9 +58,8 @@ test('lists budgets', function () {
 });
 
 test('lists only current wedding budgets', function () {
-    $user = User::factory()->create();
     Budget::factory()
-        ->for($user->currentWedding)
+        ->for($this->user->currentWedding)
         ->create();
 
     Budget::factory()
@@ -67,7 +70,6 @@ test('lists only current wedding budgets', function () {
             ['name' => 'Budget 3'],
         )->create();
 
-    Sanctum::actingAs($user, ['*']);
     $response = $this->getJson(route('api.budgets.index'));
 
     $response->assertOk()
@@ -78,10 +80,8 @@ test('lists only current wedding budgets', function () {
 });
 
 test('paginates budgets', function () {
-    $user = User::factory()->create();
-    Budget::factory()->for($user->currentWedding)->count(20)->create();
+    Budget::factory()->for($this->user->currentWedding)->count(20)->create();
 
-    Sanctum::actingAs($user, ['*']);
     $response = $this->getJson(route('api.budgets.index', ['page' => 2]));
 
     $response
@@ -113,7 +113,6 @@ test('paginates budgets', function () {
 });
 
 test('returns empty list when empty', function () {
-    Sanctum::actingAs(User::factory()->create(), ['*']);
     $response = $this->getJson(route('api.budgets.index'));
 
     $response
@@ -139,6 +138,7 @@ test('returns empty list when empty', function () {
 });
 
 test('does not list budgets when unauthenticated', function () {
+    Auth::forgetUser();
     $this->getJson(route('api.budgets.index'))
         ->assertStatus(401);
 });

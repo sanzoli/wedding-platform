@@ -8,9 +8,13 @@ use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
 
 test('shows a budget', function () {
-    $budget = Budget::factory()->has(BudgetItem::factory()->count(3), 'items')->create();
+    $user = User::factory()->create();
+    $budget = Budget::factory()
+        ->for($user->currentWedding)
+        ->has(BudgetItem::factory()->count(3), 'items')
+        ->create();
 
-    Sanctum::actingAs(User::factory()->create(), ['*']);
+    Sanctum::actingAs($user, ['*']);
     $response = $this->getJson(route('api.budgets.show', $budget));
 
     $response->assertOk()
