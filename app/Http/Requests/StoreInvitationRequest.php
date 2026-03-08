@@ -7,6 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class StoreInvitationRequest extends FormRequest
 {
     protected $stopOnFirstFailure = true;
+
     public function rules(): array
     {
         return [

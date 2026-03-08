@@ -34,14 +34,14 @@ test('lists invitations', function () {
                 ->has('created_at')
                 ->has('updated_at')
             )->has('data', fn (AssertableJson $json) => $json
-                ->first(fn (AssertableJson $json) => $json
-                    ->where('accepted_at', now()->format('Y-m-d H:i:s'))
-                    ->has('user', fn (AssertableJson $json) => $json
-                        ->has('id')
-                        ->has('name')
-                        ->has('email')
-                    )->etc()
+            ->first(fn (AssertableJson $json) => $json
+                ->where('accepted_at', now()->format('Y-m-d H:i:s'))
+                ->has('user', fn (AssertableJson $json) => $json
+                    ->has('id')
+                    ->has('name')
+                    ->has('email')
                 )->etc()
+            )->etc()
             )->etc()
         );
 });
@@ -73,21 +73,21 @@ test('paginates invitations', function () {
                 ->where('prev', route('api.invitations.index', ['page' => 1]))
                 ->whereNull('next')
             )->has('meta', fn ($json) => $json
-                ->where('current_page', 2)
-                ->where('from', 16)
-                ->where('to', 20)
-                ->where('last_page', 2)
-                ->where('total', 20)
-                ->where('path', route('api.invitations.index'))
-                ->where('per_page', 15)
-                ->has('links', fn ($json) => $json
-                    ->each(fn ($json) => $json
-                        ->has('url')
-                        ->has('label')
-                        ->has('page')
-                        ->has('active')
-                    )
+            ->where('current_page', 2)
+            ->where('from', 16)
+            ->where('to', 20)
+            ->where('last_page', 2)
+            ->where('total', 20)
+            ->where('path', route('api.invitations.index'))
+            ->where('per_page', 15)
+            ->has('links', fn ($json) => $json
+                ->each(fn ($json) => $json
+                    ->has('url')
+                    ->has('label')
+                    ->has('page')
+                    ->has('active')
                 )
+            )
             )
         );
 });
@@ -105,14 +105,14 @@ test('returns empty list when empty', function () {
                 ->whereNull('prev')
                 ->whereNull('next')
             )->has('meta', fn ($json) => $json
-                ->where('current_page', 1)
-                ->whereNull('from')
-                ->whereNull('to')
-                ->where('last_page', 1)
-                ->where('total', 0)
-                ->where('path', route('api.invitations.index'))
-                ->where('per_page', 15)
-                ->has('links', 3)
+            ->where('current_page', 1)
+            ->whereNull('from')
+            ->whereNull('to')
+            ->where('last_page', 1)
+            ->where('total', 0)
+            ->where('path', route('api.invitations.index'))
+            ->where('per_page', 15)
+            ->has('links', 3)
             )
         );
 });
@@ -122,4 +122,3 @@ test('does not list invitations when unauthenticated', function () {
     $this->getJson(route('api.invitations.index'))
         ->assertStatus(401);
 });
-

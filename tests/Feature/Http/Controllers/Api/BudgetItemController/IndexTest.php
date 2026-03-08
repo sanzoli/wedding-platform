@@ -6,7 +6,6 @@ use App\Models\User;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
 
-
 beforeEach(function () {
     $user = User::factory()->create();
     $this->budget = Budget::factory()->for($user->currentWedding)->create();
