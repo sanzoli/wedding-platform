@@ -82,3 +82,26 @@
         @apply bg-background text-foreground;
     }
 }
+
+@layer utilities {
+    .cursor-pointer {
+        cursor: pointer;
+    }
+}
+
+/* Global cursor pointer for all interactive elements */
+@layer base {
+    a,
+    button,
+    [role='button'],
+    [role='link'],
+    input[type='button'],
+    input[type='submit'],
+    input[type='reset'],
+    summary,
+    [data-radix-dropdown-menu-trigger],
+    [data-dropdown-trigger],
+    .dropdown-trigger {
+        cursor: pointer !important;
+    }
+}

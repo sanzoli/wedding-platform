@@ -1,6 +1,8 @@
 <?php
 
+use App\Actions\Budget\Items\StoreBudgetItem;
 use App\Actions\Budget\StoreBudget;
+use App\Http\Requests\StoreBudgetItemRequest;
 use App\Http\Requests\StoreBudgetRequest;
 use App\Models\Budget;
 use Illuminate\Support\Facades\Route;
@@ -34,5 +36,9 @@ Route::get('/web/budgets', function () {
 Route::post('/web/budgets', function (StoreBudgetRequest $request, StoreBudget $action) {
     return $action->store($request->validated())->toResource();
 })->middleware(['auth', 'verified'])->name('web.budgets.store');
+
+Route::post('/web/budgets/{budget}/items', function (StoreBudgetItemRequest $request, Budget $budget, StoreBudgetItem $action) {
+    return $action->store($budget, $request->validated())->toResource();
+})->middleware(['auth', 'verified'])->name('web.budgets.items.store');
 
 require __DIR__.'/settings.php';
