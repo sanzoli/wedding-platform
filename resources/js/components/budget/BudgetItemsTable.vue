@@ -5,6 +5,34 @@ import type { BudgetItem, BudgetItemImportance } from '@/types';
 import { Check, Pencil, Plus, Trash2, X } from 'lucide-vue-next';
 import { computed, nextTick, ref } from 'vue';
 
+// ─── Mobile FAB / full-screen editor state ───────────────────────────────────
+const isMobileEditorOpen = ref(false);
+const mobileEditorItem = ref<Partial<BudgetItem>>({
+    name: '',
+    importance: 'normal',
+    expected_amount: null,
+});
+
+const openMobileEditor = () => {
+    mobileEditorItem.value = {
+        name: '',
+        importance: 'normal',
+        expected_amount: null,
+    };
+    isMobileEditorOpen.value = true;
+};
+
+const closeMobileEditor = () => {
+    isMobileEditorOpen.value = false;
+};
+
+const saveMobileEditor = () => {
+    if (mobileEditorItem.value?.name?.trim()) {
+        emit('create', mobileEditorItem.value);
+    }
+    closeMobileEditor();
+};
+
 interface EditableItem extends BudgetItem {
     isEditing?: boolean;
     isNew?: boolean;
@@ -189,8 +217,15 @@ const isEditing = (itemId: string) => {
                                     </td>
                                     <td class="px-6 py-3">
                                         <Input
-                                            v-model.number="
-                                                editingItem.expected_amount
+                                            :modelValue="
+                                                editingItem.expected_amount ??
+                                                undefined
+                                            "
+                                            @update:modelValue="
+                                                editingItem.expected_amount =
+                                                    $event !== ''
+                                                        ? Number($event)
+                                                        : null
                                             "
                                             type="number"
                                             class="h-[40px] rounded-[10px] border-border/60 bg-card text-right text-[15px] tabular-nums shadow-none"
@@ -347,7 +382,15 @@ const isEditing = (itemId: string) => {
                             </td>
                             <td class="px-6 py-3">
                                 <Input
-                                    v-model.number="newItem.expected_amount"
+                                    :modelValue="
+                                        newItem.expected_amount ?? undefined
+                                    "
+                                    @update:modelValue="
+                                        newItem.expected_amount =
+                                            $event !== ''
+                                                ? Number($event)
+                                                : null
+                                    "
                                     type="number"
                                     placeholder="0"
                                     class="h-[40px] rounded-[10px] border-border/60 bg-card text-right text-[15px] tabular-nums shadow-none"
@@ -407,7 +450,7 @@ const isEditing = (itemId: string) => {
         </div>
 
         <!-- ─── Mobile card list (below sm) ─── -->
-        <div class="flex flex-col gap-4 sm:hidden">
+        <div class="flex flex-col gap-2.5 sm:hidden">
             <template v-if="hasItems">
                 <div
                     v-for="item in items"
@@ -416,18 +459,16 @@ const isEditing = (itemId: string) => {
                 >
                     <!-- Edit mode card -->
                     <template v-if="isEditing(item.id) && editingItem">
-                        <div
-                            class="flex flex-col gap-4 px-[21px] pt-[21px] pb-[21px]"
-                        >
+                        <div class="flex flex-col gap-3.5 px-4 py-4">
                             <div class="flex flex-col gap-1.5">
                                 <label
-                                    class="text-[12px] font-medium tracking-[0.05em] text-muted-foreground uppercase"
+                                    class="text-[11px] font-medium tracking-[0.05em] text-muted-foreground uppercase"
                                     >Item</label
                                 >
                                 <Input
                                     v-model="editingItem.name"
                                     placeholder="e.g., Venue rental"
-                                    class="h-[44px] rounded-[14px] border-border/60 bg-card text-[15px] shadow-none"
+                                    class="h-[40px] rounded-[10px] border-border/60 bg-card text-[15px] shadow-none"
                                     @keydown.enter="saveEdit"
                                     @keydown.esc="cancelEdit"
                                     autofocus
@@ -435,12 +476,12 @@ const isEditing = (itemId: string) => {
                             </div>
                             <div class="flex flex-col gap-1.5">
                                 <label
-                                    class="text-[12px] font-medium tracking-[0.05em] text-muted-foreground uppercase"
+                                    class="text-[11px] font-medium tracking-[0.05em] text-muted-foreground uppercase"
                                     >Importance</label
                                 >
                                 <select
                                     v-model="editingItem.importance"
-                                    class="h-[44px] w-full rounded-[14px] border border-border/60 bg-card px-3 text-[15px] text-foreground shadow-none transition-colors outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
+                                    class="h-[40px] w-full rounded-[10px] border border-border/60 bg-card px-3 text-[15px] text-foreground shadow-none transition-colors outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
                                 >
                                     <option
                                         v-for="option in importanceOptions"
@@ -453,28 +494,36 @@ const isEditing = (itemId: string) => {
                             </div>
                             <div class="flex flex-col gap-1.5">
                                 <label
-                                    class="text-[12px] font-medium tracking-[0.05em] text-muted-foreground uppercase"
+                                    class="text-[11px] font-medium tracking-[0.05em] text-muted-foreground uppercase"
                                     >Expected Amount</label
                                 >
                                 <Input
-                                    v-model.number="editingItem.expected_amount"
+                                    :modelValue="
+                                        editingItem.expected_amount ?? undefined
+                                    "
+                                    @update:modelValue="
+                                        editingItem.expected_amount =
+                                            $event !== ''
+                                                ? Number($event)
+                                                : null
+                                    "
                                     type="number"
                                     placeholder="0"
-                                    class="h-[44px] rounded-[14px] border-border/60 bg-card text-[15px] tabular-nums shadow-none"
+                                    class="h-[40px] rounded-[10px] border-border/60 bg-card text-[15px] tabular-nums shadow-none"
                                     @keydown.enter="saveEdit"
                                     @keydown.esc="cancelEdit"
                                 />
                             </div>
-                            <div class="flex gap-3 pt-2">
+                            <div class="flex gap-2.5 pt-1">
                                 <button
                                     @click="saveEdit"
-                                    class="flex h-[42px] flex-1 items-center justify-center rounded-[14px] bg-foreground text-[15px] font-medium text-background transition-colors hover:bg-foreground/90"
+                                    class="flex h-[38px] flex-1 items-center justify-center rounded-[10px] bg-foreground text-[14px] font-medium text-background transition-colors hover:bg-foreground/90"
                                 >
                                     Save
                                 </button>
                                 <button
                                     @click="cancelEdit"
-                                    class="flex h-[42px] flex-1 items-center justify-center rounded-[14px] bg-muted text-[15px] font-medium text-muted-foreground transition-colors hover:bg-muted/70"
+                                    class="flex h-[38px] flex-1 items-center justify-center rounded-[10px] bg-muted text-[14px] font-medium text-muted-foreground transition-colors hover:bg-muted/70"
                                 >
                                     Cancel
                                 </button>
@@ -482,83 +531,147 @@ const isEditing = (itemId: string) => {
                         </div>
                     </template>
 
-                    <!-- View mode card -->
+                    <!-- View mode card — compact 2-row layout -->
                     <template v-else>
-                        <div
-                            class="flex flex-col gap-4 px-[21px] pt-[21px] pb-[1px]"
-                        >
-                            <div class="flex items-start justify-between">
-                                <div class="flex flex-col gap-2">
-                                    <p
-                                        class="text-[16px] font-medium text-foreground"
-                                    >
-                                        {{ item.name }}
-                                    </p>
-                                    <Badge
-                                        v-if="item.importance"
-                                        :variant="
-                                            importanceVariant[item.importance]
-                                        "
-                                        class="h-[22px] w-fit rounded-full px-[10px] py-0 text-[12px]"
-                                    >
-                                        {{ importanceLabel[item.importance] }}
-                                    </Badge>
-                                </div>
-                                <div class="flex shrink-0 items-center gap-1">
+                        <div class="px-4 py-3">
+                            <!-- Row 1: name + actions -->
+                            <div
+                                class="flex items-center justify-between gap-2"
+                            >
+                                <p
+                                    class="truncate text-[15px] font-medium text-foreground"
+                                >
+                                    {{ item.name }}
+                                </p>
+                                <div class="flex shrink-0 items-center gap-0.5">
                                     <button
                                         @click="startEdit(item)"
-                                        class="inline-flex h-8 w-8 items-center justify-center rounded-[14px] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                                        class="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                                         title="Edit"
                                     >
-                                        <Pencil :size="15" :stroke-width="2" />
+                                        <Pencil :size="13" :stroke-width="2" />
                                     </button>
                                     <button
                                         @click="deleteItem(item.id)"
-                                        class="inline-flex h-8 w-8 items-center justify-center rounded-[14px] text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+                                        class="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
                                         title="Delete"
                                     >
-                                        <Trash2 :size="15" :stroke-width="2" />
+                                        <Trash2 :size="13" :stroke-width="2" />
                                     </button>
                                 </div>
                             </div>
-                            <p
-                                class="pb-[20px] text-[20px] font-medium tracking-tight text-foreground tabular-nums"
+                            <!-- Row 2: badge + amount -->
+                            <div
+                                class="mt-2 flex items-center justify-between gap-2"
                             >
-                                {{ formatAmount(item.expected_amount) }}
-                            </p>
+                                <Badge
+                                    v-if="item.importance"
+                                    :variant="
+                                        importanceVariant[item.importance]
+                                    "
+                                    class="h-[20px] rounded-full px-[9px] py-0 text-[11px]"
+                                >
+                                    {{ importanceLabel[item.importance] }}
+                                </Badge>
+                                <span
+                                    v-else
+                                    class="text-xs text-muted-foreground"
+                                    >—</span
+                                >
+                                <p
+                                    class="text-[16px] font-semibold tracking-tight text-foreground tabular-nums"
+                                >
+                                    {{ formatAmount(item.expected_amount) }}
+                                </p>
+                            </div>
                         </div>
                     </template>
                 </div>
             </template>
 
-            <!-- New item card (add mode) -->
+            <!-- Empty state for mobile -->
             <div
-                v-if="isAddingItem && newItem"
-                class="rounded-xl border border-border bg-card shadow-sm"
+                v-else
+                class="rounded-xl border border-border bg-card px-4 py-10 text-center shadow-sm"
             >
-                <div class="flex flex-col gap-4 px-[21px] pt-[21px] pb-[21px]">
+                <div class="flex flex-col items-center gap-2">
+                    <div
+                        class="flex h-10 w-10 items-center justify-center rounded-full bg-muted/40"
+                    >
+                        <Plus
+                            :size="18"
+                            :stroke-width="1.5"
+                            class="text-muted-foreground/60"
+                        />
+                    </div>
+                    <p class="text-sm font-medium text-foreground/80">
+                        No budget items yet
+                    </p>
+                    <p class="text-xs text-muted-foreground">
+                        Tap + to add your first item
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─── Mobile FAB (below sm) ─── -->
+        <button
+            @click="openMobileEditor"
+            class="fixed right-5 bottom-6 z-40 flex h-13 w-13 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform active:scale-95 sm:hidden"
+            aria-label="Add item"
+        >
+            <Plus :size="20" :stroke-width="2" />
+        </button>
+
+        <!-- ─── Mobile full-screen editor overlay ─── -->
+        <Teleport to="body">
+            <div
+                v-if="isMobileEditorOpen"
+                class="fixed inset-0 z-50 flex flex-col bg-background sm:hidden"
+            >
+                <!-- Header -->
+                <div
+                    class="flex items-center justify-between border-b border-border px-5 py-4"
+                >
+                    <h2 class="text-[17px] font-semibold text-foreground">
+                        Add item
+                    </h2>
+                    <button
+                        @click="closeMobileEditor"
+                        class="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                        aria-label="Close"
+                    >
+                        <X :size="18" :stroke-width="2" />
+                    </button>
+                </div>
+
+                <!-- Form body -->
+                <div
+                    class="flex flex-1 flex-col gap-5 overflow-y-auto px-5 py-6"
+                >
                     <div class="flex flex-col gap-1.5">
                         <label
                             class="text-[12px] font-medium tracking-[0.05em] text-muted-foreground uppercase"
-                            >Item</label
                         >
+                            Item name
+                        </label>
                         <Input
-                            v-model="newItem.name"
+                            v-model="mobileEditorItem.name"
                             placeholder="e.g., Venue rental"
-                            class="h-[44px] rounded-[14px] border-border/60 bg-card text-[15px] shadow-none"
-                            @keydown.enter="saveNewItem"
-                            @keydown.esc="cancelAddItem"
+                            class="h-[44px] rounded-[12px] border-border/60 bg-card text-[15px] shadow-none"
+                            @keydown.esc="closeMobileEditor"
                             autofocus
                         />
                     </div>
                     <div class="flex flex-col gap-1.5">
                         <label
                             class="text-[12px] font-medium tracking-[0.05em] text-muted-foreground uppercase"
-                            >Importance</label
                         >
+                            Importance
+                        </label>
                         <select
-                            v-model="newItem.importance"
-                            class="h-[44px] w-full rounded-[14px] border border-border/60 bg-card px-3 text-[15px] text-foreground shadow-none transition-colors outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
+                            v-model="mobileEditorItem.importance"
+                            class="h-[44px] w-full rounded-[12px] border border-border/60 bg-card px-3 text-[15px] text-foreground shadow-none transition-colors outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
                         >
                             <option
                                 v-for="option in importanceOptions"
@@ -572,43 +685,45 @@ const isEditing = (itemId: string) => {
                     <div class="flex flex-col gap-1.5">
                         <label
                             class="text-[12px] font-medium tracking-[0.05em] text-muted-foreground uppercase"
-                            >Expected Amount</label
                         >
+                            Expected amount
+                        </label>
                         <Input
-                            v-model.number="newItem.expected_amount"
+                            :modelValue="
+                                mobileEditorItem.expected_amount ?? undefined
+                            "
+                            @update:modelValue="
+                                mobileEditorItem.expected_amount =
+                                    $event !== '' ? Number($event) : null
+                            "
                             type="number"
                             placeholder="0"
-                            class="h-[44px] rounded-[14px] border-border/60 bg-card text-[15px] tabular-nums shadow-none"
-                            @keydown.enter="saveNewItem"
-                            @keydown.esc="cancelAddItem"
+                            class="h-[44px] rounded-[12px] border-border/60 bg-card text-[15px] tabular-nums shadow-none"
+                            @keydown.esc="closeMobileEditor"
                         />
                     </div>
-                    <div class="flex gap-3 pt-2">
+                </div>
+
+                <!-- Bottom actions -->
+                <div
+                    class="border-t border-border px-5 py-4 pb-[calc(1rem+env(safe-area-inset-bottom))]"
+                >
+                    <div class="flex gap-3">
                         <button
-                            @click="saveNewItem"
-                            class="flex h-[42px] flex-1 items-center justify-center rounded-[14px] bg-foreground text-[15px] font-medium text-background transition-colors hover:bg-foreground/90"
-                        >
-                            Save
-                        </button>
-                        <button
-                            @click="cancelAddItem"
-                            class="flex h-[42px] flex-1 items-center justify-center rounded-[14px] bg-muted text-[15px] font-medium text-muted-foreground transition-colors hover:bg-muted/70"
+                            @click="closeMobileEditor"
+                            class="flex h-[46px] flex-1 items-center justify-center rounded-[12px] bg-muted text-[15px] font-medium text-muted-foreground transition-colors hover:bg-muted/70"
                         >
                             Cancel
+                        </button>
+                        <button
+                            @click="saveMobileEditor"
+                            class="flex h-[46px] flex-1 items-center justify-center rounded-[12px] bg-primary text-[15px] font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+                        >
+                            Save
                         </button>
                     </div>
                 </div>
             </div>
-
-            <!-- Add item button -->
-            <button
-                v-if="!isAddingItem"
-                @click="startAddItem"
-                class="flex h-[54px] w-full items-center justify-center gap-2.5 rounded-xl border border-border bg-card text-[14px] font-medium text-muted-foreground transition-colors hover:bg-muted/30 hover:text-foreground"
-            >
-                <Plus :size="14" :stroke-width="2" class="opacity-70" />
-                Add item
-            </button>
-        </div>
+        </Teleport>
     </div>
 </template>
