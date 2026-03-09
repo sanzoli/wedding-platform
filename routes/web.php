@@ -1,5 +1,8 @@
 <?php
 
+use App\Actions\Budget\StoreBudget;
+use App\Http\Requests\StoreBudgetRequest;
+use App\Models\Budget;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -23,5 +26,13 @@ Route::get('/budgets/{budget}', function ($budget) {
         'budgetId' => $budget
     ]);
 })->middleware(['auth', 'verified'])->name('budgets.show');
+
+Route::get('/web/budgets', function () {
+    return Budget::with('items')->get()->map->toResource();
+})->middleware(['auth', 'verified'])->name('web.budgets.index');
+
+Route::post('/web/budgets', function (StoreBudgetRequest $request, StoreBudget $action) {
+    return $action->store($request->validated())->toResource();
+})->middleware(['auth', 'verified'])->name('web.budgets.store');
 
 require __DIR__.'/settings.php';

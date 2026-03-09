@@ -1,9 +1,104 @@
 <script setup lang="ts">
-// Budgets Index page - Lean implementation
+import { show } from '@/routes/budgets';
+import type { Budget } from '@/types';
+import { router } from '@inertiajs/vue3';
+import { onMounted, ref } from 'vue';
+
+const error = ref<string | null>(null);
+const isLoading = ref(true);
+
+const getCsrfToken = (): string | null => {
+    const match = document.cookie.match(/XSRF-TOKEN=([^;]+)/);
+    return match ? decodeURIComponent(match[1]) : null;
+};
+
+const redirectToBudget = (budgetId: string) => {
+    router.visit(show.url(budgetId), { replace: true });
+};
+
+const requestJson = async <T,>(
+    url: string,
+    init: RequestInit = {},
+): Promise<T> => {
+    const response = await fetch(url, {
+        credentials: 'same-origin',
+        ...init,
+        headers: {
+            Accept: 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            ...(init.headers ?? {}),
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
+    }
+
+    return response.json() as Promise<T>;
+};
+
+const bootstrapBudget = async () => {
+    error.value = null;
+    isLoading.value = true;
+
+    try {
+        const budgets = await requestJson<Budget[]>('/web/budgets');
+
+        if (budgets.length > 0) {
+            redirectToBudget(budgets[0].id);
+            return;
+        }
+
+        const budget = await requestJson<Budget>('/web/budgets', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-XSRF-TOKEN': getCsrfToken() || '',
+            },
+            body: JSON.stringify({
+                name: 'Wedding Budget',
+                draft: false,
+            }),
+        });
+
+        redirectToBudget(budget.id);
+    } catch (err) {
+        error.value =
+            err instanceof Error ? err.message : 'An unexpected error occurred';
+        isLoading.value = false;
+    }
+};
+
+const retry = () => {
+    bootstrapBudget();
+};
+
+onMounted(() => {
+    bootstrapBudget();
+});
 </script>
 
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-background">
-    <p class="text-muted-foreground text-lg">Preparing your budget...</p>
-  </div>
+    <div class="flex min-h-screen items-center justify-center bg-background">
+        <div class="space-y-3 text-center">
+            <template v-if="isLoading && !error">
+                <p class="text-lg font-medium text-foreground">
+                    Preparing your budget...
+                </p>
+                <p class="text-sm text-muted-foreground">
+                    Setting up your planning workspace
+                </p>
+            </template>
+
+            <template v-else-if="error">
+                <p class="text-sm font-medium text-destructive">{{ error }}</p>
+                <button
+                    @click="retry"
+                    class="text-sm text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground"
+                >
+                    Try again
+                </button>
+            </template>
+        </div>
+    </div>
 </template>
