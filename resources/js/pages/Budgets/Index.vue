@@ -42,6 +42,7 @@ const bootstrapBudget = async () => {
     isLoading.value = true;
 
     try {
+        // TODO(api): replace local fetch with backend API call for budgets list
         const budgets = await requestJson<Budget[]>('/web/budgets');
 
         if (budgets.length > 0) {
@@ -49,6 +50,7 @@ const bootstrapBudget = async () => {
             return;
         }
 
+        // TODO(api): replace local create flow with backend POST for new budget
         const budget = await requestJson<Budget>('/web/budgets', {
             method: 'POST',
             headers: {

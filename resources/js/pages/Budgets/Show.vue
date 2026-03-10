@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import BudgetItemsTable from '@/components/budget/BudgetItemsTable.vue';
+import { mockBudgetItems } from '@/components/budget/mock-budget-items';
 import ThemeToggle from '@/components/ThemeToggle.vue';
 import type { Budget, BudgetItem, BudgetItemImportance } from '@/types';
 import { onMounted, ref } from 'vue';
@@ -32,6 +33,7 @@ const generateTempId = (): string => {
 
 const loadBudget = async () => {
     try {
+        // TODO(api): load this budget from a dedicated backend endpoint when available
         // Simulate loading delay
         await new Promise((resolve) => setTimeout(resolve, 500));
 
@@ -39,29 +41,7 @@ const loadBudget = async () => {
         budget.value = createMockBudget();
 
         // Add some demo items for testing
-        tempItems.value = [
-            {
-                id: generateTempId(),
-                budget_id: props.budgetId,
-                name: 'Venue Rental',
-                importance: 'innegociable',
-                expected_amount: 5000,
-            },
-            {
-                id: generateTempId(),
-                budget_id: props.budgetId,
-                name: 'Photography',
-                importance: 'high',
-                expected_amount: 2500,
-            },
-            {
-                id: generateTempId(),
-                budget_id: props.budgetId,
-                name: 'Flowers',
-                importance: 'normal',
-                expected_amount: 1200,
-            },
-        ];
+        tempItems.value = mockBudgetItems(props.budgetId, generateTempId);
 
         budget.value.items = tempItems.value;
     } catch {
@@ -73,6 +53,7 @@ const handleCreateItem = (item: Partial<BudgetItem>) => {
     if (!budget.value) return;
 
     try {
+        // TODO(api): replace local create flow with backend POST for budget items
         const newItem: BudgetItem = {
             id: generateTempId(),
             budget_id: props.budgetId,
@@ -95,6 +76,7 @@ const handleUpdateItem = (id: string, item: Partial<BudgetItem>) => {
     if (!budget.value?.items) return;
 
     try {
+        // TODO(api): replace local update flow with backend PATCH for this item
         const index = tempItems.value.findIndex((i) => i.id === id);
         if (index !== -1) {
             tempItems.value[index] = {
@@ -122,6 +104,7 @@ const handleDeleteItem = (id: string) => {
     if (!budget.value?.items) return;
 
     try {
+        // TODO(api): replace local delete flow with backend DELETE for this item
         tempItems.value = tempItems.value.filter((i) => i.id !== id);
         budget.value.items = tempItems.value;
 
@@ -141,10 +124,6 @@ onMounted(async () => {
 
 <template>
     <div class="mx-auto max-w-6xl px-6 py-10">
-        <!-- Theme Toggle - Top Right Corner -->
-        <div class="fixed top-6 right-6 z-50">
-            <ThemeToggle />
-        </div>
         <template v-if="isLoading">
             <div class="flex items-center justify-center py-20">
                 <div class="text-center">
@@ -168,7 +147,7 @@ onMounted(async () => {
 
         <template v-else-if="budget">
             <header
-                class="mb-10 flex items-end justify-between border-b border-border pb-6"
+                class="sticky top-0 z-40 -mx-6 mb-10 flex items-center justify-between bg-background/95 px-6 py-6 backdrop-blur-sm transition-shadow duration-200"
             >
                 <div>
                     <h1 class="type-display text-foreground">
@@ -178,6 +157,7 @@ onMounted(async () => {
                         Manage and track your estimated costs
                     </p>
                 </div>
+                <ThemeToggle />
             </header>
 
             <section>
