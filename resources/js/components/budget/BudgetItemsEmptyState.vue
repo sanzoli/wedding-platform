@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-vue-next';
 
 interface Props {
@@ -16,13 +17,10 @@ const emit = defineEmits<{
     <!-- Desktop: rendered inside a <td colspan="4"> by the parent -->
     <template v-if="variant === 'desktop'">
         <div class="flex flex-col items-center gap-4">
-            <button
-                @click="emit('addItem')"
-                class="inline-flex items-center gap-2 rounded-[10px] bg-primary px-5 py-2.5 text-[14px] font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-            >
+            <Button @click="emit('addItem')">
                 <Plus :size="16" :stroke-width="2" />
                 Add your first item
-            </button>
+            </Button>
             <div class="space-y-2">
                 <p class="text-sm font-medium text-foreground/80">
                     No budget items yet

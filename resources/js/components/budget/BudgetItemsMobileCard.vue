@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import type { BudgetItem, BudgetItemImportance } from '@/types';
 import { Pencil, Trash2 } from 'lucide-vue-next';
 import type { DisplayConfig, EditingConfig } from './budget-items.config';
@@ -28,10 +30,11 @@ const emit = defineEmits<{
         <template v-if="editing?.isEditing && editing.draft">
             <div class="flex flex-col gap-3.5 px-4 py-4">
                 <div class="flex flex-col gap-1.5">
-                    <label
+                    <Label
                         class="text-[11px] font-medium tracking-[0.05em] text-muted-foreground uppercase"
-                        >Item</label
                     >
+                        Item
+                    </Label>
                     <Input
                         :modelValue="editing.draft.name"
                         @update:modelValue="
@@ -48,10 +51,11 @@ const emit = defineEmits<{
                     />
                 </div>
                 <div class="flex flex-col gap-1.5">
-                    <label
+                    <Label
                         class="text-[11px] font-medium tracking-[0.05em] text-muted-foreground uppercase"
-                        >Importance</label
                     >
+                        Importance
+                    </Label>
                     <select
                         :value="editing.draft.importance"
                         @change="
@@ -73,10 +77,11 @@ const emit = defineEmits<{
                     </select>
                 </div>
                 <div class="flex flex-col gap-1.5">
-                    <label
+                    <Label
                         class="text-[11px] font-medium tracking-[0.05em] text-muted-foreground uppercase"
-                        >Expected Amount</label
                     >
+                        Expected Amount
+                    </Label>
                     <Input
                         :modelValue="editing.draft.expected_amount ?? undefined"
                         @update:modelValue="
@@ -95,18 +100,16 @@ const emit = defineEmits<{
                     />
                 </div>
                 <div class="flex gap-2.5 pt-1">
-                    <button
+                    <Button
                         @click="emit('cancel')"
-                        class="flex h-[38px] flex-1 items-center justify-center rounded-[10px] bg-muted text-[14px] font-medium text-muted-foreground transition-colors hover:bg-muted/70"
+                        variant="secondary"
+                        class="flex h-[38px] flex-1"
                     >
                         Cancel
-                    </button>
-                    <button
-                        @click="emit('save')"
-                        class="flex h-[38px] flex-1 items-center justify-center rounded-[10px] bg-primary text-[14px] font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-                    >
+                    </Button>
+                    <Button @click="emit('save')" class="flex h-[38px] flex-1">
                         Save
-                    </button>
+                    </Button>
                 </div>
             </div>
         </template>
@@ -120,20 +123,24 @@ const emit = defineEmits<{
                         {{ item.name }}
                     </p>
                     <div class="flex shrink-0 items-center gap-0.5">
-                        <button
+                        <Button
                             @click="emit('edit', item)"
-                            class="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                            variant="ghost"
+                            size="icon"
+                            class="h-7 w-7 text-muted-foreground hover:bg-muted hover:text-foreground"
                             title="Edit"
                         >
                             <Pencil :size="13" :stroke-width="2" />
-                        </button>
-                        <button
+                        </Button>
+                        <Button
                             @click="emit('delete', item.id)"
-                            class="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+                            variant="ghost"
+                            size="icon"
+                            class="h-7 w-7 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
                             title="Delete"
                         >
                             <Trash2 :size="13" :stroke-width="2" />
-                        </button>
+                        </Button>
                     </div>
                 </div>
                 <!-- Row 2: badge + amount -->

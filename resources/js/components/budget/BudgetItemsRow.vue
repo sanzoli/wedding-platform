@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import type { BudgetItem, BudgetItemImportance } from '@/types';
 import { Check, Pencil, Trash2, X } from 'lucide-vue-next';
@@ -84,20 +85,24 @@ const emit = defineEmits<{
             </td>
             <td class="px-6 py-3">
                 <div class="flex items-center justify-end gap-1.5">
-                    <button
+                    <Button
                         @click="emit('cancel')"
-                        class="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+                        variant="ghost"
+                        size="icon"
+                        class="h-9 w-9 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
                         title="Cancel"
                     >
                         <X :size="15" :stroke-width="2.5" />
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                         @click="emit('save')"
-                        class="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
+                        variant="ghost"
+                        size="icon"
+                        class="h-9 w-9 text-muted-foreground hover:bg-primary/10 hover:text-primary"
                         title="Save"
                     >
                         <Check :size="15" :stroke-width="2.5" />
-                    </button>
+                    </Button>
                 </div>
             </td>
         </template>
@@ -125,20 +130,24 @@ const emit = defineEmits<{
             </td>
             <td class="px-6 py-[21px]">
                 <div class="flex items-center justify-end gap-1">
-                    <button
+                    <Button
                         @click="emit('edit', item)"
-                        class="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                        variant="ghost"
+                        size="icon"
+                        class="h-9 w-9 text-muted-foreground hover:bg-muted hover:text-foreground"
                         title="Edit"
                     >
                         <Pencil :size="15" :stroke-width="2" />
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                         @click="emit('delete', item.id)"
-                        class="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+                        variant="ghost"
+                        size="icon"
+                        class="h-9 w-9 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
                         title="Delete"
                     >
                         <Trash2 :size="15" :stroke-width="2" />
-                    </button>
+                    </Button>
                 </div>
             </td>
         </template>

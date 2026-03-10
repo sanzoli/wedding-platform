@@ -207,20 +207,24 @@ const saveMobileEditor = () => {
                                 <div
                                     class="flex items-center justify-end gap-1.5"
                                 >
-                                    <button
+                                    <Button
                                         @click="saveNewItem"
-                                        class="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
+                                        variant="ghost"
+                                        size="icon"
+                                        class="h-7 w-7 text-muted-foreground hover:bg-primary/10 hover:text-primary"
                                         title="Save"
                                     >
                                         <Check :size="13" :stroke-width="2.5" />
-                                    </button>
-                                    <button
+                                    </Button>
+                                    <Button
                                         @click="cancelAddItem"
-                                        class="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+                                        variant="ghost"
+                                        size="icon"
+                                        class="h-7 w-7 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
                                         title="Cancel"
                                     >
                                         <X :size="13" :stroke-width="2.5" />
-                                    </button>
+                                    </Button>
                                 </div>
                             </td>
                         </tr>

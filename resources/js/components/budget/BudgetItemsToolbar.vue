@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Button } from '@/components/ui/button';
 import SearchInput from '@/components/ui/search-input/SearchInput.vue';
 import { Plus } from 'lucide-vue-next';
 
@@ -29,14 +30,14 @@ const emit = defineEmits<{
                 class="mt-1 w-full sm:max-w-xs"
             />
             <!-- Add item: desktop only -->
-            <button
+            <Button
                 v-if="!isAddingItem"
                 @click="emit('start-add-item')"
-                class="hidden shrink-0 items-center gap-2 rounded-[10px] bg-primary px-4 py-2 text-[14px] font-medium text-primary-foreground transition-colors hover:bg-primary/90 sm:inline-flex"
+                class="hidden sm:inline-flex"
             >
                 <Plus :size="15" :stroke-width="2" />
                 Add item
-            </button>
+            </Button>
         </div>
     </section>
 </template>
