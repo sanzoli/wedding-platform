@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import type { BudgetItem, BudgetItemImportance } from '@/types';
@@ -25,7 +26,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-    <div class="rounded-xl border border-border bg-card shadow-sm">
+    <Card class="py-1">
         <!-- Edit mode card -->
         <template v-if="editing?.isEditing && editing.draft">
             <div class="flex flex-col gap-3.5 px-4 py-4">
@@ -161,5 +162,5 @@ const emit = defineEmits<{
                 </div>
             </div>
         </template>
-    </div>
+    </Card>
 </template>

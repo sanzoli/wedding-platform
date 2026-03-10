@@ -3,6 +3,8 @@ import BudgetItemsEmptyState from '@/components/budget/BudgetItemsEmptyState.vue
 import BudgetItemsMobileCard from '@/components/budget/BudgetItemsMobileCard.vue';
 import BudgetItemsMobileEditor from '@/components/budget/BudgetItemsMobileEditor.vue';
 import BudgetItemsRow from '@/components/budget/BudgetItemsRow.vue';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import FloatingActionButton from '@/components/ui/floating-action-button/FloatingActionButton.vue';
 import { Input } from '@/components/ui/input';
 import type { BudgetItem } from '@/types';
@@ -120,7 +122,7 @@ const saveMobileEditor = () => {
 </script>
 
 <template>
-    <div class="premium-table-container">
+    <section class="premium-table-container">
         <!-- ─── Toolbar ─── -->
         <BudgetItemsToolbar
             :search-query="searchQuery"
@@ -131,9 +133,7 @@ const saveMobileEditor = () => {
         />
 
         <!-- ─── Desktop table (sm and up) ─── -->
-        <div
-            class="hidden overflow-hidden rounded-xl border border-border bg-card shadow-sm sm:block"
-        >
+        <Card class="hidden gap-0 overflow-hidden py-0 sm:block">
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead>
@@ -266,7 +266,7 @@ const saveMobileEditor = () => {
                     </tbody>
                 </table>
             </div>
-        </div>
+        </Card>
 
         <!-- ─── Mobile card list (below sm) ─── -->
         <div class="flex flex-col gap-2.5 sm:hidden">
@@ -311,5 +311,5 @@ const saveMobileEditor = () => {
             @save="saveMobileEditor"
             @cancel="closeMobileEditor"
         />
-    </div>
+    </section>
 </template>

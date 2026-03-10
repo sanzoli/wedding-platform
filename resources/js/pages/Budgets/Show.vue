@@ -2,6 +2,8 @@
 import BudgetItemsTable from '@/components/budget/BudgetItemsTable.vue';
 import { mockBudgetItems } from '@/components/budget/mock-budget-items';
 import ThemeToggle from '@/components/ThemeToggle.vue';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Spinner } from '@/components/ui/spinner';
 import type { Budget, BudgetItem, BudgetItemImportance } from '@/types';
 import { onMounted, ref } from 'vue';
 
@@ -123,13 +125,11 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div class="mx-auto max-w-6xl px-6 py-10">
+    <div class="mx-auto max-w-6xl px-6 py-4">
         <template v-if="isLoading">
             <div class="flex items-center justify-center py-20">
                 <div class="text-center">
-                    <div
-                        class="mb-3 inline-block h-8 w-8 animate-spin rounded-full border-2 border-border border-t-primary"
-                    ></div>
+                    <Spinner class="mb-3 size-8" />
                     <p class="text-sm text-muted-foreground">
                         Loading budget...
                     </p>
@@ -138,15 +138,15 @@ onMounted(async () => {
         </template>
 
         <template v-else-if="error">
-            <div
-                class="rounded-lg border border-destructive/20 bg-destructive/5 p-6 text-center"
-            >
-                <p class="text-sm font-medium text-destructive">{{ error }}</p>
-            </div>
+            <Alert variant="destructive" class="text-center">
+                <AlertDescription>
+                    {{ error }}
+                </AlertDescription>
+            </Alert>
         </template>
 
         <template v-else-if="budget">
-            <header
+            <div
                 class="sticky top-0 z-40 -mx-6 mb-2 flex items-center justify-between bg-background/95 px-6 py-6 backdrop-blur-sm transition-shadow duration-200"
             >
                 <div>
@@ -158,7 +158,7 @@ onMounted(async () => {
                     </p>
                 </div>
                 <ThemeToggle />
-            </header>
+            </div>
 
             <section>
                 <BudgetItemsTable

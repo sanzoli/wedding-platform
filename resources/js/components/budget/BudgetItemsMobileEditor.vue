@@ -23,7 +23,7 @@ const emit = defineEmits<{
     <Teleport to="body">
         <div class="fixed inset-0 z-50 flex flex-col bg-background sm:hidden">
             <!-- Header -->
-            <div
+            <header
                 class="flex items-center justify-between border-b border-border px-5 py-4"
             >
                 <h2 class="text-[17px] font-semibold text-foreground">
@@ -38,10 +38,10 @@ const emit = defineEmits<{
                 >
                     <X :size="18" :stroke-width="2" />
                 </Button>
-            </div>
+            </header>
 
             <!-- Form body -->
-            <div class="flex flex-1 flex-col gap-5 overflow-y-auto px-5 py-6">
+            <main class="flex flex-1 flex-col gap-5 overflow-y-auto px-5 py-6">
                 <div class="flex flex-col gap-1.5">
                     <Label
                         class="text-[12px] font-medium tracking-[0.05em] text-muted-foreground uppercase"
@@ -109,10 +109,10 @@ const emit = defineEmits<{
                         @keydown.esc="emit('cancel')"
                     />
                 </div>
-            </div>
+            </main>
 
             <!-- Bottom actions -->
-            <div
+            <footer
                 class="border-t border-border px-5 py-4 pb-[calc(1rem+env(safe-area-inset-bottom))]"
             >
                 <div class="flex gap-3">
@@ -127,7 +127,7 @@ const emit = defineEmits<{
                         Save
                     </Button>
                 </div>
-            </div>
+            </footer>
         </div>
     </Teleport>
 </template>

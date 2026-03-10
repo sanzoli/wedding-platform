@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Button } from '@/components/ui/button';
 import { show } from '@/routes/budgets';
 import type { Budget } from '@/types';
 import { router } from '@inertiajs/vue3';
@@ -94,12 +95,13 @@ onMounted(() => {
 
             <template v-else-if="error">
                 <p class="text-sm font-medium text-destructive">{{ error }}</p>
-                <button
+                <Button
+                    variant="link"
                     @click="retry"
-                    class="text-sm text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground"
+                    class="text-sm text-muted-foreground"
                 >
                     Try again
-                </button>
+                </Button>
             </template>
         </div>
     </div>
