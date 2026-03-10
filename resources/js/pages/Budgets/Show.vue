@@ -58,7 +58,7 @@ const handleCreateItem = (item: Partial<BudgetItem>) => {
             id: generateTempId(),
             budget_id: props.budgetId,
             name: item.name || '',
-            importance: (item.importance as BudgetItemImportance) || 'normal',
+            importance: (item.importance as BudgetItemImportance) || 'Normal',
             expected_amount: item.expected_amount || null,
         };
 

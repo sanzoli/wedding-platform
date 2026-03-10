@@ -4,7 +4,7 @@ namespace App\Enum;
 
 enum Importance
 {
-    case Innegociable;
+    case MustHave;
     case High;
     case Normal;
     case Low;

@@ -45,7 +45,7 @@ export interface Budget {
     items?: BudgetItem[];
 }
 
-export type BudgetItemImportance = 'innegociable' | 'high' | 'normal' | 'low';
+export type BudgetItemImportance = 'MustHave' | 'High' | 'Normal' | 'Low';
 
 export interface BudgetItem {
     id: string;

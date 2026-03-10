@@ -3,7 +3,7 @@ import type { BudgetItem, BudgetItemImportance } from '@/types';
 export function createEmptyItemDraft(): Partial<BudgetItem> {
     return {
         name: '',
-        importance: 'normal',
+        importance: 'Normal',
         expected_amount: null,
     };
 }
@@ -27,27 +27,27 @@ export const importanceOptions: {
     value: BudgetItemImportance;
     label: string;
 }[] = [
-    { value: 'innegociable', label: 'Innegociable' },
-    { value: 'high', label: 'High' },
-    { value: 'normal', label: 'Normal' },
-    { value: 'low', label: 'Low' },
+    { value: 'MustHave', label: 'Must-have' },
+    { value: 'High', label: 'High' },
+    { value: 'Normal', label: 'Normal' },
+    { value: 'Low', label: 'Low' },
 ];
 
 export const importanceVariant: Record<
     BudgetItemImportance,
     'default' | 'secondary' | 'destructive' | 'outline'
 > = {
-    innegociable: 'default',
-    high: 'outline',
-    normal: 'secondary',
-    low: 'outline',
+    MustHave: 'default',
+    High: 'outline',
+    Normal: 'secondary',
+    Low: 'outline',
 };
 
 export const importanceLabel: Record<BudgetItemImportance, string> = {
-    innegociable: 'Innegociable',
-    high: 'High',
-    normal: 'Normal',
-    low: 'Low',
+    MustHave: 'Must-have',
+    High: 'High',
+    Normal: 'Normal',
+    Low: 'Low',
 };
 
 export type DisplayConfig = {

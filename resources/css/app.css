@@ -162,10 +162,10 @@
         background-color: var(--badge-high-bg);
     }
 
-    .badge-innegociable-importance {
-        border-color: var(--badge-innegociable-border);
-        color: var(--badge-innegociable-fg);
-        background-color: var(--badge-innegociable-bg);
+    .badge-must-have-importance {
+        border-color: var(--badge-must-have-border);
+        color: var(--badge-must-have-fg);
+        background-color: var(--badge-must-have-bg);
     }
 
     .badge-normal-importance {
