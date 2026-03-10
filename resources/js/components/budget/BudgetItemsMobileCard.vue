@@ -141,6 +141,7 @@ const emit = defineEmits<{
                     <Badge
                         v-if="item.importance"
                         :variant="display.importanceVariant[item.importance]"
+                        :class="`badge-${item.importance}-importance`"
                         class="h-[20px] rounded-full px-[9px] py-0 text-[11px]"
                     >
                         {{ display.importanceLabel[item.importance] }}

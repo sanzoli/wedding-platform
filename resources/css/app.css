@@ -154,6 +154,31 @@
         letter-spacing: 0;
         text-transform: none;
     }
+
+    /* Custom badge styles for importance levels */
+    .badge-high-importance {
+        border-color: var(--badge-high-border);
+        color: var(--badge-high-fg);
+        background-color: var(--badge-high-bg);
+    }
+
+    .badge-innegociable-importance {
+        border-color: var(--badge-innegociable-border);
+        color: var(--badge-innegociable-fg);
+        background-color: var(--badge-innegociable-bg);
+    }
+
+    .badge-normal-importance {
+        border-color: var(--badge-normal-border);
+        color: var(--badge-normal-fg);
+        background-color: var(--badge-normal-bg);
+    }
+
+    .badge-low-importance {
+        border-color: var(--badge-low-border);
+        color: var(--badge-low-fg);
+        background-color: var(--badge-low-bg);
+    }
 }
 
 /* Global cursor pointer for all interactive elements */

@@ -38,7 +38,7 @@ export const importanceVariant: Record<
     'default' | 'secondary' | 'destructive' | 'outline'
 > = {
     innegociable: 'default',
-    high: 'destructive',
+    high: 'outline',
     normal: 'secondary',
     low: 'outline',
 };

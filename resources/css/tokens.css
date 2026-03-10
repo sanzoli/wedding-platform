@@ -102,6 +102,25 @@
     --sidebar-ring: var(--ring);
 
     /* ----------------------------
+   * Badge importance tokens (semantic)
+   * ---------------------------- */
+    --badge-high-bg: var(--p-wine-700);
+    --badge-high-fg: var(--p-neutral-0);
+    --badge-high-border: var(--p-wine-700);
+
+    --badge-innegociable-bg: var(--primary);
+    --badge-innegociable-fg: var(--primary-foreground);
+    --badge-innegociable-border: var(--primary);
+
+    --badge-normal-bg: var(--secondary);
+    --badge-normal-fg: var(--secondary-foreground);
+    --badge-normal-border: var(--secondary);
+
+    --badge-low-bg: transparent;
+    --badge-low-fg: var(--foreground);
+    --badge-low-border: var(--border);
+
+    /* ----------------------------
    * Radii
    * ---------------------------- */
     --radius: 1rem;
@@ -151,4 +170,21 @@
     --sidebar-accent-foreground: var(--hover-foreground);
     --sidebar-border: var(--border);
     --sidebar-ring: var(--ring);
+
+    /* Badge importance tokens (dark mode) */
+    --badge-high-bg: var(--p-wine-700);
+    --badge-high-fg: var(--p-neutral-0);
+    --badge-high-border: var(--p-wine-700);
+
+    --badge-innegociable-bg: var(--primary);
+    --badge-innegociable-fg: var(--primary-foreground);
+    --badge-innegociable-border: var(--primary);
+
+    --badge-normal-bg: var(--secondary);
+    --badge-normal-fg: var(--secondary-foreground);
+    --badge-normal-border: var(--secondary);
+
+    --badge-low-bg: transparent;
+    --badge-low-fg: var(--foreground);
+    --badge-low-border: var(--border);
 }
