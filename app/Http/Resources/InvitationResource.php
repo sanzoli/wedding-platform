@@ -12,9 +12,9 @@ class InvitationResource extends JsonResource
         return [
             'id' => $this->id,
             'email' => $this->email,
-            'expires_at' => $this->expires_at,
+            'expires_at' => $this->expires_at?->toDateTimeString(),
             'user' => $this->user?->only(['id', 'name', 'email']),
-            'accepted_at' => $this->accepted_at,
+            'accepted_at' => $this->accepted_at?->toDateTimeString(),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
