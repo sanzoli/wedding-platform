@@ -14,6 +14,7 @@ import {
     editingConfig,
     parseExpectedAmount,
 } from './budget-items.config';
+import BudgetItemsToolbar from './BudgetItemsToolbar.vue';
 
 interface Props {
     items: BudgetItem[];
@@ -27,6 +28,15 @@ const emit = defineEmits<{
     update: [id: string, item: Partial<BudgetItem>];
     delete: [id: string];
 }>();
+
+// ─── Search ───────────────────────────────────────────────────────────────────
+const searchQuery = ref('');
+
+const filteredItems = computed(() => {
+    const q = searchQuery.value.trim().toLowerCase();
+    if (!q) return props.items;
+    return props.items.filter((item) => item.name.toLowerCase().includes(q));
+});
 
 // ─── Inline row editing state ────────────────────────────────────────────────
 const editingItem = ref<Partial<BudgetItem> | null>(null);
@@ -109,6 +119,15 @@ const saveMobileEditor = () => {
 
 <template>
     <div class="premium-table-container">
+        <!-- ─── Toolbar ─── -->
+        <BudgetItemsToolbar
+            :search-query="searchQuery"
+            :is-adding-item="isAddingItem"
+            @update:search-query="searchQuery = $event"
+            @start-add-item="startAddItem"
+            @cancel-add-item="cancelAddItem"
+        />
+
         <!-- ─── Desktop table (sm and up) ─── -->
         <div
             class="hidden overflow-hidden rounded-xl border border-border bg-card shadow-sm sm:block"
@@ -136,31 +155,7 @@ const saveMobileEditor = () => {
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-border/50">
-                        <template v-if="hasItems">
-                            <BudgetItemsRow
-                                v-for="item in items"
-                                :key="item.id"
-                                :item="item"
-                                :display="displayConfig"
-                                :editing="rowEditingFor(item)"
-                                @edit="startEdit"
-                                @cancel="cancelEdit"
-                                @save="saveEdit"
-                                @delete="deleteItem"
-                                @update:draft="editingItem = $event"
-                            />
-                        </template>
-
-                        <tr v-else-if="!isAddingItem">
-                            <td colspan="4" class="px-6 py-12 text-center">
-                                <BudgetItemsEmptyState
-                                    variant="desktop"
-                                    @add-item="startAddItem"
-                                />
-                            </td>
-                        </tr>
-
-                        <!-- New item editable row -->
+                        <!-- New item editable row — always at top -->
                         <tr
                             v-if="isAddingItem && newItem"
                             class="group bg-muted/20 transition-colors"
@@ -201,7 +196,7 @@ const saveMobileEditor = () => {
                                     type="number"
                                     min="0"
                                     placeholder="0"
-                                    class="h-[40px] rounded-[10px] border-border/60 bg-card text-right text-[15px] tabular-nums shadow-none"
+                                    class="h-[40px] max-w-[70px] rounded-[10px] border-border/60 bg-card text-right text-[15px] tabular-nums shadow-none"
                                     @keydown.enter="saveNewItem"
                                     @keydown.esc="cancelAddItem"
                                 />
@@ -228,21 +223,27 @@ const saveMobileEditor = () => {
                             </td>
                         </tr>
 
-                        <!-- Ghost add-item row - cuando hay items -->
-                        <tr v-if="!isAddingItem && hasItems">
-                            <td
-                                colspan="4"
-                                class="border-t border-border/50 px-6 py-[18px]"
-                            >
-                                <div class="flex justify-start">
-                                    <button
-                                        @click="startAddItem"
-                                        class="inline-flex items-center gap-2 rounded-[10px] bg-primary px-5 py-2.5 text-[14px] font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-                                    >
-                                        <Plus :size="16" :stroke-width="2" />
-                                        Add item
-                                    </button>
-                                </div>
+                        <template v-if="hasItems">
+                            <BudgetItemsRow
+                                v-for="item in filteredItems"
+                                :key="item.id"
+                                :item="item"
+                                :display="displayConfig"
+                                :editing="rowEditingFor(item)"
+                                @edit="startEdit"
+                                @cancel="cancelEdit"
+                                @save="saveEdit"
+                                @delete="deleteItem"
+                                @update:draft="editingItem = $event"
+                            />
+                        </template>
+
+                        <tr v-else-if="!isAddingItem">
+                            <td colspan="4" class="px-6 py-12 text-center">
+                                <BudgetItemsEmptyState
+                                    variant="desktop"
+                                    @add-item="startAddItem"
+                                />
                             </td>
                         </tr>
                     </tbody>
@@ -254,7 +255,7 @@ const saveMobileEditor = () => {
         <div class="flex flex-col gap-2.5 sm:hidden">
             <template v-if="hasItems">
                 <BudgetItemsMobileCard
-                    v-for="item in items"
+                    v-for="item in filteredItems"
                     :key="item.id"
                     :item="item"
                     :display="displayConfig"

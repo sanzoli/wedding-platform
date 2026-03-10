@@ -85,17 +85,17 @@ const emit = defineEmits<{
                 <div class="flex items-center justify-end gap-1.5">
                     <button
                         @click="emit('cancel')"
-                        class="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+                        class="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
                         title="Cancel"
                     >
-                        <X :size="13" :stroke-width="2.5" />
+                        <X :size="15" :stroke-width="2.5" />
                     </button>
                     <button
                         @click="emit('save')"
-                        class="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
+                        class="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
                         title="Save"
                     >
-                        <Check :size="13" :stroke-width="2.5" />
+                        <Check :size="15" :stroke-width="2.5" />
                     </button>
                 </div>
             </td>
@@ -127,17 +127,17 @@ const emit = defineEmits<{
                 <div class="flex items-center justify-end gap-1">
                     <button
                         @click="emit('edit', item)"
-                        class="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                        class="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                         title="Edit"
                     >
-                        <Pencil :size="13" :stroke-width="2" />
+                        <Pencil :size="15" :stroke-width="2" />
                     </button>
                     <button
                         @click="emit('delete', item.id)"
-                        class="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+                        class="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
                         title="Delete"
                     >
-                        <Trash2 :size="13" :stroke-width="2" />
+                        <Trash2 :size="15" :stroke-width="2" />
                     </button>
                 </div>
             </td>

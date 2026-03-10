@@ -62,7 +62,7 @@ const handleCreateItem = (item: Partial<BudgetItem>) => {
             expected_amount: item.expected_amount || null,
         };
 
-        tempItems.value.push(newItem);
+        tempItems.value.unshift(newItem);
         budget.value.items = tempItems.value;
 
         console.log('Item created locally:', newItem);
@@ -147,7 +147,7 @@ onMounted(async () => {
 
         <template v-else-if="budget">
             <header
-                class="sticky top-0 z-40 -mx-6 mb-10 flex items-center justify-between bg-background/95 px-6 py-6 backdrop-blur-sm transition-shadow duration-200"
+                class="sticky top-0 z-40 -mx-6 mb-2 flex items-center justify-between bg-background/95 px-6 py-6 backdrop-blur-sm transition-shadow duration-200"
             >
                 <div>
                     <h1 class="type-display text-foreground">
