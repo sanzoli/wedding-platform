@@ -26,7 +26,7 @@ const emit = defineEmits<{
                 :model-value="searchQuery"
                 @update:model-value="emit('update:searchQuery', $event)"
                 placeholder="Search items…"
-                class="w-full sm:max-w-xs"
+                class="mt-1 w-full sm:max-w-xs"
             />
             <!-- Add item: desktop only -->
             <button

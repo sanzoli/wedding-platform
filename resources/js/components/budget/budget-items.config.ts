@@ -33,14 +33,11 @@ export const importanceOptions: {
     { value: 'Low', label: 'Low' },
 ];
 
-export const importanceVariant: Record<
-    BudgetItemImportance,
-    'default' | 'secondary' | 'destructive' | 'outline'
-> = {
-    MustHave: 'default',
-    High: 'outline',
-    Normal: 'secondary',
-    Low: 'outline',
+export const importanceClass: Record<BudgetItemImportance, string> = {
+    MustHave: 'badge-must-have-importance',
+    High: 'badge-high-importance',
+    Normal: 'badge-normal-importance',
+    Low: 'badge-low-importance',
 };
 
 export const importanceLabel: Record<BudgetItemImportance, string> = {
@@ -51,7 +48,7 @@ export const importanceLabel: Record<BudgetItemImportance, string> = {
 };
 
 export type DisplayConfig = {
-    importanceVariant: typeof importanceVariant;
+    importanceClass: typeof importanceClass;
     importanceLabel: typeof importanceLabel;
     formatAmount: typeof formatAmount;
 };
@@ -64,7 +61,7 @@ export type EditingConfig = {
 };
 
 export const displayConfig: DisplayConfig = {
-    importanceVariant,
+    importanceClass,
     importanceLabel,
     formatAmount,
 };

@@ -64,7 +64,7 @@ const emit = defineEmits<{
                     </option>
                 </select>
             </td>
-            <td class="px-6 py-3">
+            <td class="flex justify-end px-6 py-3">
                 <Input
                     :modelValue="editing.draft.expected_amount ?? undefined"
                     @update:modelValue="
@@ -76,7 +76,8 @@ const emit = defineEmits<{
                     "
                     type="number"
                     min="0"
-                    class="h-[40px] rounded-[10px] border-border/60 bg-card text-right text-[15px] tabular-nums shadow-none"
+                    placeholder="0"
+                    class="h-[40px] max-w-[100px] rounded-[10px] border-border/60 bg-card text-right text-[15px] tabular-nums shadow-none"
                     @keydown.enter="emit('save')"
                     @keydown.esc="emit('cancel')"
                 />
@@ -110,8 +111,7 @@ const emit = defineEmits<{
             <td class="px-8 py-[21px]">
                 <Badge
                     v-if="item.importance"
-                    :variant="display.importanceVariant[item.importance]"
-                    :class="`badge-${item.importance}-importance`"
+                    :class="display.importanceClass[item.importance]"
                     class="h-[22px] rounded-full px-[10px] py-0 text-[12px]"
                 >
                     {{ display.importanceLabel[item.importance] }}

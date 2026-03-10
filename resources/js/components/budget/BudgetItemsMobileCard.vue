@@ -140,8 +140,7 @@ const emit = defineEmits<{
                 <div class="mt-2 flex items-center justify-between gap-2">
                     <Badge
                         v-if="item.importance"
-                        :variant="display.importanceVariant[item.importance]"
-                        :class="`badge-${item.importance}-importance`"
+                        :class="display.importanceClass[item.importance]"
                         class="h-[20px] rounded-full px-[9px] py-0 text-[11px]"
                     >
                         {{ display.importanceLabel[item.importance] }}
