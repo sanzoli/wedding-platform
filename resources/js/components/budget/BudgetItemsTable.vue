@@ -89,6 +89,8 @@ const saveNewItem = () => {
 };
 
 const hasItems = computed(() => props.items.length > 0);
+const hasFilteredItems = computed(() => filteredItems.value.length > 0);
+const hasSearchQuery = computed(() => searchQuery.value.trim().length > 0);
 
 const rowEditingFor = (item: BudgetItem) =>
     editingItem.value?.id === item.id
@@ -184,7 +186,7 @@ const saveMobileEditor = () => {
                                     </option>
                                 </select>
                             </td>
-                            <td class="px-6 py-3">
+                            <td class="flex justify-end px-6 py-3">
                                 <Input
                                     :modelValue="
                                         newItem.expected_amount ?? undefined
@@ -223,7 +225,7 @@ const saveMobileEditor = () => {
                             </td>
                         </tr>
 
-                        <template v-if="hasItems">
+                        <template v-if="hasItems && hasFilteredItems">
                             <BudgetItemsRow
                                 v-for="item in filteredItems"
                                 :key="item.id"
@@ -238,12 +240,23 @@ const saveMobileEditor = () => {
                             />
                         </template>
 
-                        <tr v-else-if="!isAddingItem">
+                        <!-- Search no results -->
+                        <tr
+                            v-else-if="
+                                hasItems && !hasFilteredItems && hasSearchQuery
+                            "
+                        >
                             <td colspan="4" class="px-6 py-12 text-center">
                                 <BudgetItemsEmptyState
-                                    variant="desktop"
-                                    @add-item="startAddItem"
+                                    variant="search-desktop"
                                 />
+                            </td>
+                        </tr>
+
+                        <!-- Empty state normal -->
+                        <tr v-else-if="!isAddingItem && !hasItems">
+                            <td colspan="4" class="px-6 py-12 text-center">
+                                <BudgetItemsEmptyState variant="desktop" />
                             </td>
                         </tr>
                     </tbody>
@@ -253,7 +266,7 @@ const saveMobileEditor = () => {
 
         <!-- ─── Mobile card list (below sm) ─── -->
         <div class="flex flex-col gap-2.5 sm:hidden">
-            <template v-if="hasItems">
+            <template v-if="hasItems && hasFilteredItems">
                 <BudgetItemsMobileCard
                     v-for="item in filteredItems"
                     :key="item.id"
@@ -266,6 +279,12 @@ const saveMobileEditor = () => {
                     @delete="deleteItem"
                     @update:draft="editingItem = $event"
                 />
+            </template>
+
+            <template
+                v-else-if="hasItems && !hasFilteredItems && hasSearchQuery"
+            >
+                <BudgetItemsEmptyState variant="search-mobile" />
             </template>
 
             <BudgetItemsEmptyState v-else variant="mobile" />

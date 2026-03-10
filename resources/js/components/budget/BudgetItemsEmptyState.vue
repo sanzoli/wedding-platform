@@ -2,10 +2,10 @@
 import { Plus } from 'lucide-vue-next';
 
 interface Props {
-    variant: 'desktop' | 'mobile';
+    variant: 'desktop' | 'mobile' | 'search-desktop' | 'search-mobile';
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
 
 const emit = defineEmits<{
     addItem: [];
@@ -24,19 +24,50 @@ const emit = defineEmits<{
                 Add your first item
             </button>
             <div class="space-y-2">
-                <p class="text-sm font-medium text-foreground/80">No budget items yet</p>
-                <p class="text-xs text-muted-foreground">Start building your dream wedding</p>
+                <p class="text-sm font-medium text-foreground/80">
+                    No budget items yet
+                </p>
+                <p class="text-xs text-muted-foreground">
+                    Start building your dream wedding
+                </p>
+            </div>
+        </div>
+    </template>
+
+    <!-- Search results (desktop y mobile) -->
+    <template
+        v-else-if="variant === 'search-desktop' || variant === 'search-mobile'"
+    >
+        <div
+            :class="
+                variant === 'search-desktop'
+                    ? 'flex flex-col items-center gap-3'
+                    : 'rounded-xl border border-border bg-card px-4 py-10 text-center shadow-sm'
+            "
+        >
+            <div class="flex flex-col items-center gap-3">
+                <p class="text-sm font-medium text-foreground/80">
+                    No items match your search
+                </p>
+                <p class="text-xs text-muted-foreground">
+                    Try adjusting your search terms
+                </p>
             </div>
         </div>
     </template>
 
     <!-- Mobile: self-contained card -->
-    <template v-else>
-        <div class="rounded-xl border border-border bg-card px-4 py-10 text-center shadow-sm">
+    <template v-else-if="variant === 'mobile'">
+        <div
+            class="rounded-xl border border-border bg-card px-4 py-10 text-center shadow-sm"
+        >
             <div class="flex flex-col items-center gap-3">
-                <p class="text-sm font-medium text-foreground/80">No budget items yet</p>
+                <p class="text-sm font-medium text-foreground/80">
+                    No budget items yet
+                </p>
                 <p class="text-xs text-muted-foreground">
-                    Tap + to add your first item and start building your dream wedding
+                    Tap + to add your first item and start building your dream
+                    wedding
                 </p>
             </div>
         </div>
