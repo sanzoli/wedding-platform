@@ -171,9 +171,7 @@ onMounted(async () => {
                 class="mb-10 flex items-end justify-between border-b border-border pb-6"
             >
                 <div>
-                    <h1
-                        class="text-[30px] font-medium tracking-[-0.02em] text-foreground"
-                    >
+                    <h1 class="type-display text-foreground">
                         {{ budget.name }}
                     </h1>
                     <p class="mt-2 text-[15px] text-muted-foreground">

@@ -40,6 +40,18 @@
     --font-serif: 'Playfair Display', ui-serif, Georgia, serif;
 
     /* ----------------------------
+   * Semantic typography roles
+   * display / heading → serif (editorial, hierarchical)
+   * body / label / data / action → sans (utilitarian, clear)
+   * ---------------------------- */
+    --font-display: var(--font-serif);
+    --font-heading: var(--font-serif);
+    --font-body: var(--font-sans);
+    --font-label: var(--font-sans);
+    --font-data: var(--font-sans);
+    --font-action: var(--font-sans);
+
+    /* ----------------------------
    * Semantic tokens
    * Using shadcn-like naming for interoperability
    * ---------------------------- */
