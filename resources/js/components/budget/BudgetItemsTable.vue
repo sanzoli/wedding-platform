@@ -4,6 +4,7 @@ import BudgetItemsMobileCard from '@/components/budget/BudgetItemsMobileCard.vue
 import BudgetItemsMobileEditor from '@/components/budget/BudgetItemsMobileEditor.vue';
 import BudgetItemsNewRow from '@/components/budget/BudgetItemsNewRow.vue';
 import BudgetItemsRow from '@/components/budget/BudgetItemsRow.vue';
+import BudgetSortableHeader from '@/components/budget/BudgetSortableHeader.vue';
 import { Card } from '@/components/ui/card';
 import FloatingActionButton from '@/components/ui/floating-action-button/FloatingActionButton.vue';
 import type { BudgetItem } from '@/types';
@@ -15,6 +16,7 @@ import {
     editingConfig,
 } from './budget-items.config';
 import BudgetItemsToolbar from './BudgetItemsToolbar.vue';
+import { useBudgetTableSorting } from './composables/useBudgetTableSorting';
 
 interface Props {
     items: BudgetItem[];
@@ -37,6 +39,10 @@ const filteredItems = computed(() => {
     if (!q) return props.items;
     return props.items.filter((item) => item.name.toLowerCase().includes(q));
 });
+
+// ─── Sorting ──────────────────────────────────────────────────────────────────
+const { sortColumn, sortDirection, toggleSort, sortedItems } =
+    useBudgetTableSorting(filteredItems);
 
 // ─── Inline row editing state ────────────────────────────────────────────────
 const editingItem = ref<Partial<BudgetItem> | null>(null);
@@ -146,17 +152,44 @@ const saveMobileEditor = () => {
                             <th
                                 class="type-table-header w-[300px] px-6 py-[22px] text-left text-muted-foreground"
                             >
-                                Item ({{ items.length }})
+                                <BudgetSortableHeader
+                                    :label="`Item (${items.length})`"
+                                    :active="sortColumn === 'item'"
+                                    :direction="
+                                        sortColumn === 'item'
+                                            ? sortDirection
+                                            : null
+                                    "
+                                    @toggle="toggleSort('item')"
+                                />
                             </th>
                             <th
                                 class="type-table-header px-8 py-[22px] text-left text-muted-foreground"
                             >
-                                Importance
+                                <BudgetSortableHeader
+                                    label="Importance"
+                                    :active="sortColumn === 'importance'"
+                                    :direction="
+                                        sortColumn === 'importance'
+                                            ? sortDirection
+                                            : null
+                                    "
+                                    @toggle="toggleSort('importance')"
+                                />
                             </th>
                             <th
                                 class="type-table-header px-6 py-[22px] text-right text-muted-foreground"
                             >
-                                Expected Amount
+                                <BudgetSortableHeader
+                                    label="Expected Amount"
+                                    :active="sortColumn === 'expectedAmount'"
+                                    :direction="
+                                        sortColumn === 'expectedAmount'
+                                            ? sortDirection
+                                            : null
+                                    "
+                                    @toggle="toggleSort('expectedAmount')"
+                                />
                             </th>
                             <th class="w-[120px] px-6 py-[22px]"></th>
                         </tr>
@@ -172,7 +205,7 @@ const saveMobileEditor = () => {
 
                         <template v-if="hasItems && hasFilteredItems">
                             <BudgetItemsRow
-                                v-for="item in filteredItems"
+                                v-for="item in sortedItems"
                                 :key="item.id"
                                 :item="item"
                                 :display="displayConfig"
