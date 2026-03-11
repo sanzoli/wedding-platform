@@ -19,7 +19,7 @@ interface Props {
     draft: Partial<BudgetItem>;
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 
 const nameInputRef = ref<InstanceType<typeof Input>>();
 

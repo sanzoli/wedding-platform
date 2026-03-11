@@ -61,7 +61,7 @@ const handleCreateItem = (item: Partial<BudgetItem>) => {
             budget_id: props.budgetId,
             name: item.name || '',
             importance: (item.importance as BudgetItemImportance) || 'Normal',
-            expected_amount: item.expected_amount || null,
+            expected_amount: item.expected_amount ?? null,
         };
 
         tempItems.value.unshift(newItem);
@@ -163,7 +163,6 @@ onMounted(async () => {
             <section>
                 <BudgetItemsTable
                     :items="budget.items || []"
-                    :budget-id="budget.id"
                     @create="handleCreateItem"
                     @update="handleUpdateItem"
                     @delete="handleDeleteItem"

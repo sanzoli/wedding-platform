@@ -20,7 +20,6 @@ import { useBudgetTableSorting } from './composables/useBudgetTableSorting';
 
 interface Props {
     items: BudgetItem[];
-    budgetId?: string;
 }
 
 const props = defineProps<Props>();
@@ -140,7 +139,6 @@ const saveMobileEditor = () => {
             :is-adding-item="isAddingItem"
             @update:search-query="searchQuery = $event"
             @start-add-item="startAddItem"
-            @cancel-add-item="cancelAddItem"
         />
 
         <!-- ─── Desktop table (sm and up) ─── -->

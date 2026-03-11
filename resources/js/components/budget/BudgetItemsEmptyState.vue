@@ -7,7 +7,7 @@ interface Props {
     variant: 'desktop' | 'mobile' | 'search-desktop' | 'search-mobile';
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 
 const emit = defineEmits<{
     addItem: [];

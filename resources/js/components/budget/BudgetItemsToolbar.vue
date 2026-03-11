@@ -8,12 +8,11 @@ interface Props {
     isAddingItem: boolean;
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 
 const emit = defineEmits<{
     'update:searchQuery': [value: string];
     'start-add-item': [];
-    'cancel-add-item': [];
 }>();
 </script>
 
