@@ -2,19 +2,17 @@
 import BudgetItemsEmptyState from '@/components/budget/BudgetItemsEmptyState.vue';
 import BudgetItemsMobileCard from '@/components/budget/BudgetItemsMobileCard.vue';
 import BudgetItemsMobileEditor from '@/components/budget/BudgetItemsMobileEditor.vue';
+import BudgetItemsNewRow from '@/components/budget/BudgetItemsNewRow.vue';
 import BudgetItemsRow from '@/components/budget/BudgetItemsRow.vue';
-import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import FloatingActionButton from '@/components/ui/floating-action-button/FloatingActionButton.vue';
-import { Input } from '@/components/ui/input';
 import type { BudgetItem } from '@/types';
-import { Check, Plus, X } from 'lucide-vue-next';
-import { computed, ref } from 'vue';
+import { Plus } from 'lucide-vue-next';
+import { computed, nextTick, ref } from 'vue';
 import {
     createEmptyItemDraft,
     displayConfig,
     editingConfig,
-    parseExpectedAmount,
 } from './budget-items.config';
 import BudgetItemsToolbar from './BudgetItemsToolbar.vue';
 
@@ -74,6 +72,13 @@ const deleteItem = (id: string) => {
 const startAddItem = () => {
     isAddingItem.value = true;
     newItem.value = createEmptyItemDraft();
+
+    nextTick(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    });
 };
 
 const cancelAddItem = () => {
@@ -157,77 +162,13 @@ const saveMobileEditor = () => {
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-border/50">
-                        <!-- New item editable row — always at top -->
-                        <tr
+                        <BudgetItemsNewRow
                             v-if="isAddingItem && newItem"
-                            class="group bg-muted/20 transition-colors"
-                        >
-                            <td class="w-[300px] px-6 py-3">
-                                <Input
-                                    v-model="newItem.name"
-                                    placeholder="e.g., Venue rental"
-                                    class="h-[40px] rounded-[10px] border-border/60 bg-card text-[15px] shadow-none"
-                                    @keydown.enter="saveNewItem"
-                                    @keydown.esc="cancelAddItem"
-                                    autofocus
-                                />
-                            </td>
-                            <td class="px-8 py-3">
-                                <select
-                                    v-model="newItem.importance"
-                                    class="h-[40px] w-full rounded-[10px] border border-border/60 bg-card px-3 text-[15px] text-foreground shadow-none transition-colors outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
-                                >
-                                    <option
-                                        v-for="option in editingConfig.importanceOptions"
-                                        :key="option.value"
-                                        :value="option.value"
-                                    >
-                                        {{ option.label }}
-                                    </option>
-                                </select>
-                            </td>
-                            <td class="flex justify-end px-6 py-3">
-                                <Input
-                                    :modelValue="
-                                        newItem.expected_amount ?? undefined
-                                    "
-                                    @update:modelValue="
-                                        newItem.expected_amount =
-                                            parseExpectedAmount($event)
-                                    "
-                                    type="number"
-                                    min="0"
-                                    placeholder="0"
-                                    class="h-[40px] max-w-[70px] rounded-[10px] border-border/60 bg-card text-right text-[15px] tabular-nums shadow-none"
-                                    @keydown.enter="saveNewItem"
-                                    @keydown.esc="cancelAddItem"
-                                />
-                            </td>
-                            <td class="px-6 py-3">
-                                <div
-                                    class="flex items-center justify-end gap-1.5"
-                                >
-                                    <Button
-                                        @click="saveNewItem"
-                                        variant="ghost"
-                                        size="icon"
-                                        class="h-7 w-7 text-muted-foreground hover:bg-primary/10 hover:text-primary"
-                                        title="Save"
-                                    >
-                                        <Check :size="13" :stroke-width="2.5" />
-                                    </Button>
-                                    <Button
-                                        @click="cancelAddItem"
-                                        variant="ghost"
-                                        size="icon"
-                                        class="h-7 w-7 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-                                        title="Cancel"
-                                    >
-                                        <X :size="13" :stroke-width="2.5" />
-                                    </Button>
-                                </div>
-                            </td>
-                        </tr>
+                            :draft="newItem"
+                            @update:draft="newItem = $event"
+                            @save="saveNewItem"
+                            @cancel="cancelAddItem"
+                        />
 
                         <template v-if="hasItems && hasFilteredItems">
                             <BudgetItemsRow
@@ -260,7 +201,10 @@ const saveMobileEditor = () => {
                         <!-- Empty state normal -->
                         <tr v-else-if="!isAddingItem && !hasItems">
                             <td colspan="4" class="px-6 py-12 text-center">
-                                <BudgetItemsEmptyState variant="desktop" />
+                                <BudgetItemsEmptyState
+                                    variant="desktop"
+                                    @addItem="startAddItem"
+                                />
                             </td>
                         </tr>
                     </tbody>

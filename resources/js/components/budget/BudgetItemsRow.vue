@@ -1,9 +1,19 @@
 <script setup lang="ts">
+import ActionButtonGroup, {
+    type ActionButton,
+} from '@/components/budget/ActionButtonGroup.vue';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import type { BudgetItem, BudgetItemImportance } from '@/types';
 import { Check, Pencil, Trash2, X } from 'lucide-vue-next';
+import { computed } from 'vue';
 import type { DisplayConfig, EditingConfig } from './budget-items.config';
 
 interface Props {
@@ -21,6 +31,44 @@ const emit = defineEmits<{
     delete: [id: string];
     'update:draft': [draft: Partial<BudgetItem>];
 }>();
+
+const editActions = computed<ActionButton[]>(() => [
+    {
+        icon: X,
+        variant: 'ghost',
+        size: 'icon',
+        class: 'h-9 w-9 text-muted-foreground hover:bg-destructive/10 hover:text-destructive',
+        title: 'Cancel',
+        onClick: () => emit('cancel'),
+    },
+    {
+        icon: Check,
+        variant: 'ghost',
+        size: 'icon',
+        class: 'h-9 w-9 text-muted-foreground hover:bg-primary/10 hover:text-primary',
+        title: 'Save',
+        onClick: () => emit('save'),
+    },
+]);
+
+const viewActions = computed<ActionButton[]>(() => [
+    {
+        icon: Pencil,
+        variant: 'ghost',
+        size: 'icon',
+        class: 'h-9 w-9 text-muted-foreground hover:bg-muted hover:text-foreground',
+        title: 'Edit',
+        onClick: () => emit('edit', props.item),
+    },
+    {
+        icon: Trash2,
+        variant: 'ghost',
+        size: 'icon',
+        class: 'h-9 w-9 text-muted-foreground hover:bg-destructive/10 hover:text-destructive',
+        title: 'Delete',
+        onClick: () => emit('delete', props.item.id),
+    },
+]);
 </script>
 
 <template>
@@ -45,25 +93,30 @@ const emit = defineEmits<{
                 />
             </td>
             <td class="px-8 py-3">
-                <select
-                    :value="editing.draft.importance"
-                    @change="
+                <Select
+                    :modelValue="editing.draft.importance"
+                    @update:modelValue="
                         emit('update:draft', {
                             ...editing.draft,
-                            importance: ($event.target as HTMLSelectElement)
-                                .value as BudgetItemImportance,
+                            importance: $event as BudgetItemImportance,
                         })
                     "
-                    class="h-[40px] w-full rounded-[10px] border border-border/60 bg-card px-3 text-[15px] text-foreground shadow-none transition-colors outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
                 >
-                    <option
-                        v-for="option in editing.importanceOptions"
-                        :key="option.value"
-                        :value="option.value"
+                    <SelectTrigger
+                        class="h-[40px] rounded-[10px] border-border/60 bg-card text-[15px] shadow-none"
                     >
-                        {{ option.label }}
-                    </option>
-                </select>
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem
+                            v-for="option in editing.importanceOptions"
+                            :key="option.value"
+                            :value="option.value"
+                        >
+                            {{ option.label }}
+                        </SelectItem>
+                    </SelectContent>
+                </Select>
             </td>
             <td class="flex justify-end px-6 py-3">
                 <Input
@@ -84,26 +137,7 @@ const emit = defineEmits<{
                 />
             </td>
             <td class="px-6 py-3">
-                <div class="flex items-center justify-end gap-1.5">
-                    <Button
-                        @click="emit('cancel')"
-                        variant="ghost"
-                        size="icon"
-                        class="h-9 w-9 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-                        title="Cancel"
-                    >
-                        <X :size="15" :stroke-width="2.5" />
-                    </Button>
-                    <Button
-                        @click="emit('save')"
-                        variant="ghost"
-                        size="icon"
-                        class="h-9 w-9 text-muted-foreground hover:bg-primary/10 hover:text-primary"
-                        title="Save"
-                    >
-                        <Check :size="15" :stroke-width="2.5" />
-                    </Button>
-                </div>
+                <ActionButtonGroup :actions="editActions" class="justify-end" />
             </td>
         </template>
 
@@ -129,26 +163,7 @@ const emit = defineEmits<{
                 {{ display.formatAmount(item.expected_amount) }}
             </td>
             <td class="px-6 py-[21px]">
-                <div class="flex items-center justify-end gap-1">
-                    <Button
-                        @click="emit('edit', item)"
-                        variant="ghost"
-                        size="icon"
-                        class="h-9 w-9 text-muted-foreground hover:bg-muted hover:text-foreground"
-                        title="Edit"
-                    >
-                        <Pencil :size="15" :stroke-width="2" />
-                    </Button>
-                    <Button
-                        @click="emit('delete', item.id)"
-                        variant="ghost"
-                        size="icon"
-                        class="h-9 w-9 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-                        title="Delete"
-                    >
-                        <Trash2 :size="15" :stroke-width="2" />
-                    </Button>
-                </div>
+                <ActionButtonGroup :actions="viewActions" class="justify-end" />
             </td>
         </template>
     </tr>

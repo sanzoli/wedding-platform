@@ -2,6 +2,13 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import type { BudgetItem, BudgetItemImportance } from '@/types';
 import { X } from 'lucide-vue-next';
 import { editingConfig, parseExpectedAmount } from './budget-items.config';
@@ -68,25 +75,30 @@ const emit = defineEmits<{
                     >
                         Importance
                     </Label>
-                    <select
-                        :value="draft.importance"
-                        @change="
+                    <Select
+                        :modelValue="draft.importance"
+                        @update:modelValue="
                             emit('update:draft', {
                                 ...draft,
-                                importance: ($event.target as HTMLSelectElement)
-                                    .value as BudgetItemImportance,
+                                importance: $event as BudgetItemImportance,
                             })
                         "
-                        class="h-[44px] w-full rounded-[12px] border border-border/60 bg-card px-3 text-[15px] text-foreground shadow-none transition-colors outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
                     >
-                        <option
-                            v-for="option in editingConfig.importanceOptions"
-                            :key="option.value"
-                            :value="option.value"
+                        <SelectTrigger
+                            class="h-[44px] rounded-[12px] border-border/60 bg-card text-[15px] shadow-none"
                         >
-                            {{ option.label }}
-                        </option>
-                    </select>
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem
+                                v-for="option in editingConfig.importanceOptions"
+                                :key="option.value"
+                                :value="option.value"
+                            >
+                                {{ option.label }}
+                            </SelectItem>
+                        </SelectContent>
+                    </Select>
                 </div>
                 <div class="flex flex-col gap-1.5">
                     <Label

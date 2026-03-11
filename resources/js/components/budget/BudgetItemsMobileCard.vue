@@ -1,11 +1,21 @@
 <script setup lang="ts">
+import ActionButtonGroup, {
+    type ActionButton,
+} from '@/components/budget/ActionButtonGroup.vue';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import type { BudgetItem, BudgetItemImportance } from '@/types';
 import { Pencil, Trash2 } from 'lucide-vue-next';
+import { computed } from 'vue';
 import type { DisplayConfig, EditingConfig } from './budget-items.config';
 
 interface Props {
@@ -23,6 +33,25 @@ const emit = defineEmits<{
     delete: [id: string];
     'update:draft': [draft: Partial<BudgetItem>];
 }>();
+
+const viewActions = computed<ActionButton[]>(() => [
+    {
+        icon: Pencil,
+        variant: 'ghost',
+        size: 'icon',
+        class: 'h-7 w-7 text-muted-foreground hover:bg-muted hover:text-foreground',
+        title: 'Edit',
+        onClick: () => emit('edit', props.item),
+    },
+    {
+        icon: Trash2,
+        variant: 'ghost',
+        size: 'icon',
+        class: 'h-7 w-7 text-muted-foreground hover:bg-destructive/10 hover:text-destructive',
+        title: 'Delete',
+        onClick: () => emit('delete', props.item.id),
+    },
+]);
 </script>
 
 <template>
@@ -57,25 +86,30 @@ const emit = defineEmits<{
                     >
                         Importance
                     </Label>
-                    <select
-                        :value="editing.draft.importance"
-                        @change="
+                    <Select
+                        :modelValue="editing.draft.importance"
+                        @update:modelValue="
                             emit('update:draft', {
                                 ...editing.draft,
-                                importance: ($event.target as HTMLSelectElement)
-                                    .value as BudgetItemImportance,
+                                importance: $event as BudgetItemImportance,
                             })
                         "
-                        class="h-[40px] w-full rounded-[10px] border border-border/60 bg-card px-3 text-[15px] text-foreground shadow-none transition-colors outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
                     >
-                        <option
-                            v-for="option in editing.importanceOptions"
-                            :key="option.value"
-                            :value="option.value"
+                        <SelectTrigger
+                            class="h-[40px] rounded-[10px] border-border/60 bg-card text-[15px] shadow-none"
                         >
-                            {{ option.label }}
-                        </option>
-                    </select>
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem
+                                v-for="option in editing.importanceOptions"
+                                :key="option.value"
+                                :value="option.value"
+                            >
+                                {{ option.label }}
+                            </SelectItem>
+                        </SelectContent>
+                    </Select>
                 </div>
                 <div class="flex flex-col gap-1.5">
                     <Label
@@ -123,26 +157,10 @@ const emit = defineEmits<{
                     <p class="truncate text-[15px] font-medium text-foreground">
                         {{ item.name }}
                     </p>
-                    <div class="flex shrink-0 items-center gap-0.5">
-                        <Button
-                            @click="emit('edit', item)"
-                            variant="ghost"
-                            size="icon"
-                            class="h-7 w-7 text-muted-foreground hover:bg-muted hover:text-foreground"
-                            title="Edit"
-                        >
-                            <Pencil :size="13" :stroke-width="2" />
-                        </Button>
-                        <Button
-                            @click="emit('delete', item.id)"
-                            variant="ghost"
-                            size="icon"
-                            class="h-7 w-7 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-                            title="Delete"
-                        >
-                            <Trash2 :size="13" :stroke-width="2" />
-                        </Button>
-                    </div>
+                    <ActionButtonGroup
+                        :actions="viewActions"
+                        class="shrink-0"
+                    />
                 </div>
                 <!-- Row 2: badge + amount -->
                 <div class="mt-2 flex items-center justify-between gap-2">

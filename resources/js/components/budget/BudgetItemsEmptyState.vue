@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import EmptyStateCard from '@/components/budget/EmptyStateCard.vue';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
 import { Plus } from 'lucide-vue-next';
 
 interface Props {
@@ -47,26 +47,17 @@ const emit = defineEmits<{
 
     <!-- Search: mobile -->
     <template v-else-if="variant === 'search-mobile'">
-        <Card class="items-center px-4 py-10 text-center">
-            <p class="text-sm font-medium text-foreground/80">
-                No items match your search
-            </p>
-            <p class="text-xs text-muted-foreground">
-                Try adjusting your search terms
-            </p>
-        </Card>
+        <EmptyStateCard
+            title="No items match your search"
+            description="Try adjusting your search terms"
+        />
     </template>
 
     <!-- Mobile: self-contained card -->
     <template v-else-if="variant === 'mobile'">
-        <Card class="items-center px-4 py-10 text-center">
-            <p class="text-sm font-medium text-foreground/80">
-                No budget items yet
-            </p>
-            <p class="text-xs text-muted-foreground">
-                Tap + to add your first item and start building your dream
-                wedding
-            </p>
-        </Card>
+        <EmptyStateCard
+            title="No budget items yet"
+            description="Tap + to add your first item and start building your dream wedding"
+        />
     </template>
 </template>
