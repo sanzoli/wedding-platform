@@ -9,6 +9,8 @@ import { onMounted, ref } from 'vue';
 
 const props = defineProps<{
     budgetId: string;
+    // Future: Inertia page prop `budget` will be typed as Budget
+    budget?: Budget;
 }>();
 
 const budget = ref<Budget | null>(null);
@@ -19,33 +21,26 @@ const isLoading = ref(true);
 let tempItemIdCounter = 1;
 const tempItems = ref<BudgetItem[]>([]);
 
-// Mock budget data for demo
-const createMockBudget = (): Budget => {
-    return {
-        id: props.budgetId,
-        name: 'Wedding Budget 2026',
-        draft: false,
-        items: tempItems.value,
-    };
-};
-
 const generateTempId = (): string => {
     return `temp-${tempItemIdCounter++}`;
 };
 
+// Mock budget for demo until Inertia delivers real props
+const createMockBudget = (): Budget => ({
+    id: props.budgetId,
+    name: 'Wedding Budget 2026',
+    draft: false,
+    items: mockBudgetItems(props.budgetId, generateTempId),
+});
+
 const loadBudget = async () => {
     try {
-        // TODO(api): load this budget from a dedicated backend endpoint when available
-        // Simulate loading delay
+        // TODO(api): remove mock once Inertia delivers budget as page prop
         await new Promise((resolve) => setTimeout(resolve, 500));
 
-        // Create mock budget with temporary items
-        budget.value = createMockBudget();
-
-        // Add some demo items for testing
-        tempItems.value = mockBudgetItems(props.budgetId, generateTempId);
-
-        budget.value.items = tempItems.value;
+        const loadedBudget = props.budget ?? createMockBudget();
+        tempItems.value = loadedBudget.items || [];
+        budget.value = loadedBudget;
     } catch {
         error.value = 'Failed to load budget';
     }

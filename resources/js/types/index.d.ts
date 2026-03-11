@@ -52,5 +52,5 @@ export interface BudgetItem {
     budget_id: string;
     name: string;
     expected_amount: number | null;
-    importance: BudgetItemImportance;
+    importance: BudgetItemImportance | null;
 }
