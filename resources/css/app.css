@@ -179,6 +179,20 @@
         color: var(--badge-low-fg);
         background-color: var(--badge-low-bg);
     }
+
+    /* Flash animation for edited items */
+    @keyframes flash-edit {
+        0% {
+            background-color: hsl(var(--primary) / 0.08);
+        }
+        100% {
+            background-color: transparent;
+        }
+    }
+
+    .animate-flash-edit {
+        animation: flash-edit 600ms ease-out;
+    }
 }
 
 /* Global cursor pointer for all interactive elements */

@@ -21,6 +21,8 @@ interface Props {
     display: DisplayConfig;
     editing: EditingConfig | null;
     isDeleting?: boolean;
+    isNewlyCreated?: boolean;
+    isRecentlyEdited?: boolean;
 }
 
 const props = defineProps<Props>();
@@ -77,7 +79,14 @@ const viewActions = computed<ActionButton[]>(() => [
 <template>
     <tr
         class="group transition-colors hover:bg-muted/30"
-        :class="{ 'bg-muted/20': editing?.isEditing }"
+        :class="{
+            'bg-muted/20': editing?.isEditing,
+            'animate-in duration-300 fade-in-0 slide-in-from-top-2':
+                isNewlyCreated,
+            'animate-out opacity-50 duration-300 fade-out-0 slide-out-to-right-4':
+                isDeleting,
+            'animate-flash-edit': isRecentlyEdited && !editing?.isEditing,
+        }"
     >
         <template v-if="editing?.isEditing && editing.draft">
             <td class="w-[300px] px-6 py-3">

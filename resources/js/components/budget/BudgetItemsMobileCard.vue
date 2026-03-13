@@ -24,6 +24,8 @@ interface Props {
     display: DisplayConfig;
     editing: EditingConfig | null;
     isDeleting?: boolean;
+    isNewlyCreated?: boolean;
+    isRecentlyEdited?: boolean;
 }
 
 const props = defineProps<Props>();
@@ -59,7 +61,16 @@ const viewActions = computed<ActionButton[]>(() => [
 </script>
 
 <template>
-    <Card class="py-1">
+    <Card
+        class="py-1"
+        :class="{
+            'animate-in duration-300 fade-in-0 slide-in-from-top-2':
+                isNewlyCreated,
+            'animate-out opacity-50 duration-300 fade-out-0 slide-out-to-right-4':
+                isDeleting,
+            'animate-flash-edit': isRecentlyEdited && !editing?.isEditing,
+        }"
+    >
         <!-- Edit mode card -->
         <template v-if="editing?.isEditing && editing.draft">
             <div class="flex flex-col gap-3.5 px-4 py-4">

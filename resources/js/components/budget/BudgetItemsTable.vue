@@ -9,7 +9,7 @@ import { Card } from '@/components/ui/card';
 import FloatingActionButton from '@/components/ui/floating-action-button/FloatingActionButton.vue';
 import type { BudgetItem } from '@/types';
 import { Plus } from 'lucide-vue-next';
-import { computed, nextTick, onUnmounted, ref } from 'vue';
+import { computed, nextTick, onUnmounted, ref, watch } from 'vue';
 import {
     createEmptyItemDraft,
     displayConfig,
@@ -30,6 +30,29 @@ const emit = defineEmits<{
     update: [id: string, item: Partial<BudgetItem>];
     delete: [id: string];
 }>();
+
+// ─── Animation states ─────────────────────────────────────────────────────────
+const newlyCreatedItems = ref<Set<string>>(new Set());
+const recentlyEditedItems = ref<Set<string>>(new Set());
+
+// Track newly created items for entrance animation
+watch(
+    () => props.items,
+    (newItems, oldItems) => {
+        if (!oldItems) return;
+
+        const oldIds = new Set(oldItems.map((item) => item.id));
+        const newIds = newItems.filter((item) => !oldIds.has(item.id));
+
+        newIds.forEach((item) => {
+            newlyCreatedItems.value.add(item.id);
+            setTimeout(() => {
+                newlyCreatedItems.value.delete(item.id);
+            }, 500);
+        });
+    },
+    { deep: false },
+);
 
 // ─── Search ───────────────────────────────────────────────────────────────────
 const searchQuery = ref('');
@@ -64,9 +87,16 @@ const cancelEdit = () => {
 
 const saveEdit = () => {
     if (editingItem.value && editingItem.value.id) {
+        const itemId = editingItem.value.id;
         // TODO(api): Replace local update flow with backend PATCH for this item
-        emit('update', editingItem.value.id, editingItem.value);
+        emit('update', itemId, editingItem.value);
         editingItem.value = null;
+
+        // Trigger flash animation
+        recentlyEditedItems.value.add(itemId);
+        setTimeout(() => {
+            recentlyEditedItems.value.delete(itemId);
+        }, 600);
     }
 };
 
@@ -112,6 +142,14 @@ const rowEditingFor = (item: BudgetItem) =>
 
 const isDeleting = (item: BudgetItem) => {
     return props.deletingItems?.has(item.id) || false;
+};
+
+const isNewlyCreated = (item: BudgetItem) => {
+    return newlyCreatedItems.value.has(item.id);
+};
+
+const isRecentlyEdited = (item: BudgetItem) => {
+    return recentlyEditedItems.value.has(item.id);
 };
 
 // ─── Mobile FAB / full-screen editor state ───────────────────────────────────
@@ -244,6 +282,8 @@ onUnmounted(() => {
                                 :display="displayConfig"
                                 :editing="rowEditingFor(item)"
                                 :is-deleting="isDeleting(item)"
+                                :is-newly-created="isNewlyCreated(item)"
+                                :is-recently-edited="isRecentlyEdited(item)"
                                 @edit="startEdit"
                                 @cancel="cancelEdit"
                                 @save="saveEdit"
@@ -289,6 +329,8 @@ onUnmounted(() => {
                     :display="displayConfig"
                     :editing="rowEditingFor(item)"
                     :is-deleting="isDeleting(item)"
+                    :is-newly-created="isNewlyCreated(item)"
+                    :is-recently-edited="isRecentlyEdited(item)"
                     @edit="startEdit"
                     @cancel="cancelEdit"
                     @save="saveEdit"
