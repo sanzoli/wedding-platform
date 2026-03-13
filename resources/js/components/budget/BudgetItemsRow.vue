@@ -20,6 +20,7 @@ interface Props {
     item: BudgetItem;
     display: DisplayConfig;
     editing: EditingConfig | null;
+    isDeleting?: boolean;
 }
 
 const props = defineProps<Props>();
@@ -34,20 +35,20 @@ const emit = defineEmits<{
 
 const editActions = computed<ActionButton[]>(() => [
     {
-        icon: X,
-        variant: 'ghost',
-        size: 'icon',
-        class: 'h-9 w-9 text-muted-foreground hover:bg-destructive/10 hover:text-destructive',
-        title: 'Cancel',
-        onClick: () => emit('cancel'),
-    },
-    {
         icon: Check,
         variant: 'ghost',
         size: 'icon',
         class: 'h-9 w-9 text-muted-foreground hover:bg-primary/10 hover:text-primary',
         title: 'Save',
         onClick: () => emit('save'),
+    },
+    {
+        icon: X,
+        variant: 'ghost',
+        size: 'icon',
+        class: 'h-9 w-9 text-muted-foreground hover:bg-destructive/10 hover:text-destructive',
+        title: 'Cancel',
+        onClick: () => emit('cancel'),
     },
 ]);
 
@@ -59,6 +60,7 @@ const viewActions = computed<ActionButton[]>(() => [
         class: 'h-9 w-9 text-muted-foreground hover:bg-muted hover:text-foreground',
         title: 'Edit',
         onClick: () => emit('edit', props.item),
+        disabled: props.isDeleting,
     },
     {
         icon: Trash2,
@@ -67,6 +69,7 @@ const viewActions = computed<ActionButton[]>(() => [
         class: 'h-9 w-9 text-muted-foreground hover:bg-destructive/10 hover:text-destructive',
         title: 'Delete',
         onClick: () => emit('delete', props.item.id),
+        disabled: props.isDeleting,
     },
 ]);
 </script>

@@ -40,20 +40,20 @@ onMounted(() => {
 
 const actions = computed<ActionButton[]>(() => [
     {
-        icon: Check,
-        variant: 'ghost',
-        size: 'icon',
-        class: 'h-7 w-7 text-muted-foreground hover:bg-primary/10 hover:text-primary',
-        title: 'Save',
-        onClick: () => emit('save'),
-    },
-    {
         icon: X,
         variant: 'ghost',
         size: 'icon',
-        class: 'h-7 w-7 text-muted-foreground hover:bg-destructive/10 hover:text-destructive',
+        class: 'h-9 w-9 text-muted-foreground hover:bg-destructive/10 hover:text-destructive',
         title: 'Cancel',
         onClick: () => emit('cancel'),
+    },
+    {
+        icon: Check,
+        variant: 'ghost',
+        size: 'icon',
+        class: 'h-9 w-9 text-muted-foreground hover:bg-primary/10 hover:text-primary',
+        title: 'Save',
+        onClick: () => emit('save'),
     },
 ]);
 </script>

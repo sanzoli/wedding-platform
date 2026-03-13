@@ -9,7 +9,7 @@ import { Card } from '@/components/ui/card';
 import FloatingActionButton from '@/components/ui/floating-action-button/FloatingActionButton.vue';
 import type { BudgetItem } from '@/types';
 import { Plus } from 'lucide-vue-next';
-import { computed, nextTick, ref } from 'vue';
+import { computed, nextTick, onUnmounted, ref } from 'vue';
 import {
     createEmptyItemDraft,
     displayConfig,
@@ -20,6 +20,7 @@ import { useBudgetTableSorting } from './composables/useBudgetTableSorting';
 
 interface Props {
     items: BudgetItem[];
+    deletingItems?: Set<string>;
 }
 
 const props = defineProps<Props>();
@@ -63,14 +64,14 @@ const cancelEdit = () => {
 
 const saveEdit = () => {
     if (editingItem.value && editingItem.value.id) {
-        // TODO(api): replace local update flow with backend PATCH for this item
+        // TODO(api): Replace local update flow with backend PATCH for this item
         emit('update', editingItem.value.id, editingItem.value);
         editingItem.value = null;
     }
 };
 
 const deleteItem = (id: string) => {
-    // TODO(api): replace local delete flow with backend DELETE for this item
+    // TODO(api): Replace local delete flow with backend DELETE for this item
     emit('delete', id);
 };
 
@@ -92,7 +93,7 @@ const cancelAddItem = () => {
 
 const saveNewItem = () => {
     if (newItem.value && newItem.value.name && newItem.value.name.trim()) {
-        // TODO(api): replace local create flow with backend POST for budget items
+        // TODO(api): Replace local create flow with backend POST for budget items
         emit('create', newItem.value);
         resetNewItemState();
     } else {
@@ -109,9 +110,38 @@ const rowEditingFor = (item: BudgetItem) =>
         ? { isEditing: true, draft: editingItem.value!, ...editingConfig }
         : null;
 
+const isDeleting = (item: BudgetItem) => {
+    return props.deletingItems?.has(item.id) || false;
+};
+
 // ─── Mobile FAB / full-screen editor state ───────────────────────────────────
 const isMobileEditorOpen = ref(false);
 const mobileEditorDraft = ref<Partial<BudgetItem>>(createEmptyItemDraft());
+
+// Detect screen size
+const isMobile = ref(false);
+const updateIsMobile = () => {
+    const wasMobile = isMobile.value;
+    isMobile.value = window.innerWidth < 640; // sm breakpoint
+
+    // Desktop to Mobile: Transfer desktop add state to mobile
+    if (!wasMobile && isMobile.value && isAddingItem.value && newItem.value) {
+        mobileEditorDraft.value = { ...newItem.value };
+        isMobileEditorOpen.value = true;
+        resetNewItemState();
+    }
+
+    // Mobile to Desktop: Transfer mobile add state to desktop
+    if (wasMobile && !isMobile.value && isMobileEditorOpen.value) {
+        newItem.value = { ...mobileEditorDraft.value };
+        isAddingItem.value = true;
+        isMobileEditorOpen.value = false;
+    }
+};
+
+// Initialize and add listener
+updateIsMobile();
+window.addEventListener('resize', updateIsMobile);
 
 const openMobileEditor = () => {
     mobileEditorDraft.value = createEmptyItemDraft();
@@ -124,11 +154,16 @@ const closeMobileEditor = () => {
 
 const saveMobileEditor = () => {
     if (mobileEditorDraft.value?.name?.trim()) {
-        // TODO(api): replace local create flow with backend POST for budget items
+        // TODO(api): Replace local create flow with backend POST for budget items
         emit('create', mobileEditorDraft.value);
     }
     closeMobileEditor();
 };
+
+// Cleanup on unmount
+onUnmounted(() => {
+    window.removeEventListener('resize', updateIsMobile);
+});
 </script>
 
 <template>
@@ -208,6 +243,7 @@ const saveMobileEditor = () => {
                                 :item="item"
                                 :display="displayConfig"
                                 :editing="rowEditingFor(item)"
+                                :is-deleting="isDeleting(item)"
                                 @edit="startEdit"
                                 @cancel="cancelEdit"
                                 @save="saveEdit"
@@ -252,6 +288,7 @@ const saveMobileEditor = () => {
                     :item="item"
                     :display="displayConfig"
                     :editing="rowEditingFor(item)"
+                    :is-deleting="isDeleting(item)"
                     @edit="startEdit"
                     @cancel="cancelEdit"
                     @save="saveEdit"

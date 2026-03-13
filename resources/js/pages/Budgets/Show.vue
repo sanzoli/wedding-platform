@@ -1,168 +1,119 @@
 <script setup lang="ts">
 import BudgetItemsTable from '@/components/budget/BudgetItemsTable.vue';
-import { mockBudgetItems } from '@/components/budget/mock-budget-items';
 import ThemeToggle from '@/components/ThemeToggle.vue';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Spinner } from '@/components/ui/spinner';
-import type { Budget, BudgetItem, BudgetItemImportance } from '@/types';
-import { onMounted, ref } from 'vue';
+import { store as storeItem } from '@/routes/budgets/items';
+import { destroy as destroyItem, update as updateItem } from '@/routes/items';
+import type { Budget, BudgetItem } from '@/types';
+import { router, useForm } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 const props = defineProps<{
-    budgetId: string;
-    // Future: Inertia page prop `budget` will be typed as Budget
-    budget?: Budget;
+    budget: Budget;
 }>();
 
-const budget = ref<Budget | null>(null);
 const error = ref<string | null>(null);
-const isLoading = ref(true);
+const deletingItems = ref<Set<string>>(new Set());
 
-// Temporary local storage for budget items
-let tempItemIdCounter = 1;
-const tempItems = ref<BudgetItem[]>([]);
-
-const generateTempId = (): string => {
-    return `temp-${tempItemIdCounter++}`;
-};
-
-// Mock budget for demo until Inertia delivers real props
-const createMockBudget = (): Budget => ({
-    id: props.budgetId,
-    name: 'Wedding Budget 2026',
-    draft: false,
-    items: mockBudgetItems(props.budgetId, generateTempId),
+const createForm = useForm<{
+    name: string;
+    importance: string | null;
+    expected_amount: number | null;
+}>({
+    name: '',
+    importance: 'Normal',
+    expected_amount: null,
 });
 
-const loadBudget = async () => {
-    try {
-        // TODO(api): remove mock once Inertia delivers budget as page prop
-        await new Promise((resolve) => setTimeout(resolve, 500));
-
-        const loadedBudget = props.budget ?? createMockBudget();
-        tempItems.value = loadedBudget.items || [];
-        budget.value = loadedBudget;
-    } catch {
-        error.value = 'Failed to load budget';
-    }
-};
-
 const handleCreateItem = (item: Partial<BudgetItem>) => {
-    if (!budget.value) return;
+    createForm.name = item.name || '';
+    createForm.importance = item.importance ?? 'Normal';
+    createForm.expected_amount = item.expected_amount ?? null;
 
-    try {
-        // TODO(api): replace local create flow with backend POST for budget items
-        const newItem: BudgetItem = {
-            id: generateTempId(),
-            budget_id: props.budgetId,
-            name: item.name || '',
-            importance: (item.importance as BudgetItemImportance) || 'Normal',
-            expected_amount: item.expected_amount ?? null,
-        };
-
-        tempItems.value.unshift(newItem);
-        budget.value.items = tempItems.value;
-
-        console.log('Item created locally:', newItem);
-    } catch (err) {
-        console.error('Failed to create item:', err);
-        error.value = 'Failed to create budget item';
-    }
+    createForm.post(storeItem.url(props.budget.id), {
+        preserveScroll: true,
+        onError: () => {
+            error.value = 'Failed to create budget item';
+        },
+        onSuccess: () => {
+            createForm.reset();
+            error.value = null;
+        },
+    });
 };
 
 const handleUpdateItem = (id: string, item: Partial<BudgetItem>) => {
-    if (!budget.value?.items) return;
-
-    try {
-        // TODO(api): replace local update flow with backend PATCH for this item
-        const index = tempItems.value.findIndex((i) => i.id === id);
-        if (index !== -1) {
-            tempItems.value[index] = {
-                ...tempItems.value[index],
-                name: item.name || tempItems.value[index].name,
-                importance:
-                    (item.importance as BudgetItemImportance) ||
-                    tempItems.value[index].importance,
-                expected_amount:
-                    item.expected_amount !== undefined
-                        ? item.expected_amount
-                        : tempItems.value[index].expected_amount,
-            };
-            budget.value.items = tempItems.value;
-
-            console.log('Item updated locally:', tempItems.value[index]);
-        }
-    } catch (err) {
-        console.error('Failed to update item:', err);
-        error.value = 'Failed to update budget item';
-    }
+    router.patch(
+        updateItem.url(id),
+        {
+            name: item.name,
+            importance: item.importance,
+            expected_amount: item.expected_amount,
+        },
+        {
+            preserveScroll: true,
+            onError: () => {
+                error.value = 'Failed to update budget item';
+            },
+            onSuccess: () => {
+                error.value = null;
+            },
+        },
+    );
 };
 
 const handleDeleteItem = (id: string) => {
-    if (!budget.value?.items) return;
-
-    try {
-        // TODO(api): replace local delete flow with backend DELETE for this item
-        tempItems.value = tempItems.value.filter((i) => i.id !== id);
-        budget.value.items = tempItems.value;
-
-        console.log('Item deleted locally:', id);
-    } catch (err) {
-        console.error('Failed to delete item:', err);
-        error.value = 'Failed to delete budget item';
+    // Prevents double click
+    if (deletingItems.value.has(id)) {
+        return;
     }
-};
 
-onMounted(async () => {
-    isLoading.value = true;
-    await loadBudget();
-    isLoading.value = false;
-});
+    deletingItems.value.add(id);
+
+    router.delete(destroyItem.url(id), {
+        preserveScroll: true,
+        onError: (errors) => {
+            error.value = 'Failed to delete budget item';
+            deletingItems.value.delete(id);
+        },
+        onSuccess: () => {
+            error.value = null;
+            deletingItems.value.delete(id);
+        },
+    });
+};
 </script>
 
 <template>
     <div class="mx-auto max-w-6xl px-6 py-4">
-        <template v-if="isLoading">
-            <div class="flex items-center justify-center py-20">
-                <div class="text-center">
-                    <Spinner class="mb-3 size-8" />
-                    <p class="text-sm text-muted-foreground">
-                        Loading budget...
-                    </p>
-                </div>
+        <Alert v-if="error" variant="destructive" class="mb-4 text-center">
+            <AlertDescription>
+                {{ error }}
+            </AlertDescription>
+        </Alert>
+
+        <div
+            class="sticky top-0 z-40 -mx-6 mb-2 flex items-center justify-between bg-background/95 px-6 py-6 backdrop-blur-sm transition-shadow duration-200"
+        >
+            <div>
+                <h1 class="type-display text-foreground">
+                    {{ budget.name }}
+                </h1>
+                <p class="mt-2 text-[15px] text-muted-foreground">
+                    Manage and track your estimated costs
+                </p>
             </div>
-        </template>
+            <ThemeToggle />
+        </div>
 
-        <template v-else-if="error">
-            <Alert variant="destructive" class="text-center">
-                <AlertDescription>
-                    {{ error }}
-                </AlertDescription>
-            </Alert>
-        </template>
-
-        <template v-else-if="budget">
-            <div
-                class="sticky top-0 z-40 -mx-6 mb-2 flex items-center justify-between bg-background/95 px-6 py-6 backdrop-blur-sm transition-shadow duration-200"
-            >
-                <div>
-                    <h1 class="type-display text-foreground">
-                        {{ budget.name }}
-                    </h1>
-                    <p class="mt-2 text-[15px] text-muted-foreground">
-                        Manage and track your estimated costs
-                    </p>
-                </div>
-                <ThemeToggle />
-            </div>
-
-            <section>
-                <BudgetItemsTable
-                    :items="budget.items || []"
-                    @create="handleCreateItem"
-                    @update="handleUpdateItem"
-                    @delete="handleDeleteItem"
-                />
-            </section>
-        </template>
+        <section>
+            <BudgetItemsTable
+                :items="budget.items || []"
+                :deleting-items="deletingItems"
+                @create="handleCreateItem"
+                @update="handleUpdateItem"
+                @delete="handleDeleteItem"
+            />
+        </section>
     </div>
 </template>

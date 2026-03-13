@@ -23,6 +23,7 @@ interface Props {
     item: BudgetItem;
     display: DisplayConfig;
     editing: EditingConfig | null;
+    isDeleting?: boolean;
 }
 
 const props = defineProps<Props>();
@@ -43,6 +44,7 @@ const viewActions = computed<ActionButton[]>(() => [
         class: 'h-7 w-7 text-muted-foreground hover:bg-muted hover:text-foreground',
         title: 'Edit',
         onClick: () => emit('edit', props.item),
+        disabled: props.isDeleting,
     },
     {
         icon: Trash2,
@@ -51,6 +53,7 @@ const viewActions = computed<ActionButton[]>(() => [
         class: 'h-7 w-7 text-muted-foreground hover:bg-destructive/10 hover:text-destructive',
         title: 'Delete',
         onClick: () => emit('delete', props.item.id),
+        disabled: props.isDeleting,
     },
 ]);
 </script>
