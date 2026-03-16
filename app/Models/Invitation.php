@@ -16,14 +16,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $email
  * @property Carbon $expires_at
  * @property Carbon $accepted_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property User $user
  */
 #[ScopedBy([CurrentWedding::class])]
 class Invitation extends Model
 {
     /** @use HasFactory<InvitationFactory> */
     use HasFactory, HasUlids;
-
-    protected $dateFormat = 'Y-m-d H:i:s';
 
     public function wedding(): BelongsTo
     {
@@ -40,6 +41,8 @@ class Invitation extends Model
         return [
             'expires_at' => 'datetime:Y-m-d H:i:s',
             'accepted_at' => 'datetime:Y-m-d H:i:s',
+            'created_at' => 'datetime:Y-m-d H:i:s',
+            'updated_at' => 'datetime:Y-m-d H:i:s',
         ];
     }
 }

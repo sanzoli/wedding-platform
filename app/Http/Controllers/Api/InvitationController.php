@@ -24,7 +24,7 @@ class InvitationController extends Controller
 
     public function show(Invitation $invitation)
     {
-        //
+        return $invitation->toResource();
     }
 
     public function update(UpdateInvitationRequest $request, Invitation $invitation, UpdateInvitation $action)
