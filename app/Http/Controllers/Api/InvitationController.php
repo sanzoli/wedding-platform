@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Actions\Invitation\CreateNewInvitation;
+use App\Actions\Invitation\DeleteInvitation;
 use App\Actions\Invitation\UpdateInvitation;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreInvitationRequest;
@@ -31,8 +32,10 @@ class InvitationController extends Controller
         return $action->update($invitation, $request->validated())->toResource();
     }
 
-    public function destroy(Invitation $invitation)
+    public function destroy(Invitation $invitation, DeleteInvitation $action)
     {
-        //
+        $action->delete($invitation);
+
+        return response()->noContent();
     }
 }
