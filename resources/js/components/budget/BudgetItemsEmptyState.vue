@@ -57,7 +57,22 @@ const emit = defineEmits<{
     <template v-else-if="variant === 'mobile'">
         <EmptyStateCard
             title="No budget items yet"
-            description="Tap + to add your first item and start building your dream wedding"
-        />
+            description=""
+        >
+            <template #action>
+                <p class="text-xs text-muted-foreground text-center">
+                    Tap + button or 
+                    <Button 
+                        variant="link" 
+                        size="sm" 
+                        class="p-0 h-auto text-xs underline"
+                        @click="emit('addItem')"
+                    >
+                        click here
+                    </Button>
+                     to add your first item and build your dream wedding
+                </p>
+            </template>
+        </EmptyStateCard>
     </template>
 </template>

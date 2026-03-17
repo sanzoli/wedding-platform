@@ -345,7 +345,11 @@ onUnmounted(() => {
                 <BudgetItemsEmptyState variant="search-mobile" />
             </template>
 
-            <BudgetItemsEmptyState v-else variant="mobile" />
+            <BudgetItemsEmptyState 
+                v-else 
+                variant="mobile" 
+                @addItem="openMobileEditor" 
+            />
         </div>
 
         <!-- ─── Mobile FAB (below sm) ─── -->
