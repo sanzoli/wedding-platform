@@ -320,7 +320,7 @@ onUnmounted(() => {
         </Card>
 
         <!-- ─── Mobile card list (below sm) ─── -->
-        <div class="flex flex-col gap-2.5 sm:hidden">
+        <div class="flex flex-col gap-2.5 sm:hidden fab-safe-area">
             <template v-if="hasItems && hasFilteredItems">
                 <BudgetItemsMobileCard
                     v-for="item in filteredItems"

@@ -193,6 +193,13 @@
     .animate-flash-edit {
         animation: flash-edit 600ms ease-out;
     }
+
+    /* ----------------------------
+     * FAB-aware spacing utilities
+     * ---------------------------- */
+    .fab-safe-area {
+        padding-bottom: calc(var(--fab-size) + 1.5rem);
+    }
 }
 
 /* Global cursor pointer for all interactive elements */
