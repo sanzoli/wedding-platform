@@ -12,4 +12,7 @@ Route::name('api.')->group(fn () => [
 
         Route::apiResource('invitations', InvitationController::class),
     ]),
+
+    Route::post('invitations/{invitation}/accept', [InvitationController::class, 'accept'])
+        ->name('invitations.accept'),
 ]);

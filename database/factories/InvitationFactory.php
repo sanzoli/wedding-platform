@@ -29,4 +29,11 @@ class InvitationFactory extends Factory
             'user_id' => User::factory(),
         ]);
     }
+
+    public function expired(): InvitationFactory|Factory
+    {
+        return $this->state(fn (array $attributes) => [
+            'expires_at' => Carbon::now()->subDay(),
+        ]);
+    }
 }

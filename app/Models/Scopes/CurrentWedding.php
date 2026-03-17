@@ -11,6 +11,8 @@ class CurrentWedding implements Scope
 {
     public function apply(Builder $builder, Model $model): void
     {
-        $builder->where('wedding_id', Auth::user()->current_wedding_id);
+        $builder->when(Auth::user(), function (Builder $builder) {
+            $builder->where('wedding_id', Auth::user()->current_wedding_id);
+        });
     }
 }

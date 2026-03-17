@@ -14,6 +14,8 @@ use Laravel\Sanctum\HasApiTokens;
 /**
  * @property ?int $current_wedding_id
  * @property Wedding $currentWedding
+ *
+ * @method static User create(string[] $array)
  */
 class User extends Authenticatable
 {

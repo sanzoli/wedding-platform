@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\BudgetItem;
 use App\Models\Invitation;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -66,7 +65,6 @@ test('does not found unknown invitation', function () {
     $this->getJson(route('api.invitations.show', ['invitation' => Str::uuid()]))
         ->assertStatus(404);
 });
-
 
 test('does not found another wedding invitation', function () {
     $invitation = Invitation::factory()->create();

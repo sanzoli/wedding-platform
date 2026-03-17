@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Actions\Invitation\AcceptInvitation;
 use App\Actions\Invitation\CreateNewInvitation;
 use App\Actions\Invitation\DeleteInvitation;
 use App\Actions\Invitation\UpdateInvitation;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AcceptInvitationRequest;
 use App\Http\Requests\StoreInvitationRequest;
 use App\Http\Requests\UpdateInvitationRequest;
 use App\Models\Invitation;
@@ -37,5 +39,10 @@ class InvitationController extends Controller
         $action->delete($invitation);
 
         return response()->noContent();
+    }
+
+    public function accept(AcceptInvitationRequest $request, Invitation $invitation, AcceptInvitation $action)
+    {
+        return $action->accept($invitation, $request->validated())->toResource();
     }
 }
