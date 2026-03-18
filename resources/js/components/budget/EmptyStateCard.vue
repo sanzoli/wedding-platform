@@ -14,7 +14,7 @@ withDefaults(defineProps<Props>(), {
 
 <template>
     <Card
-        class="px-4 py-10"
+        class="px-4 py-10 gap-2"
         :class="{
             'items-center text-center': centered,
         }"

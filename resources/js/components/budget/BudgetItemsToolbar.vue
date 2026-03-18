@@ -18,7 +18,7 @@ const emit = defineEmits<{
 
 <template>
     <section
-        class="sticky top-24 z-30 -mx-6 mb-2 bg-background/95 px-6 py-4 backdrop-blur-sm transition-shadow duration-200"
+        class="sticky top-24 z-30 -mx-6 mb-1 bg-background/95 px-6 py-3 backdrop-blur-sm transition-shadow duration-200 sm:mb-2 sm:py-4"
     >
         <div class="flex items-center justify-between gap-3">
             <!-- Search: both desktop and mobile -->

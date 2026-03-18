@@ -12,18 +12,14 @@ import {
 import type { BudgetItem, BudgetItemImportance } from '@/types';
 import { X } from 'lucide-vue-next';
 import { editingConfig, parseExpectedAmount } from './budget-items.config';
+import { useInputFocus } from '@/composables/useInputFocus';
+import type { BudgetItemEmits, BudgetItemProps } from './budget-items.types';
 
-interface Props {
-    draft: Partial<BudgetItem>;
-}
+defineProps<BudgetItemProps>();
 
-defineProps<Props>();
+const emit = defineEmits<BudgetItemEmits>();
 
-const emit = defineEmits<{
-    'update:draft': [draft: Partial<BudgetItem>];
-    save: [];
-    cancel: [];
-}>();
+const { inputRef: nameInputRef } = useInputFocus();
 </script>
 
 <template>
@@ -56,6 +52,7 @@ const emit = defineEmits<{
                         Item name
                     </Label>
                     <Input
+                        ref="nameInputRef"
                         :modelValue="draft.name"
                         @update:modelValue="
                             emit('update:draft', {
@@ -66,7 +63,6 @@ const emit = defineEmits<{
                         placeholder="e.g., Venue rental"
                         class="h-[44px] rounded-[12px] border-border/60 bg-card text-[15px] shadow-none"
                         @keydown.esc="emit('cancel')"
-                        autofocus
                     />
                 </div>
                 <div class="flex flex-col gap-1.5">

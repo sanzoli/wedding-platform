@@ -12,31 +12,16 @@ import {
 } from '@/components/ui/select';
 import type { BudgetItem, BudgetItemImportance } from '@/types';
 import { Check, X } from 'lucide-vue-next';
-import { computed, onMounted, ref } from 'vue';
+import { computed } from 'vue';
 import { editingConfig } from './budget-items.config';
+import { useInputFocus } from '@/composables/useInputFocus';
+import type { BudgetItemEmits, BudgetItemProps } from './budget-items.types';
 
-interface Props {
-    draft: Partial<BudgetItem>;
-}
+defineProps<BudgetItemProps>();
 
-defineProps<Props>();
+const { inputRef: nameInputRef } = useInputFocus();
 
-const nameInputRef = ref<InstanceType<typeof Input>>();
-
-const emit = defineEmits<{
-    'update:draft': [draft: Partial<BudgetItem>];
-    save: [];
-    cancel: [];
-}>();
-
-onMounted(() => {
-    setTimeout(() => {
-        const inputElement = nameInputRef.value?.$el as HTMLInputElement;
-        if (inputElement) {
-            inputElement.focus();
-        }
-    }, 350);
-});
+const emit = defineEmits<BudgetItemEmits>();
 
 const actions = computed<ActionButton[]>(() => [
     {
