@@ -1,22 +1,27 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
-import { dashboard } from '@/routes';
-import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import PlaceholderPattern from '../components/PlaceholderPattern.vue';
-
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: dashboard().url,
-    },
-];
 </script>
 
 <template>
     <Head title="Dashboard" />
 
-    <AppLayout :breadcrumbs="breadcrumbs">
+    <AppLayout>
+    <div class="px-6 py-4">
+        <div
+            class="-mx-6 mb-1 flex items-center justify-between bg-background/95 px-6 pt-2 backdrop-blur-sm transition-shadow duration-200 sm:mb-2"
+        >
+            <div>
+                <h1 class="type-display text-foreground">
+                    Dashboard
+                </h1>
+                <p class="mt-2 text-[15px] text-muted-foreground">
+                    Overview of your wedding planning progress
+                </p>
+            </div>
+        </div>
+
         <div
             class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4"
         >
@@ -43,5 +48,6 @@ const breadcrumbs: BreadcrumbItem[] = [
                 <PlaceholderPattern />
             </div>
         </div>
+    </div>
     </AppLayout>
 </template>
