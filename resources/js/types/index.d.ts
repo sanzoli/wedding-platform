@@ -37,3 +37,20 @@ export interface User {
 }
 
 export type BreadcrumbItemType = BreadcrumbItem;
+
+export interface Budget {
+    id: string;
+    name: string;
+    draft: boolean;
+    items?: BudgetItem[];
+}
+
+export type BudgetItemImportance = 'MustHave' | 'High' | 'Normal' | 'Low';
+
+export interface BudgetItem {
+    id: string;
+    budget_id: string;
+    name: string;
+    expected_amount: number | null;
+    importance: BudgetItemImportance | null;
+}
