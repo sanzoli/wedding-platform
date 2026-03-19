@@ -215,7 +215,7 @@ onUnmounted(() => {
         />
 
         <!-- ─── Desktop table (sm and up) ─── -->
-        <Card class="hidden gap-0 overflow-hidden py-0 sm:block">
+        <Card class="hidden gap-0 overflow-hidden py-0 sm:block max-w-content">
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead>

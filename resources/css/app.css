@@ -200,6 +200,15 @@
     .fab-safe-area {
         padding-bottom: calc(var(--fab-size) + 1.5rem);
     }
+
+    /* ----------------------------
+     * Content container utilities
+     * ---------------------------- */
+    .max-w-content {
+        max-width: 64rem; /* 5xl */
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
 
 /* Global cursor pointer for all interactive elements */

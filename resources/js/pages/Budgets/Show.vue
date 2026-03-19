@@ -19,7 +19,7 @@ const { error, deletingItems, handleCreate, handleUpdate, handleDelete } =
     <Head :title="`Budget - ${budget.name}`" />
 
     <AppLayout>
-    <div class="max-w-6xl px-6 py-4">
+    <div class="px-6 py-4">
         <Alert v-if="error" variant="destructive" class="mb-4 text-center">
             <AlertDescription>
                 {{ error }}
@@ -27,7 +27,7 @@ const { error, deletingItems, handleCreate, handleUpdate, handleDelete } =
         </Alert>
 
         <div
-            class="sticky top-0 z-40 -mx-6 mb-1 flex items-center justify-between bg-background/95 px-6 py-4 backdrop-blur-sm transition-shadow duration-200 sm:mb-2"
+            class="-mx-6 mb-1 flex items-center justify-between bg-background/95 px-6 pt-2 backdrop-blur-sm transition-shadow duration-200 sm:mb-2"
         >
             <div>
                 <h1 class="type-display text-foreground">

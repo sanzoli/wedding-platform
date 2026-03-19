@@ -18,9 +18,9 @@ const emit = defineEmits<{
 
 <template>
     <section
-        class="sticky top-24 z-30 -mx-6 mb-1 bg-background/95 px-6 py-3 backdrop-blur-sm transition-shadow duration-200 sm:mb-2 sm:py-4"
+        class="sticky top-16 z-30 -mx-6 mb-1 px-6 py-3 backdrop-blur-xl transition-shadow duration-200 group-has-data-[collapsible=icon]/sidebar-wrapper:top-12 sm:mb-2 sm:py-4"
     >
-        <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center justify-between gap-3 max-w-content">
             <!-- Search: both desktop and mobile -->
             <SearchInput
                 :model-value="searchQuery"
