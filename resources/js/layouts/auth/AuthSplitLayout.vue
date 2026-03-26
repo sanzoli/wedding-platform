@@ -44,7 +44,7 @@ defineProps<{
                 class="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]"
             >
                 <div class="flex flex-col space-y-2 text-center">
-                    <h1 class="text-xl font-medium tracking-tight" v-if="title">
+                    <h1 class="type-heading text-foreground" v-if="title">
                         {{ title }}
                     </h1>
                     <p class="text-sm text-muted-foreground" v-if="description">
