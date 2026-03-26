@@ -1,27 +1,84 @@
 <script setup lang="ts">
-import type { BudgetItem } from '@/types';
+import IconButton from '@/components/IconButton.vue';
+import { Input } from '@/components/ui/input';
+import { Select, SelectItem } from '@/components/ui/select';
+import { Check, X } from 'lucide-vue-next';
+import { router, usePage } from '@inertiajs/vue3';
+import { reactive } from 'vue';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { X } from 'lucide-vue-next';
-import { reactive } from 'vue';
-import { router, usePage } from '@inertiajs/vue3';
 import { store } from '@/actions/App/Http/Controllers/BudgetItemsController';
-import { Select, SelectItem } from '@/components/ui/select';
 
 const emit = defineEmits(['close']);
-const input = reactive(<BudgetItem>{});
 
 const page = usePage();
 const importanceOptions = page.props.importanceOptions;
 
-const storeItem = function () {
-    router.post(store(), input, { only: ['items'] });
+const input = reactive({
+    name: '',
+    importance: null,
+    expected_amount: undefined,
+});
+
+const storeItem = () => {
+    router.post(store(), input, {
+        only: ['items'],
+        preserveScroll: true,
+    });
+
     emit('close');
 };
 </script>
 
 <template>
+    <tr class="group hidden transition-colors hover:bg-muted/30 md:table-row">
+        <td class="w-[300px] px-6 py-3">
+            <Input
+                v-model="input.name"
+                :placeholder="page.props.trans.budget.placeholder.item"
+                class="h-[40px] rounded-[10px] border-border/60 bg-card text-[15px] shadow-none"
+                @keydown.enter="storeItem"
+                @keydown.esc="$emit('close')"
+            />
+        </td>
+        <td class="px-6 py-3">
+            <Select v-model="input.importance">
+                <SelectItem
+                    v-for="(label, value) in importanceOptions"
+                    :key="value"
+                    :value
+                >
+                    {{ label }}
+                </SelectItem>
+            </Select>
+        </td>
+        <td class="flex justify-end px-6 py-3">
+            <Input
+                v-model="input.expected_amount"
+                type="number"
+                min="0"
+                placeholder="0"
+                class="h-[40px] max-w-[100px] min-w-32 rounded-[10px] border-border/60 bg-card text-right text-[15px] tabular-nums shadow-none"
+                @keydown.enter="storeItem"
+                @keydown.esc="$emit('close')"
+            />
+        </td>
+        <td class="px-6 py-3">
+            <IconButton
+                @click="storeItem"
+                class="hover:bg-muted hover:text-foreground"
+            >
+                <Check></Check>
+            </IconButton>
+            <IconButton
+                @click="$emit('close')"
+                class="hover:bg-destructive/10 hover:text-destructive"
+            >
+                <X></X>
+            </IconButton>
+        </td>
+    </tr>
+
     <Teleport to="body">
         <div class="fixed inset-0 z-50 flex flex-col bg-background sm:hidden">
             <!-- Header -->
@@ -102,7 +159,10 @@ const storeItem = function () {
                     >
                         {{ page.props.trans.button.cancel }}
                     </Button>
-                    <Button @click="storeItem" class="flex h-[46px] flex-1">
+                    <Button
+                        @click="storeItem"
+                        class="flex h-[46px] flex-1"
+                    >
                         {{ page.props.trans.button.save }}
                     </Button>
                 </div>

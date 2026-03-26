@@ -78,7 +78,7 @@ trans.empty_search_desc ??= 'Try adjusting your search terms';
 
         <!-- ─── Mobile card list (below sm) ─── -->
         <div class="fab-safe-area flex flex-col gap-2.5 sm:hidden">
-            <slot name="mobile">
+            <slot name="body">
                 <Card class="items-center gap-2 px-4 py-10 text-center">
                     <p class="text-sm font-medium text-foreground/80">
                         {{ search ? trans.empty_search : trans.no_items }}
@@ -86,7 +86,5 @@ trans.empty_search_desc ??= 'Try adjusting your search terms';
                 </Card>
             </slot>
         </div>
-
-        <slot name="append"></slot>
     </section>
 </template>
