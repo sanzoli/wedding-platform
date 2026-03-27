@@ -3,7 +3,7 @@
 return [
     'description' => 'Manage and track your estimated costs',
     'button' => [
-        'add' => 'Add item'
+        'add' => 'Add item',
     ],
     'label' => [
         'items' => 'Items',
@@ -22,5 +22,5 @@ return [
     ],
     'table' => [
         'no_items' => 'No budget items yet',
-    ]
+    ],
 ];

@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Inertia::macro(
             'mergeShared',
-            fn(string $key, array $value) => array_merge(Inertia::getShared($key), $value)
+            fn (string $key, array $value) => array_merge(Inertia::getShared($key), $value)
         );
     }
 }

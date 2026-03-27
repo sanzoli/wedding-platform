@@ -25,6 +25,6 @@ enum Importance
 
     public function trans(): string
     {
-        return trans('budget.importance.'. Str::kebab($this->name));
+        return trans('budget.importance.'.Str::kebab($this->name));
     }
 }

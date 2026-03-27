@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { SortOptions } from '@/types';
 import { ChevronDown, ChevronUp } from 'lucide-vue-next';
 import { computed } from 'vue';
-import { SortOptions } from '@/types';
 
 const props = defineProps<{
     sortBy?: string;
@@ -14,10 +14,10 @@ const isCurrentSorting = computed(
 
 const nextDirection = computed(function () {
     if (!isCurrentSorting.value || !props.sortOptions?.direction) {
-        return 'asc'
+        return 'asc';
     }
 
-    return props.sortOptions.direction === 'asc'? 'desc' :null;
+    return props.sortOptions.direction === 'asc' ? 'desc' : null;
 });
 </script>
 

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-vue-next';
+import { Card } from '@/components/ui/card';
 import { usePage } from '@inertiajs/vue3';
+import { Plus } from 'lucide-vue-next';
 
 defineEmits<{
     addItem: [];

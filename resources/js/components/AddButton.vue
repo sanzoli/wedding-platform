@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Plus } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
+import { Plus } from 'lucide-vue-next';
 
 defineEmits(['add']);
 </script>

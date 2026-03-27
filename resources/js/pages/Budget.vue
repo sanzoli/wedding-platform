@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import ItemsTable from '@/components/budget/ItemsTable.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BudgetItem } from '@/types';
 import { Head, usePage } from '@inertiajs/vue3';
-import ItemsTable from '@/components/budget/ItemsTable.vue';
 
 defineProps<{
     name: string;

@@ -9,7 +9,7 @@ export function confirmDelete(deleteItem: () => void, options?: object) {
         confirmButtonColor: '#1B7B7D',
         cancelButtonColor: '#B8311D',
         confirmButtonText: 'Yes, delete it!',
-        ...options
+        ...options,
     }).then((result) => {
         if (result.isConfirmed) {
             deleteItem();
@@ -22,7 +22,7 @@ export function toastError(message: string) {
         text: message,
         toast: true,
         position: 'bottom-end',
-        icon: "error",
+        icon: 'error',
         showConfirmButton: false,
         timer: 3000,
         timerProgressBar: true,

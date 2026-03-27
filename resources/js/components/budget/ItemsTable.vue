@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import type { BudgetItem, QueryOptions, SortOptions } from '@/types';
-import SearchBar from '@/components/SearchBar.vue';
-import TableHeader from '@/components/TableHeader.vue';
-import Table from '@/components/Table.vue';
-import { router, usePage } from '@inertiajs/vue3';
-import { budget } from '@/routes';
-import debounce from 'lodash/debounce';
-import { reactive, ref, watch } from 'vue';
+import AddButton from '@/components/AddButton.vue';
 import Item from '@/components/budget/Item.vue';
 import NewItem from '@/components/budget/NewItem.vue';
-import AddButton from '@/components/AddButton.vue';
+import SearchBar from '@/components/SearchBar.vue';
+import Table from '@/components/Table.vue';
+import TableHeader from '@/components/TableHeader.vue';
+import { budget } from '@/routes';
+import type { BudgetItem, QueryOptions, SortOptions } from '@/types';
+import { router, usePage } from '@inertiajs/vue3';
+import debounce from 'lodash/debounce';
+import { reactive, ref, watch } from 'vue';
 
 const trans = usePage().props.trans;
 const props = defineProps<{
@@ -62,7 +62,7 @@ watch(
                 ></SearchBar>
 
                 <AddButton @add="adding = true">
-                    {{trans.budget.button.add }}
+                    {{ trans.budget.button.add }}
                 </AddButton>
             </div>
         </template>

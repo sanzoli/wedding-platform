@@ -20,10 +20,10 @@ class BudgetController extends Controller
             'name' => $budget->name,
             'items' => BudgetItem::query()
                 ->where('budget_id', $budget->id)
-                ->when($request->input('search'), fn($query) => $query
-                    ->where('name', 'like', '%' . $request->input('search') . '%')
+                ->when($request->input('search'), fn ($query) => $query
+                    ->where('name', 'like', '%'.$request->input('search').'%')
                 )->when($request->input('sortBy'), fn (Builder $query) => $query
-                    ->orderBy($request->input('sortBy'), $request->input('sort'))
+                ->orderBy($request->input('sortBy'), $request->input('sort'))
                 )->latest()
                 ->get(),
             'filters' => $request->only('search', 'sortBy', 'sort'),

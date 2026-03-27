@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import type { BudgetItem } from '@/types';
-import ItemEditor from '@/components/budget/ItemEditor.vue';
-import ItemDisplay from '@/components/budget/ItemDisplay.vue';
-import { confirmDelete, toastError } from '@/composables/useAlert';
-import { router } from '@inertiajs/vue3';
 import {
     destroy,
     update,
 } from '@/actions/App/Http/Controllers/BudgetItemsController';
+import ItemDisplay from '@/components/budget/ItemDisplay.vue';
+import ItemEditor from '@/components/budget/ItemEditor.vue';
+import { confirmDelete, toastError } from '@/composables/useAlert';
+import type { BudgetItem } from '@/types';
+import { router } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
 const props = defineProps<{

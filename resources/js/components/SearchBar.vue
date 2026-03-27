@@ -5,8 +5,8 @@ defineProps({
     searchValue: String,
     placeholder: {
         type: String,
-        default: 'Search...'
-    }
+        default: 'Search...',
+    },
 });
 
 defineEmits(['update:searchValue']);
