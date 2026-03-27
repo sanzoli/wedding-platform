@@ -2,7 +2,7 @@
 import type { BudgetItem } from '@/types';
 import ItemEditor from '@/components/budget/ItemEditor.vue';
 import ItemDisplay from '@/components/budget/ItemDisplay.vue';
-import { confirmDelete } from '@/composables/useModal';
+import { confirmDelete, toastError } from '@/composables/useAlert';
 import { router } from '@inertiajs/vue3';
 import {
     destroy,
@@ -24,9 +24,9 @@ const updateItem = (input: object) => {
     router.put(update(props.item.id), input, {
         only: ['items'],
         preserveScroll: true,
+        onSuccess: () => (editing.value = false),
+        onError: (errors: object) => toastError(Object.values(errors)[0]),
     });
-
-    editing.value = false;
 };
 
 const deleteItem = () =>

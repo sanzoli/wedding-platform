@@ -16,3 +16,19 @@ export function confirmDelete(deleteItem: () => void, options?: object) {
         }
     });
 }
+
+export function toastError(message: string) {
+    return Swal.fire({
+        text: message,
+        toast: true,
+        position: 'bottom-end',
+        icon: "error",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        },
+    });
+}

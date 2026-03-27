@@ -8,6 +8,7 @@ import { reactive } from 'vue';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { store } from '@/actions/App/Http/Controllers/BudgetItemsController';
+import { toastError } from '@/composables/useAlert';
 
 const emit = defineEmits(['close']);
 
@@ -24,9 +25,9 @@ const storeItem = () => {
     router.post(store(), input, {
         only: ['items'],
         preserveScroll: true,
+        onSuccess: () => emit('close'),
+        onError: (errors: object) => toastError(Object.values(errors)[0]),
     });
-
-    emit('close');
 };
 </script>
 
@@ -159,10 +160,7 @@ const storeItem = () => {
                     >
                         {{ page.props.trans.button.cancel }}
                     </Button>
-                    <Button
-                        @click="storeItem"
-                        class="flex h-[46px] flex-1"
-                    >
+                    <Button @click="storeItem" class="flex h-[46px] flex-1">
                         {{ page.props.trans.button.save }}
                     </Button>
                 </div>
