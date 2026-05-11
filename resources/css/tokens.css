@@ -36,8 +36,20 @@
    * Typography tokens
    * ---------------------------- */
     --font-sans:
-        ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Inter, sans-serif;
-    --font-serif: ui-serif, Georgia, 'Times New Roman', Playfair Display, serif;
+        'Instrument Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-serif: 'Playfair Display', ui-serif, Georgia, serif;
+
+    /* ----------------------------
+   * Semantic typography roles
+   * display / heading → serif (editorial, hierarchical)
+   * body / label / data / action → sans (utilitarian, clear)
+   * ---------------------------- */
+    --font-display: var(--font-serif);
+    --font-heading: var(--font-serif);
+    --font-body: var(--font-sans);
+    --font-label: var(--font-sans);
+    --font-data: var(--font-sans);
+    --font-action: var(--font-sans);
 
     /* ----------------------------
    * Semantic tokens
@@ -90,9 +102,33 @@
     --sidebar-ring: var(--ring);
 
     /* ----------------------------
+   * Badge importance tokens (semantic)
+   * ---------------------------- */
+    --badge-high-bg: var(--p-orange-600);
+    --badge-high-fg: var(--p-neutral-0);
+    --badge-high-border: var(--p-orange-600);
+
+    --badge-must-have-bg: var(--p-wine-700);
+    --badge-must-have-fg: var(--p-neutral-0);
+    --badge-must-have-border: var(--p-wine-700);
+
+    --badge-normal-bg: var(--p-sand-200);
+    --badge-normal-fg: var(--p-neutral-900);
+    --badge-normal-border: var(--p-sand-200);
+
+    --badge-low-bg: transparent;
+    --badge-low-fg: var(--foreground);
+    --badge-low-border: var(--border);
+
+    /* ----------------------------
    * Radii
    * ---------------------------- */
     --radius: 1rem;
+
+    /* ----------------------------
+   * Component sizing tokens
+   * ---------------------------- */
+    --fab-size: 3.25rem; /* 52px - h-13 w-13 equivalent */
 }
 
 .dark {
@@ -139,4 +175,21 @@
     --sidebar-accent-foreground: var(--hover-foreground);
     --sidebar-border: var(--border);
     --sidebar-ring: var(--ring);
+
+    /* Badge importance tokens (dark mode) */
+    --badge-high-bg: var(--p-orange-600);
+    --badge-high-fg: var(--p-neutral-0);
+    --badge-high-border: var(--p-orange-600);
+
+    --badge-must-have-bg: var(--p-wine-700);
+    --badge-must-have-fg: var(--p-neutral-0);
+    --badge-must-have-border: var(--p-wine-700);
+
+    --badge-normal-bg: var(--p-sand-200);
+    --badge-normal-fg: var(--p-neutral-900);
+    --badge-normal-border: var(--p-sand-200);
+
+    --badge-low-bg: transparent;
+    --badge-low-fg: var(--foreground);
+    --badge-low-border: var(--border);
 }

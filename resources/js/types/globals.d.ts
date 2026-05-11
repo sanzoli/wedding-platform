@@ -1,5 +1,3 @@
-import { AppPageProps } from '@/types/index';
-
 // Extend ImportMeta interface for Vite...
 declare module 'vite/client' {
     interface ImportMetaEnv {
@@ -14,13 +12,21 @@ declare module 'vite/client' {
 }
 
 declare module '@inertiajs/core' {
-    interface PageProps extends InertiaPageProps, AppPageProps {}
-}
-
-declare module 'vue' {
-    interface ComponentCustomProperties {
-        $inertia: typeof Router;
-        $page: Page;
-        $headManager: ReturnType<typeof createHeadManager>;
+    export interface InertiaConfig {
+        sharedPageProps: {
+            auth: { user: { id: number; name: string } | null };
+            appName: string;
+            trans: {
+                [key: string]: {
+                    [key: string]:
+                        | string
+                        | { [key: string]: string | { [key: string]: string } };
+                };
+            };
+        };
+        flashDataType: {
+            toast?: { type: 'success' | 'error'; message: string };
+        };
+        errorValueType: string[];
     }
 }

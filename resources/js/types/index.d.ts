@@ -37,3 +37,14 @@ export interface User {
 }
 
 export type BreadcrumbItemType = BreadcrumbItem;
+
+export interface SortOptions {
+    type?: string | null;
+    direction?: 'asc' | 'desc' | null;
+}
+
+export interface QueryOptions extends Record<string, FormDataConvertible> {
+    search?: string;
+    sort?: 'asc' | 'desc';
+    sortBy?: string;
+}
