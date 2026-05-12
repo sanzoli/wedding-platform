@@ -34,10 +34,10 @@ export const importanceOptions: {
 ];
 
 export const importanceClass: Record<BudgetItemImportance, string> = {
-    MustHave: 'badge-must-have-importance',
-    High: 'badge-high-importance',
-    Normal: 'badge-normal-importance',
-    Low: 'badge-low-importance',
+    MustHave: 'admin-badge-must-have-importance',
+    High: 'admin-badge-high-importance',
+    Normal: 'admin-badge-normal-importance',
+    Low: 'admin-badge-low-importance',
 };
 
 export const importanceLabel: Record<BudgetItemImportance, string> = {

@@ -219,9 +219,9 @@ onUnmounted(() => {
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead>
-                        <tr class="border-b border-border">
+                        <tr class="border-border border-b">
                             <th
-                                class="type-table-header w-[300px] px-6 py-[22px] text-left text-muted-foreground"
+                                class="admin-type-table-header text-muted-foreground w-[300px] px-6 py-[22px] text-left"
                             >
                                 <BudgetSortableHeader
                                     :label="`Item (${items.length})`"
@@ -235,7 +235,7 @@ onUnmounted(() => {
                                 />
                             </th>
                             <th
-                                class="type-table-header px-8 py-[22px] text-left text-muted-foreground"
+                                class="admin-type-table-header text-muted-foreground px-8 py-[22px] text-left"
                             >
                                 <BudgetSortableHeader
                                     label="Importance"
@@ -249,7 +249,7 @@ onUnmounted(() => {
                                 />
                             </th>
                             <th
-                                class="type-table-header px-6 py-[22px] text-right text-muted-foreground"
+                                class="admin-type-table-header text-muted-foreground px-6 py-[22px] text-right"
                             >
                                 <BudgetSortableHeader
                                     label="Expected Amount"
@@ -265,7 +265,7 @@ onUnmounted(() => {
                             <th class="w-[120px] px-6 py-[22px]"></th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-border/50">
+                    <tbody class="divide-border/50 divide-y">
                         <BudgetItemsNewRow
                             v-if="isAddingItem && newItem"
                             :draft="newItem"

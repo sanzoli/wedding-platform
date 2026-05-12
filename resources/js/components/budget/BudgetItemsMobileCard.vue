@@ -64,11 +64,11 @@ const viewActions = computed<ActionButton[]>(() => [
     <Card
         class="py-1"
         :class="{
-            'animate-in duration-300 fade-in-0 slide-in-from-top-2':
+            'animate-in fade-in-0 slide-in-from-top-2 duration-300':
                 isNewlyCreated,
-            'animate-out opacity-50 duration-300 fade-out-0 slide-out-to-right-4':
+            'animate-out fade-out-0 slide-out-to-right-4 opacity-50 duration-300':
                 isDeleting,
-            'animate-flash-edit': isRecentlyEdited && !editing?.isEditing,
+            'admin-animate-flash-edit': isRecentlyEdited && !editing?.isEditing,
         }"
     >
         <!-- Edit mode card -->
@@ -76,7 +76,7 @@ const viewActions = computed<ActionButton[]>(() => [
             <div class="flex flex-col gap-3.5 px-4 py-4">
                 <div class="flex flex-col gap-1.5">
                     <Label
-                        class="text-[11px] font-medium tracking-[0.05em] text-muted-foreground uppercase"
+                        class="text-muted-foreground text-[11px] font-medium uppercase tracking-[0.05em]"
                     >
                         Item
                     </Label>
@@ -89,7 +89,7 @@ const viewActions = computed<ActionButton[]>(() => [
                             })
                         "
                         placeholder="e.g., Venue rental"
-                        class="h-[40px] rounded-[10px] border-border/60 bg-card text-[15px] shadow-none"
+                        class="border-border/60 bg-card h-[40px] rounded-[10px] text-[15px] shadow-none"
                         @keydown.enter="emit('save')"
                         @keydown.esc="emit('cancel')"
                         autofocus
@@ -97,7 +97,7 @@ const viewActions = computed<ActionButton[]>(() => [
                 </div>
                 <div class="flex flex-col gap-1.5">
                     <Label
-                        class="text-[11px] font-medium tracking-[0.05em] text-muted-foreground uppercase"
+                        class="text-muted-foreground text-[11px] font-medium uppercase tracking-[0.05em]"
                     >
                         Importance
                     </Label>
@@ -111,7 +111,7 @@ const viewActions = computed<ActionButton[]>(() => [
                         "
                     >
                         <SelectTrigger
-                            class="h-[40px] rounded-[10px] border-border/60 bg-card text-[15px] shadow-none"
+                            class="border-border/60 bg-card h-[40px] rounded-[10px] text-[15px] shadow-none"
                         >
                             <SelectValue />
                         </SelectTrigger>
@@ -128,7 +128,7 @@ const viewActions = computed<ActionButton[]>(() => [
                 </div>
                 <div class="flex flex-col gap-1.5">
                     <Label
-                        class="text-[11px] font-medium tracking-[0.05em] text-muted-foreground uppercase"
+                        class="text-muted-foreground text-[11px] font-medium uppercase tracking-[0.05em]"
                     >
                         Expected Amount
                     </Label>
@@ -144,7 +144,7 @@ const viewActions = computed<ActionButton[]>(() => [
                         type="number"
                         min="0"
                         placeholder="0"
-                        class="h-[40px] rounded-[10px] border-border/60 bg-card text-[15px] tabular-nums shadow-none"
+                        class="border-border/60 bg-card h-[40px] rounded-[10px] text-[15px] tabular-nums shadow-none"
                         @keydown.enter="emit('save')"
                         @keydown.esc="emit('cancel')"
                     />
@@ -169,7 +169,7 @@ const viewActions = computed<ActionButton[]>(() => [
             <div class="px-4 py-3">
                 <!-- Row 1: name + actions -->
                 <div class="flex items-center justify-between gap-2">
-                    <p class="truncate text-[15px] font-medium text-foreground">
+                    <p class="text-foreground truncate text-[15px] font-medium">
                         {{ item.name }}
                     </p>
                     <ActionButtonGroup
@@ -186,9 +186,9 @@ const viewActions = computed<ActionButton[]>(() => [
                     >
                         {{ display.importanceLabel[item.importance] }}
                     </Badge>
-                    <span v-else class="text-xs text-muted-foreground">—</span>
+                    <span v-else class="text-muted-foreground text-xs">—</span>
                     <p
-                        class="text-[16px] font-semibold tracking-tight text-foreground tabular-nums"
+                        class="text-foreground text-[16px] font-semibold tabular-nums tracking-tight"
                     >
                         {{ display.formatAmount(item.expected_amount) }}
                     </p>

@@ -78,14 +78,14 @@ const viewActions = computed<ActionButton[]>(() => [
 
 <template>
     <tr
-        class="group transition-colors hover:bg-muted/30"
+        class="hover:bg-muted/30 group transition-colors"
         :class="{
             'bg-muted/20': editing?.isEditing,
-            'animate-in duration-300 fade-in-0 slide-in-from-top-2':
+            'animate-in fade-in-0 slide-in-from-top-2 duration-300':
                 isNewlyCreated,
-            'animate-out opacity-50 duration-300 fade-out-0 slide-out-to-right-4':
+            'animate-out fade-out-0 slide-out-to-right-4 opacity-50 duration-300':
                 isDeleting,
-            'animate-flash-edit': isRecentlyEdited && !editing?.isEditing,
+            'admin-animate-flash-edit': isRecentlyEdited && !editing?.isEditing,
         }"
     >
         <template v-if="editing?.isEditing && editing.draft">
@@ -99,7 +99,7 @@ const viewActions = computed<ActionButton[]>(() => [
                         })
                     "
                     placeholder="e.g., Venue rental"
-                    class="h-[40px] rounded-[10px] border-border/60 bg-card text-[15px] shadow-none"
+                    class="border-border/60 bg-card h-[40px] rounded-[10px] text-[15px] shadow-none"
                     @keydown.enter="emit('save')"
                     @keydown.esc="emit('cancel')"
                 />
@@ -115,7 +115,7 @@ const viewActions = computed<ActionButton[]>(() => [
                     "
                 >
                     <SelectTrigger
-                        class="h-[40px] rounded-[10px] border-border/60 bg-card text-[15px] shadow-none"
+                        class="border-border/60 bg-card h-[40px] rounded-[10px] text-[15px] shadow-none"
                     >
                         <SelectValue />
                     </SelectTrigger>
@@ -143,7 +143,7 @@ const viewActions = computed<ActionButton[]>(() => [
                     type="number"
                     min="0"
                     placeholder="0"
-                    class="h-[40px] max-w-[100px] rounded-[10px] border-border/60 bg-card text-right text-[15px] tabular-nums shadow-none"
+                    class="border-border/60 bg-card h-[40px] max-w-[100px] rounded-[10px] text-right text-[15px] tabular-nums shadow-none"
                     @keydown.enter="emit('save')"
                     @keydown.esc="emit('cancel')"
                 />
@@ -155,7 +155,7 @@ const viewActions = computed<ActionButton[]>(() => [
 
         <template v-else>
             <td
-                class="w-[300px] px-6 py-[21px] text-[15px] font-medium text-foreground"
+                class="text-foreground w-[300px] px-6 py-[21px] text-[15px] font-medium"
             >
                 {{ item.name }}
             </td>
@@ -167,10 +167,10 @@ const viewActions = computed<ActionButton[]>(() => [
                 >
                     {{ display.importanceLabel[item.importance] }}
                 </Badge>
-                <span v-else class="text-xs text-muted-foreground">—</span>
+                <span v-else class="text-muted-foreground text-xs">—</span>
             </td>
             <td
-                class="px-6 py-[21px] text-right text-[15px] tracking-tight text-foreground tabular-nums"
+                class="text-foreground px-6 py-[21px] text-right text-[15px] tabular-nums tracking-tight"
             >
                 {{ display.formatAmount(item.expected_amount) }}
             </td>

@@ -1,0 +1,117 @@
+/* Admin Surface Design Layer
+* 
+* This layer contains design tokens and utilities specific to admin-oriented experiences.
+* It is imported after the global design system to provide admin-specific extensions.
+* 
+* Scope: Budget management, data tables, forms, and administrative interfaces
+* Not for: Guest-facing editorial content (OurWedding.vue)
+*/
+
+:root {
+    /* ----------------------------
+     * Admin-specific typography tokens
+     * Utilitarian fonts for data, labels, and actions
+     * ---------------------------- */
+    --admin-font-label: var(--font-sans);
+    --admin-font-data: var(--font-sans);
+    --admin-font-action: var(--font-sans);
+}
+
+/* ----------------------------
+ * Admin-specific badge importance tokens
+ * Business-logic aware styling for budget items
+ * ---------------------------- */
+:root {
+    --admin-badge-high-bg: var(--p-wine-700);
+    --admin-badge-high-fg: var(--p-neutral-0);
+    --admin-badge-high-border: var(--p-wine-700);
+
+    --admin-badge-must-have-bg: var(--p-olive-600);
+    --admin-badge-must-have-fg: var(--p-neutral-0);
+    --admin-badge-must-have-border: var(--p-olive-600);
+
+    --admin-badge-normal-bg: var(--secondary);
+    --admin-badge-normal-fg: var(--secondary-foreground);
+    --admin-badge-normal-border: var(--secondary);
+
+    --admin-badge-low-bg: transparent;
+    --admin-badge-low-fg: var(--foreground);
+    --admin-badge-low-border: var(--border);
+}
+
+/* ----------------------------
+ * Admin Surface utility classes
+ * ---------------------------- */
+
+/* Admin-specific typography utilities */
+.admin-type-label {
+    font-family: var(--admin-font-label);
+    font-size: 0.8125rem; /* 13px */
+    line-height: 1.4;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.admin-type-data {
+    font-family: var(--admin-font-data);
+    font-size: 0.9375rem; /* 15px */
+    line-height: 1.5;
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+}
+
+.admin-type-action {
+    font-family: var(--admin-font-action);
+    font-size: 0.875rem; /* 14px */
+    line-height: 1.4;
+    font-weight: 500;
+}
+
+.admin-type-table-header {
+    font-family: var(--admin-font-label);
+    font-size: 0.8125rem; /* 13px */
+    line-height: 1.4;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+/* Admin-specific badge styles for importance levels */
+.admin-badge-high-importance {
+    border-color: var(--admin-badge-high-border);
+    color: var(--admin-badge-high-fg);
+    background-color: var(--admin-badge-high-bg);
+}
+
+.admin-badge-must-have-importance {
+    border-color: var(--admin-badge-must-have-border);
+    color: var(--admin-badge-must-have-fg);
+    background-color: var(--admin-badge-must-have-bg);
+}
+
+.admin-badge-normal-importance {
+    border-color: var(--admin-badge-normal-border);
+    color: var(--admin-badge-normal-fg);
+    background-color: var(--admin-badge-normal-bg);
+}
+
+.admin-badge-low-importance {
+    border-color: var(--admin-badge-low-border);
+    color: var(--admin-badge-low-fg);
+    background-color: var(--admin-badge-low-bg);
+}
+
+/* Admin-specific animations */
+@keyframes admin-flash-edit {
+    0% {
+        background-color: hsl(var(--primary) / 0.08);
+    }
+    100% {
+        background-color: transparent;
+    }
+}
+
+.admin-animate-flash-edit {
+    animation: admin-flash-edit 600ms ease-out;
+}

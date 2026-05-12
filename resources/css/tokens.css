@@ -42,14 +42,12 @@
     /* ----------------------------
    * Semantic typography roles
    * display / heading → serif (editorial, hierarchical)
-   * body / label / data / action → sans (utilitarian, clear)
+   * body → sans (utilitarian, clear)
+   * Note: label/data/action roles moved to Admin Surface
    * ---------------------------- */
     --font-display: var(--font-serif);
     --font-heading: var(--font-serif);
     --font-body: var(--font-sans);
-    --font-label: var(--font-sans);
-    --font-data: var(--font-sans);
-    --font-action: var(--font-sans);
 
     /* ----------------------------
    * Semantic tokens
@@ -102,25 +100,6 @@
     --sidebar-ring: var(--ring);
 
     /* ----------------------------
-   * Badge importance tokens (semantic)
-   * ---------------------------- */
-    --badge-high-bg: var(--p-wine-700);
-    --badge-high-fg: var(--p-neutral-0);
-    --badge-high-border: var(--p-wine-700);
-
-    --badge-must-have-bg: var(--p-olive-600);
-    --badge-must-have-fg: var(--p-neutral-0);
-    --badge-must-have-border: var(--p-olive-600);
-
-    --badge-normal-bg: var(--secondary);
-    --badge-normal-fg: var(--secondary-foreground);
-    --badge-normal-border: var(--secondary);
-
-    --badge-low-bg: transparent;
-    --badge-low-fg: var(--foreground);
-    --badge-low-border: var(--border);
-
-    /* ----------------------------
    * Radii
    * ---------------------------- */
     --radius: 1rem;
@@ -170,21 +149,4 @@
     --sidebar-accent-foreground: var(--hover-foreground);
     --sidebar-border: var(--border);
     --sidebar-ring: var(--ring);
-
-    /* Badge importance tokens (dark mode) */
-    --badge-high-bg: var(--p-wine-700);
-    --badge-high-fg: var(--p-neutral-0);
-    --badge-high-border: var(--p-wine-700);
-
-    --badge-must-have-bg: var(--p-olive-600);
-    --badge-must-have-fg: var(--p-neutral-0);
-    --badge-must-have-border: var(--p-olive-600);
-
-    --badge-normal-bg: var(--secondary);
-    --badge-normal-fg: var(--secondary-foreground);
-    --badge-normal-border: var(--secondary);
-
-    --badge-low-bg: transparent;
-    --badge-low-fg: var(--foreground);
-    --badge-low-border: var(--border);
 }
