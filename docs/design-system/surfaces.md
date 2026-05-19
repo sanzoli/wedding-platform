@@ -165,3 +165,54 @@ Prior work that does not live on `main` has been preserved in
 For details, contact the engineer responsible. This document
 intentionally does not enumerate the contents — surface conventions
 are about the general rule, not the historical exceptions.
+
+## 14. Tailwind v4 cascade layer rule (import order)
+
+Any surface CSS file that contains an `@layer X { ... }` block **must
+be imported after** `@import 'tailwindcss';` in `resources/css/app.css`.
+Token-only files (bare `:root` / `.dark`, no `@layer` wrappers) like
+`tokens.css` may be imported before Tailwind.
+
+**Why**: Tailwind v4 uses CSS Cascade Layers. The first file to declare
+`@layer NAME { ... }` fixes that layer's position in the cascade. If a
+surface file with `@layer utilities { ... }` is imported **before**
+Tailwind, it registers `utilities` as the FIRST (lowest-priority)
+layer. Tailwind's `base` preflight (`* { margin: 0; padding: 0; }`)
+and `components` then land later in the cascade and override every
+utility class — pages lose `mx-auto`, `px-*`, `gap-*`, `space-y-*`
+spacing, dropdowns condense, buttons render unstyled.
+
+**Canonical order in `app.css`**:
+
+```css
+@import './tokens.css';          /* bare :root / .dark, no @layer    */
+
+@import 'tailwindcss';            /* declares theme, base, components, utilities */
+@import 'tw-animate-css';
+
+@import './admin-surface.css';    /* contains @layer utilities { ... } */
+@import './guest-surface.css';    /* same convention, future-proof    */
+```
+
+**Verification**: rebuild and inspect the layer declaration order in
+the bundled CSS:
+
+```bash
+npm run build
+CSS=$(ls -t public/build/assets/*.css | head -1)
+python3 -c "
+import re
+with open('$CSS') as f: c = f.read()
+for m in list(re.finditer(r'@layer ([a-z, ]+)(\{|;)', c))[:8]:
+    kind = 'decl' if m.group(2)==';' else 'block'
+    print(f'pos={m.start():>6} {kind}: @layer {m.group(1).strip()}')
+"
+```
+
+Expected canonical order: `properties → theme → base → components →
+utilities`. Any other order (utilities or components landing before
+base) means a surface file with `@layer` blocks is being imported too
+early — fix by moving its `@import` after `@import 'tailwindcss';`.
+
+This check is mandatory before approving any PR that adds, removes,
+or reorders a `resources/css/*.css` `@import` in `app.css`.

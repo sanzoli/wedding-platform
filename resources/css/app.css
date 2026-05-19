@@ -1,3 +1,18 @@
+/*
+ * IMPORT ORDER — Tailwind v4 cascade layer rule
+ *
+ * Files that contain `@layer X { ... }` blocks (admin-surface.css,
+ * guest-surface.css when it gains utilities) MUST be imported AFTER
+ * `@import 'tailwindcss';`. The first file to declare a layer name
+ * fixes that layer's position in the cascade; importing a surface
+ * file with `@layer utilities { ... }` before Tailwind registers
+ * `utilities` as the FIRST (lowest-priority) layer, putting
+ * Tailwind's base preflight after it and overriding every utility
+ * class. See docs/design-system/surfaces.md §14.
+ *
+ * Token-only files (bare :root / .dark, no @layer wrappers) like
+ * tokens.css are safe to import before Tailwind.
+ */
 @import './tokens.css';
 
 @import 'tailwindcss';
