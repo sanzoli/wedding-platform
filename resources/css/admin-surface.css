@@ -128,11 +128,14 @@
     }
 
     /* ----------------------------
-     * Flash animation for edited rows
+     * Flash animation for edited rows.
+     * Uses color-mix because --primary resolves to a full hsl() call,
+     * so hsl(var(--primary) / 0.08) would expand to hsl(hsl(...) / 0.08)
+     * which is invalid syntax and silently produces no color.
      * ---------------------------- */
     @keyframes admin-flash-edit {
         0% {
-            background-color: hsl(var(--primary) / 0.08);
+            background-color: color-mix(in oklch, var(--primary) 8%, transparent);
         }
         100% {
             background-color: transparent;
