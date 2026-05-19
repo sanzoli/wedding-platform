@@ -1,0 +1,152 @@
+/* Admin Surface
+ * Tokens and utilities for the admin (management) surface.
+ * Conventions documented in docs/design-system/surfaces.md.
+ * Prefix: --admin-* / .admin-*
+ * Theme switching: :root = light, .dark = dark
+ */
+
+:root {
+    /* ----------------------------
+     * Admin typography tokens — all alias var(--font-sans) today.
+     * Kept as divergence points (e.g. --admin-font-data may switch to
+     * var(--font-mono) for tabular-nums in numeric columns).
+     * ---------------------------- */
+    --admin-font-label: var(--font-sans);
+    --admin-font-data: var(--font-sans);
+    --admin-font-action: var(--font-sans);
+
+    /* ----------------------------
+     * Component sizing
+     * ---------------------------- */
+    --admin-fab-size: 3.25rem; /* 52px - h-13 w-13 equivalent */
+
+    /* ----------------------------
+     * Badge importance tokens (semantic, admin-only)
+     * Palette: high=wine-700 / must-have=olive-600 / normal=secondary / low=transparent
+     * ---------------------------- */
+    --admin-badge-high-bg: var(--p-wine-700);
+    --admin-badge-high-fg: var(--p-neutral-0);
+    --admin-badge-high-border: var(--p-wine-700);
+
+    --admin-badge-must-have-bg: var(--p-olive-600);
+    --admin-badge-must-have-fg: var(--p-neutral-0);
+    --admin-badge-must-have-border: var(--p-olive-600);
+
+    --admin-badge-normal-bg: var(--secondary);
+    --admin-badge-normal-fg: var(--secondary-foreground);
+    --admin-badge-normal-border: var(--secondary);
+
+    --admin-badge-low-bg: transparent;
+    --admin-badge-low-fg: var(--foreground);
+    --admin-badge-low-border: var(--border);
+}
+
+.dark {
+    /* Badge importance tokens (dark mode) — mirror :root.
+     * Fixed primitives stay identical; normal/low resolve through
+     * --secondary/--foreground/--border which already vary by theme.
+     */
+    --admin-badge-high-bg: var(--p-wine-700);
+    --admin-badge-high-fg: var(--p-neutral-0);
+    --admin-badge-high-border: var(--p-wine-700);
+
+    --admin-badge-must-have-bg: var(--p-olive-600);
+    --admin-badge-must-have-fg: var(--p-neutral-0);
+    --admin-badge-must-have-border: var(--p-olive-600);
+
+    --admin-badge-normal-bg: var(--secondary);
+    --admin-badge-normal-fg: var(--secondary-foreground);
+    --admin-badge-normal-border: var(--secondary);
+
+    --admin-badge-low-bg: transparent;
+    --admin-badge-low-fg: var(--foreground);
+    --admin-badge-low-border: var(--border);
+}
+
+@layer utilities {
+    /* ----------------------------
+     * Admin typography utilities
+     * ---------------------------- */
+    .admin-type-label {
+        font-family: var(--admin-font-label);
+        font-size: 0.8125rem; /* 13px */
+        line-height: 1.4;
+        font-weight: 500;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+
+    .admin-type-data {
+        font-family: var(--admin-font-data);
+        font-size: 0.9375rem; /* 15px */
+        line-height: 1.5;
+        font-weight: 400;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .admin-type-action {
+        font-family: var(--admin-font-action);
+        font-size: 0.875rem; /* 14px */
+        line-height: 1.4;
+        font-weight: 500;
+    }
+
+    .admin-type-table-header {
+        font-family: var(--admin-font-label);
+        font-size: 0.8125rem; /* 13px */
+        line-height: 1.4;
+        font-weight: 500;
+        letter-spacing: 0;
+        text-transform: none;
+    }
+
+    /* ----------------------------
+     * Badge importance utilities
+     * ---------------------------- */
+    .admin-badge-high-importance {
+        border-color: var(--admin-badge-high-border);
+        color: var(--admin-badge-high-fg);
+        background-color: var(--admin-badge-high-bg);
+    }
+
+    .admin-badge-must-have-importance {
+        border-color: var(--admin-badge-must-have-border);
+        color: var(--admin-badge-must-have-fg);
+        background-color: var(--admin-badge-must-have-bg);
+    }
+
+    .admin-badge-normal-importance {
+        border-color: var(--admin-badge-normal-border);
+        color: var(--admin-badge-normal-fg);
+        background-color: var(--admin-badge-normal-bg);
+    }
+
+    .admin-badge-low-importance {
+        border-color: var(--admin-badge-low-border);
+        color: var(--admin-badge-low-fg);
+        background-color: var(--admin-badge-low-bg);
+    }
+
+    /* ----------------------------
+     * Flash animation for edited rows
+     * ---------------------------- */
+    @keyframes admin-flash-edit {
+        0% {
+            background-color: hsl(var(--primary) / 0.08);
+        }
+        100% {
+            background-color: transparent;
+        }
+    }
+
+    .admin-animate-flash-edit {
+        animation: admin-flash-edit 600ms ease-out;
+    }
+
+    /* ----------------------------
+     * FAB-aware spacing
+     * ---------------------------- */
+    .admin-fab-safe-area {
+        padding-bottom: calc(var(--admin-fab-size) + 1.5rem);
+    }
+}
