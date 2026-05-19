@@ -1,5 +1,6 @@
 @import './tokens.css';
 @import './admin-surface.css';
+@import './guest-surface.css';
 
 @import 'tailwindcss';
 
