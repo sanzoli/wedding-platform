@@ -77,7 +77,7 @@ trans.empty_search_desc ??= 'Try adjusting your search terms';
         </Card>
 
         <!-- ─── Mobile card list (below sm) ─── -->
-        <div class="fab-safe-area flex flex-col gap-2.5 sm:hidden">
+        <div class="admin-fab-safe-area flex flex-col gap-2.5 sm:hidden">
             <slot name="body">
                 <Card class="items-center gap-2 px-4 py-10 text-center">
                     <p class="text-sm font-medium text-foreground/80">
