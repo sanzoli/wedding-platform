@@ -8,7 +8,7 @@
  * file with `@layer utilities { ... }` before Tailwind registers
  * `utilities` as the FIRST (lowest-priority) layer, putting
  * Tailwind's base preflight after it and overriding every utility
- * class. See docs/design-system/surfaces.md §14.
+ * class.
  *
  * Token-only files (bare :root / .dark, no @layer wrappers) like
  * tokens.css are safe to import before Tailwind.

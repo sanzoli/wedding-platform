@@ -54,6 +54,12 @@ Moving a file to `components/<surface>/` is justified when the props,
 slots, or events of the component carry surface-specific concepts —
 not merely because the styles differ.
 
+A component may also land in a surface when its visual density and
+typical consumption pattern are surface-shaped, even if its API
+looks generic in isolation. The corollary: if a sibling surface
+later needs the same primitive, promote it back to shared rather
+than importing across surfaces.
+
 ## 5. When to create a file under `components/admin/`
 
 A component belongs in `components/admin/` when it assumes admin
@@ -69,13 +75,6 @@ patterns:
 Its props carry admin concepts: `search`, `sortOptions`, `sortable`,
 `inline-edit`, `importance`, named slots like `toolbar` / `header` /
 `body`.
-
-A few components and composables live under `admin/` despite a
-generic-looking API — `SearchBar.vue`, `useAlert.ts` — because their
-visual density and typical usage (table filtering, destroy-confirmation
-modals) is admin-shaped, even if their props could in theory be reused.
-If a guest page ever needs the same primitive, promote it back to
-shared rather than importing across surfaces.
 
 ## 6. When to create a file under `components/guest/`
 
