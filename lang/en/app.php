@@ -32,6 +32,9 @@ return [
         'add_group' => 'Add guest group',
         'search_placeholder' => 'Search guests...',
 
+        'expand_all' => 'Expand all',
+        'collapse_all' => 'Collapse all',
+
         'companions_one' => 'companion',
         'companions_other' => 'companions',
         'pending_one' => 'pending',

@@ -2,11 +2,16 @@
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import type { GuestGroupView } from '@/types/guest-list';
 import { usePage } from '@inertiajs/vue3';
-import { ChevronDown, CircleAlert } from 'lucide-vue-next';
+import { ChevronDown, ChevronRight, CircleAlert } from 'lucide-vue-next';
 import { computed } from 'vue';
 
 const props = defineProps<{
     group: GuestGroupView;
+    expanded: boolean;
+}>();
+
+const emit = defineEmits<{
+    toggle: [];
 }>();
 
 const trans = usePage().props.trans.guest_list as Record<string, string>;
@@ -48,13 +53,19 @@ const subline = computed(() => {
     <tr class="group/row transition-colors hover:bg-muted/30">
         <td class="px-4 py-3">
             <div class="flex items-start gap-2">
-                <span
+                <button
                     v-if="hasCompanions"
-                    class="mt-1.5 inline-flex size-5 items-center justify-center text-muted-foreground"
-                    aria-hidden="true"
+                    type="button"
+                    class="mt-1.5 inline-flex size-5 cursor-pointer items-center justify-center rounded text-muted-foreground hover:bg-muted"
+                    :aria-expanded="expanded"
+                    :aria-label="
+                        expanded ? 'Collapse group' : 'Expand group'
+                    "
+                    @click="emit('toggle')"
                 >
-                    <ChevronDown :size="16" />
-                </span>
+                    <ChevronDown v-if="expanded" :size="16" />
+                    <ChevronRight v-else :size="16" />
+                </button>
                 <span v-else class="inline-block size-5" aria-hidden="true" />
 
                 <div class="flex min-w-0 flex-1 items-start gap-3">
