@@ -1,8 +1,26 @@
+/*
+ * IMPORT ORDER — Tailwind v4 cascade layer rule
+ *
+ * Files that contain `@layer X { ... }` blocks (admin-surface.css,
+ * guest-surface.css when it gains utilities) MUST be imported AFTER
+ * `@import 'tailwindcss';`. The first file to declare a layer name
+ * fixes that layer's position in the cascade; importing a surface
+ * file with `@layer utilities { ... }` before Tailwind registers
+ * `utilities` as the FIRST (lowest-priority) layer, putting
+ * Tailwind's base preflight after it and overriding every utility
+ * class.
+ *
+ * Token-only files (bare :root / .dark, no @layer wrappers) like
+ * tokens.css are safe to import before Tailwind.
+ */
 @import './tokens.css';
 
 @import 'tailwindcss';
 
 @import 'tw-animate-css';
+
+@import './admin-surface.css';
+@import './guest-surface.css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -15,9 +33,6 @@
     --font-display: var(--font-display);
     --font-heading: var(--font-heading);
     --font-body: var(--font-body);
-    --font-label: var(--font-label);
-    --font-data: var(--font-data);
-    --font-action: var(--font-action);
 
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
@@ -120,85 +135,6 @@
         font-size: 0.9375rem; /* 15px */
         line-height: 1.6;
         font-weight: 400;
-    }
-
-    .type-label {
-        font-family: var(--font-label);
-        font-size: 0.8125rem; /* 13px */
-        line-height: 1.4;
-        font-weight: 500;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-    }
-
-    .type-data {
-        font-family: var(--font-data);
-        font-size: 0.9375rem; /* 15px */
-        line-height: 1.5;
-        font-weight: 400;
-        font-variant-numeric: tabular-nums;
-    }
-
-    .type-action {
-        font-family: var(--font-action);
-        font-size: 0.875rem; /* 14px */
-        line-height: 1.4;
-        font-weight: 500;
-    }
-
-    .type-table-header {
-        font-family: var(--font-label);
-        font-size: 0.8125rem; /* 13px */
-        line-height: 1.4;
-        font-weight: 500;
-        letter-spacing: 0;
-        text-transform: none;
-    }
-
-    /* Custom badge styles for importance levels */
-    .badge-high-importance {
-        border-color: var(--badge-high-border);
-        color: var(--badge-high-fg);
-        background-color: var(--badge-high-bg);
-    }
-
-    .badge-must-have-importance {
-        border-color: var(--badge-must-have-border);
-        color: var(--badge-must-have-fg);
-        background-color: var(--badge-must-have-bg);
-    }
-
-    .badge-normal-importance {
-        border-color: var(--badge-normal-border);
-        color: var(--badge-normal-fg);
-        background-color: var(--badge-normal-bg);
-    }
-
-    .badge-low-importance {
-        border-color: var(--badge-low-border);
-        color: var(--badge-low-fg);
-        background-color: var(--badge-low-bg);
-    }
-
-    /* Flash animation for edited items */
-    @keyframes flash-edit {
-        0% {
-            background-color: hsl(var(--primary) / 0.08);
-        }
-        100% {
-            background-color: transparent;
-        }
-    }
-
-    .animate-flash-edit {
-        animation: flash-edit 600ms ease-out;
-    }
-
-    /* ----------------------------
-     * FAB-aware spacing utilities
-     * ---------------------------- */
-    .fab-safe-area {
-        padding-bottom: calc(var(--fab-size) + 1.5rem);
     }
 }
 

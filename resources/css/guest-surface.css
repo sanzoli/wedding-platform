@@ -1,0 +1,20 @@
+/* Guest Surface — skeleton
+ * Editorial surface for guest-facing pages (Save the Date, Our Wedding,
+ * Landing, etc.). Will be populated when recovering OurWedding/Landing
+ * and building Save the Date.
+ *
+ * Conventions documented in docs/design-system/surfaces.md.
+ * Prefix: --guest-* / .guest-*
+ */
+
+:root {
+    /* ----------------------------
+     * Guest typography aliases
+     * Mirror the shared display/heading/body roles, ready to diverge
+     * (e.g. ornamental ceremonial typeface for --guest-font-display)
+     * without touching shared tokens.
+     * ---------------------------- */
+    --guest-font-display: var(--font-display);
+    --guest-font-heading: var(--font-heading);
+    --guest-font-body: var(--font-body);
+}
