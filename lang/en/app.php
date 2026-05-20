@@ -23,8 +23,7 @@ return [
         'meta_attention_one' => 'NEEDS ATTENTION',
         'meta_attention_other' => 'NEED ATTENTION',
 
-        'column_name' => 'Name',
-        'column_surname' => 'Surname',
+        'column_name' => 'Guest / Group',
         'column_members' => 'Members',
         'column_language' => 'Language',
         'column_mobile' => 'Mobile',

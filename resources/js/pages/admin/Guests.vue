@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import GuestList from '@/components/admin/guest-list/GuestList.vue';
 import Heading from '@/components/Heading.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { buildGuestGroupViews } from '@/lib/mock/guest-list';
@@ -64,7 +65,7 @@ const strip = computed(() => {
                 </p>
             </header>
 
-            <!-- Table renders in the next commit. -->
+            <GuestList :groups="groups" />
         </div>
     </AppLayout>
 </template>

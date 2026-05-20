@@ -179,19 +179,11 @@ export const mockGuests: Guest[] = [
     guest('g_037', 'gg_10', false, 'Henrique', 'Almeida', 'pt'),
     guest('g_038', 'gg_10', false, 'Laura', 'Almeida', 'pt'),
 
-    // 11. Familia Torres — 4, ES, 1 pending → needs attention
-    guest(
-        'g_039',
-        'gg_11',
-        true,
-        'Diego',
-        'Torres',
-        'es',
-        '+57 312 901 4455',
-    ),
+    // 11. Familia Torres — 4, ES, primary without mobile → needs attention
+    guest('g_039', 'gg_11', true, 'Diego', 'Torres', 'es', null),
     guest('g_040', 'gg_11', false, 'Antonia', 'Torres', 'es'),
     guest('g_041', 'gg_11', false, 'Martín', 'Torres', 'es'),
-    guest('g_042', 'gg_11', false, '', '', 'es', null, 'pending'),
+    guest('g_042', 'gg_11', false, 'Sebastián', 'Torres', 'es'),
 
     // 12. Williams family — 3, EN
     guest(
@@ -275,6 +267,8 @@ export function buildGuestGroupViews(
         ).length;
         const confirmedCompanions = companions.length - pendingCompanions;
 
+        const primaryHasNoMobile = !primary.mobile?.trim();
+
         return {
             id: grp.id,
             primary,
@@ -282,7 +276,7 @@ export function buildGuestGroupViews(
             totalMembers: members.length,
             confirmedCompanions,
             pendingCompanions,
-            needsAttention: pendingCompanions > 0,
+            needsAttention: pendingCompanions > 0 || primaryHasNoMobile,
         };
     });
 }
