@@ -20,15 +20,15 @@ trans.empty_search_desc ??= 'Try adjusting your search terms';
 </script>
 
 <template>
-    <section class="premium-table-container">
+    <section class="w-full">
         <section
-            class="sticky top-24 z-30 -mx-6 mb-1 bg-background/95 px-6 py-3 backdrop-blur-sm transition-shadow duration-200 sm:mb-2 sm:py-4"
+            class="sticky top-24 z-30 -mx-6 mb-3 bg-background/95 px-6 py-3 backdrop-blur-sm transition-shadow duration-200 sm:mb-4 sm:py-4"
         >
             <slot name="toolbar" />
         </section>
 
         <!-- ─── Desktop table (sm and up) ─── -->
-        <Card class="hidden gap-0 overflow-hidden py-0 sm:block">
+        <Card class="hidden w-full gap-0 overflow-hidden py-0 sm:block">
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead>
