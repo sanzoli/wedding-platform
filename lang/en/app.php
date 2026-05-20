@@ -34,8 +34,8 @@ return [
 
         'companions_one' => 'companion',
         'companions_other' => 'companions',
-        'pending_companions_one' => 'pending companion',
-        'pending_companions_other' => 'pending companions',
+        'pending_one' => 'pending',
+        'pending_other' => 'pending',
 
         'pending_placeholder' => 'Companion',
 

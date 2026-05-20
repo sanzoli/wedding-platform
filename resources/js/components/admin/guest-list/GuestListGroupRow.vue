@@ -12,8 +12,8 @@ const props = defineProps<{
 const trans = usePage().props.trans.guest_list as Record<string, string>;
 trans.companions_one ??= 'companion';
 trans.companions_other ??= 'companions';
-trans.pending_companions_one ??= 'pending companion';
-trans.pending_companions_other ??= 'pending companions';
+trans.pending_one ??= 'pending';
+trans.pending_other ??= 'pending';
 
 const initials = computed(() => {
     const first = props.group.primary.name.charAt(0).toUpperCase();
@@ -31,18 +31,16 @@ const subline = computed(() => {
     const total = props.group.companions.length;
     if (total === 0) return null;
 
-    const parts = [
-        `${total} ${total === 1 ? trans.companions_one : trans.companions_other}`,
-    ];
-
+    const totalLabel =
+        total === 1 ? trans.companions_one : trans.companions_other;
     const pending = props.group.pendingCompanions;
-    if (pending > 0) {
-        parts.push(
-            `${pending} ${pending === 1 ? trans.pending_companions_one : trans.pending_companions_other}`,
-        );
-    }
+    const pendingLabel =
+        pending === 1 ? trans.pending_one : trans.pending_other;
 
-    return parts.join(' · ');
+    return {
+        total: `${total} ${totalLabel}`,
+        pending: pending > 0 ? `(${pending} ${pendingLabel})` : null,
+    };
 });
 </script>
 
@@ -72,7 +70,12 @@ const subline = computed(() => {
                             v-if="subline"
                             class="text-[0.78em] leading-[1.4] text-muted-foreground/70"
                         >
-                            {{ subline }}
+                            <span>{{ subline.total }}</span>
+                            <span
+                                v-if="subline.pending"
+                                class="ml-1 text-warning"
+                                >{{ subline.pending }}</span
+                            >
                         </p>
                     </div>
                 </div>
