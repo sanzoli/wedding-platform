@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ConfirmDialog from '@/components/admin/ConfirmDialog.vue';
 import Table from '@/components/admin/Table.vue';
 import TableHeader from '@/components/admin/TableHeader.vue';
 import {
@@ -7,7 +8,7 @@ import {
     TooltipTrigger,
 } from '@/components/ui/tooltip';
 import type { SortOptions } from '@/types';
-import type { GuestGroupView } from '@/types/guest-list';
+import type { Guest, GuestGroupView } from '@/types/guest-list';
 import { usePage } from '@inertiajs/vue3';
 import { ChevronsDown, ChevronsRight } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
@@ -18,6 +19,11 @@ const props = defineProps<{
     groups: GuestGroupView[];
 }>();
 
+const emit = defineEmits<{
+    'delete-group': [groupId: string];
+    'delete-companion': [companionId: string];
+}>();
+
 const trans = usePage().props.trans.guest_list as Record<string, string>;
 trans.column_name ??= 'Guest / Group';
 trans.column_members ??= 'Members';
@@ -26,8 +32,13 @@ trans.column_mobile ??= 'Mobile';
 trans.column_actions ??= 'Actions';
 trans.expand_all ??= 'Expand all';
 trans.collapse_all ??= 'Collapse all';
+trans.delete_group_title ??= 'Delete this group?';
+trans.delete_companion_title ??= 'Delete this companion?';
+trans.delete_description ??= 'This action cannot be undone.';
+trans.delete_confirm ??= 'Delete';
+trans.delete_cancel ??= 'Cancel';
 
-// Visual-only sort state. Data sorting moves server-side with the backend.
+// TODO(backend): visual-only sort; the API will sort server-side.
 const sortOptions = ref<SortOptions>({ type: 'name', direction: 'asc' });
 
 const setSort = (type: string, direction: 'asc' | 'desc' | null) => {
@@ -62,6 +73,43 @@ const toggleAll = () => {
         props.groups.map((g) => [g.id, next]),
     );
 };
+
+// Delete confirmation. The dialog lives at the table level; the parent owns
+// the mutation, so we emit on confirm and let it decide what to drop.
+type PendingDelete =
+    | { type: 'group'; groupId: string }
+    | { type: 'companion'; companionId: string };
+
+const pendingDelete = ref<PendingDelete | null>(null);
+
+const requestDeleteGroup = (group: GuestGroupView) => {
+    pendingDelete.value = { type: 'group', groupId: group.id };
+};
+
+const requestDeleteCompanion = (companion: Guest) => {
+    pendingDelete.value = { type: 'companion', companionId: companion.id };
+};
+
+const cancelDelete = () => {
+    pendingDelete.value = null;
+};
+
+const confirmDelete = () => {
+    if (!pendingDelete.value) return;
+    if (pendingDelete.value.type === 'group') {
+        emit('delete-group', pendingDelete.value.groupId);
+    } else {
+        emit('delete-companion', pendingDelete.value.companionId);
+    }
+    pendingDelete.value = null;
+};
+
+const dialogTitle = computed(() => {
+    if (!pendingDelete.value) return '';
+    return pendingDelete.value.type === 'group'
+        ? trans.delete_group_title
+        : trans.delete_companion_title;
+});
 </script>
 
 <template>
@@ -130,15 +178,28 @@ const toggleAll = () => {
                     :group="group"
                     :expanded="isExpanded(group.id)"
                     @toggle="toggle(group.id)"
+                    @delete="requestDeleteGroup(group)"
                 />
                 <template v-if="isExpanded(group.id)">
                     <GuestListCompanionRow
                         v-for="companion in group.companions"
                         :key="companion.id"
                         :companion="companion"
+                        @delete="requestDeleteCompanion(companion)"
                     />
                 </template>
             </template>
         </template>
     </Table>
+
+    <ConfirmDialog
+        :open="pendingDelete !== null"
+        :title="dialogTitle"
+        :description="trans.delete_description"
+        :confirm-label="trans.delete_confirm"
+        :cancel-label="trans.delete_cancel"
+        confirm-variant="destructive"
+        @update:open="(v) => !v && cancelDelete()"
+        @confirm="confirmDelete"
+    />
 </template>

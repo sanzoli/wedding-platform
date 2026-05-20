@@ -45,7 +45,8 @@ return [
         'action_edit' => 'Edit',
         'action_delete' => 'Delete',
 
-        'delete_title' => 'Delete guest?',
+        'delete_group_title' => 'Delete this group?',
+        'delete_companion_title' => 'Delete this companion?',
         'delete_description' => 'This action cannot be undone.',
         'delete_confirm' => 'Delete',
         'delete_cancel' => 'Cancel',

@@ -2,10 +2,14 @@
 import GuestList from '@/components/admin/guest-list/GuestList.vue';
 import Heading from '@/components/Heading.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { buildGuestGroupViews } from '@/lib/mock/guest-list';
+import {
+    buildGuestGroupViews,
+    mockGuestGroups,
+    mockGuests,
+} from '@/lib/mock/guest-list';
 import { type BreadcrumbItem } from '@/types';
 import { Head, usePage } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 
 const trans = usePage().props.trans.guest_list as Record<string, string>;
 trans.page_title ??= 'Guest list';
@@ -22,7 +26,25 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: trans.page_title, href: '/admin/guests' },
 ];
 
-const groups = computed(() => buildGuestGroupViews());
+// TODO(backend): mock data lives as mutable refs so deletes can drop entries
+// without an API. Swap these for Inertia props when the backend lands.
+const guests = ref([...mockGuests]);
+const guestGroups = ref([...mockGuestGroups]);
+
+const groups = computed(() =>
+    buildGuestGroupViews(guestGroups.value, guests.value),
+);
+
+const handleDeleteGroup = (groupId: string) => {
+    guests.value = guests.value.filter(
+        (g) => g.guest_group_id !== groupId,
+    );
+    guestGroups.value = guestGroups.value.filter((g) => g.id !== groupId);
+};
+
+const handleDeleteCompanion = (companionId: string) => {
+    guests.value = guests.value.filter((g) => g.id !== companionId);
+};
 
 const totals = computed(() => {
     const list = groups.value;
@@ -65,7 +87,11 @@ const strip = computed(() => {
                 </p>
             </header>
 
-            <GuestList :groups="groups" />
+            <GuestList
+                :groups="groups"
+                @delete-group="handleDeleteGroup"
+                @delete-companion="handleDeleteCompanion"
+            />
         </div>
     </AppLayout>
 </template>

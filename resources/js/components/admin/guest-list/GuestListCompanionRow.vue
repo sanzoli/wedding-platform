@@ -19,6 +19,14 @@ const emit = defineEmits<{
     delete: [];
 }>();
 
+// Blur the trigger before emitting so Radix does not return focus to it
+// after the AlertDialog closes — otherwise the Tooltip re-opens on focus
+// and stays stuck while the mouse is still over the hovered row.
+const onDeleteClick = (event: MouseEvent) => {
+    (event.currentTarget as HTMLElement | null)?.blur();
+    emit('delete');
+};
+
 const trans = usePage().props.trans.guest_list as Record<string, string>;
 trans.pending_placeholder ??= 'Companion';
 trans.action_delete ??= 'Delete';
@@ -81,7 +89,7 @@ const fullName = computed(() =>
                             size="icon"
                             class="size-8 cursor-pointer hover:bg-destructive/10"
                             :aria-label="trans.action_delete"
-                            @click="emit('delete')"
+                            @click="onDeleteClick"
                         >
                             <Trash2 :size="16" class="text-destructive" />
                         </Button>
