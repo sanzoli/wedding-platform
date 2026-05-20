@@ -1,8 +1,19 @@
 <script setup lang="ts">
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/ui/tooltip';
 import type { GuestGroupView } from '@/types/guest-list';
 import { usePage } from '@inertiajs/vue3';
-import { ChevronDown, ChevronRight, CircleAlert } from 'lucide-vue-next';
+import {
+    ChevronDown,
+    ChevronRight,
+    CircleAlert,
+    Trash2,
+} from 'lucide-vue-next';
 import { computed } from 'vue';
 
 const props = defineProps<{
@@ -12,6 +23,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     toggle: [];
+    delete: [];
 }>();
 
 const trans = usePage().props.trans.guest_list as Record<string, string>;
@@ -19,6 +31,7 @@ trans.companions_one ??= 'companion';
 trans.companions_other ??= 'companions';
 trans.pending_one ??= 'pending';
 trans.pending_other ??= 'pending';
+trans.action_delete ??= 'Delete';
 
 const initials = computed(() => {
     const first = props.group.primary.name.charAt(0).toUpperCase();
@@ -115,7 +128,30 @@ const subline = computed(() => {
                 >
                     <CircleAlert :size="16" />
                 </span>
-                <!-- Hover action buttons land in commit 4. -->
+
+                <div
+                    class="flex items-center gap-1 opacity-0 transition-opacity group-hover/row:opacity-100"
+                >
+                    <Tooltip>
+                        <TooltipTrigger as-child>
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                class="size-8 cursor-pointer hover:bg-destructive/10"
+                                :aria-label="trans.action_delete"
+                                @click="emit('delete')"
+                            >
+                                <Trash2
+                                    :size="16"
+                                    class="text-destructive"
+                                />
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>{{
+                            trans.action_delete
+                        }}</TooltipContent>
+                    </Tooltip>
+                </div>
             </div>
         </td>
     </tr>
