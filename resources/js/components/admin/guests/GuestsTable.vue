@@ -75,7 +75,13 @@ trans.column_actions ??= 'Actions';
 trans.expand_all ??= 'Expand all';
 trans.collapse_all ??= 'Collapse all';
 trans.delete_group_title ??= 'Delete this group?';
-trans.delete_companion_title ??= 'Delete this companion?';
+trans.delete_group_title_named ??= 'Delete :name and group?';
+trans.delete_group_desc_one ??=
+    '1 companion will also be removed. This action cannot be undone.';
+trans.delete_group_desc_other ??=
+    ':count companions will also be removed. This action cannot be undone.';
+trans.delete_companion_title_named ??= 'Delete :name?';
+trans.delete_companion_title_pending ??= 'Delete this companion entry?';
 trans.delete_description ??= 'This action cannot be undone.';
 trans.delete_confirm ??= 'Delete';
 trans.delete_cancel ??= 'Cancel';
@@ -164,11 +170,53 @@ const confirmDelete = () => {
     }
 };
 
+const findCompanion = (companionId: string): Guest | null => {
+    for (const group of props.groups) {
+        const found = group.companions.find((c) => c.id === companionId);
+        if (found) return found;
+    }
+    return null;
+};
+
 const dialogTitle = computed(() => {
-    if (!pendingDelete.value) return '';
-    return pendingDelete.value.type === 'group'
-        ? trans.delete_group_title
-        : trans.delete_companion_title;
+    const pending = pendingDelete.value;
+    if (!pending) return '';
+
+    if (pending.type === 'group') {
+        const group = props.groups.find((g) => g.id === pending.groupId);
+        const name = group
+            ? `${group.primary.name} ${group.primary.surname}`.trim()
+            : '';
+        return name
+            ? trans.delete_group_title_named.replace(':name', name)
+            : trans.delete_group_title;
+    }
+
+    const companion = findCompanion(pending.companionId);
+    if (!companion) return trans.delete_companion_title_pending;
+    const isPending =
+        companion.name_status === 'pending' ||
+        (!companion.name.trim() && !companion.surname.trim());
+    if (isPending) return trans.delete_companion_title_pending;
+    const name = `${companion.name} ${companion.surname}`.trim();
+    return name
+        ? trans.delete_companion_title_named.replace(':name', name)
+        : trans.delete_companion_title_pending;
+});
+
+const dialogDescription = computed(() => {
+    const pending = pendingDelete.value;
+    if (!pending) return trans.delete_description;
+    if (pending.type !== 'group') return trans.delete_description;
+
+    const group = props.groups.find((g) => g.id === pending.groupId);
+    const count = group?.companions.length ?? 0;
+    if (count === 0) return trans.delete_description;
+    const template =
+        count === 1
+            ? trans.delete_group_desc_one
+            : trans.delete_group_desc_other;
+    return template.replace(':count', String(count));
 });
 
 // Pending flows: only one create/edit row can be active at a time. Opening
@@ -389,7 +437,7 @@ const searchValue = ref('');
     <ConfirmDialog
         :open="pendingDelete !== null"
         :title="dialogTitle"
-        :description="trans.delete_description"
+        :description="dialogDescription"
         :confirm-label="trans.delete_confirm"
         :cancel-label="trans.delete_cancel"
         confirm-variant="destructive"

@@ -50,7 +50,11 @@ return [
         'action_add_companion' => 'Add companion',
 
         'delete_group_title' => 'Delete this group?',
-        'delete_companion_title' => 'Delete this companion?',
+        'delete_group_title_named' => 'Delete :name and group?',
+        'delete_group_desc_one' => '1 companion will also be removed. This action cannot be undone.',
+        'delete_group_desc_other' => ':count companions will also be removed. This action cannot be undone.',
+        'delete_companion_title_named' => 'Delete :name?',
+        'delete_companion_title_pending' => 'Delete this companion entry?',
         'delete_description' => 'This action cannot be undone.',
         'delete_confirm' => 'Delete',
         'delete_cancel' => 'Cancel',
