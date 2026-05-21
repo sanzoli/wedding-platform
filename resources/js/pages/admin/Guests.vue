@@ -86,6 +86,36 @@ const handleCreateGroup = (payload: {
     ];
 };
 
+// TODO(backend): POST the companion. The API should infer name_status from
+// whether name/surname are provided.
+const handleCreateCompanion = (payload: {
+    groupId: string;
+    name: string;
+    surname: string;
+    language: GuestLanguage;
+}) => {
+    const now = new Date().toISOString();
+    const companionId = `g_${Date.now()}`;
+    const hasName = payload.name !== '' || payload.surname !== '';
+
+    guests.value = [
+        ...guests.value,
+        {
+            id: companionId,
+            name: payload.name,
+            surname: payload.surname,
+            mobile: null,
+            language: payload.language,
+            guest_group_id: payload.groupId,
+            is_primary: false,
+            name_status: hasName ? 'known' : 'pending',
+            archived_at: null,
+            created_at: now,
+            updated_at: now,
+        },
+    ];
+};
+
 const totals = computed(() => {
     const list = groups.value;
     return {
@@ -132,6 +162,7 @@ const strip = computed(() => {
                 @delete-group="handleDeleteGroup"
                 @delete-companion="handleDeleteCompanion"
                 @create-group="handleCreateGroup"
+                @create-companion="handleCreateCompanion"
             />
         </div>
     </AppLayout>

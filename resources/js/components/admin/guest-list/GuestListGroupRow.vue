@@ -13,6 +13,7 @@ import {
     ChevronRight,
     CircleAlert,
     Trash2,
+    UserPlus,
 } from 'lucide-vue-next';
 import { computed } from 'vue';
 
@@ -24,6 +25,7 @@ const props = defineProps<{
 const emit = defineEmits<{
     toggle: [];
     delete: [];
+    'add-companion': [];
 }>();
 
 // Blur the trigger before emitting so Radix does not return focus to it
@@ -40,6 +42,7 @@ trans.companions_other ??= 'companions';
 trans.pending_one ??= 'pending';
 trans.pending_other ??= 'pending';
 trans.action_delete ??= 'Delete';
+trans.action_add_companion ??= 'Add companion';
 
 const initials = computed(() => {
     const first = props.group.primary.name.charAt(0).toUpperCase();
@@ -140,6 +143,22 @@ const subline = computed(() => {
                 <div
                     class="flex items-center gap-1 opacity-0 transition-opacity group-hover/row:opacity-100"
                 >
+                    <Tooltip>
+                        <TooltipTrigger as-child>
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                class="size-8 cursor-pointer hover:bg-primary/10"
+                                :aria-label="trans.action_add_companion"
+                                @click="emit('add-companion')"
+                            >
+                                <UserPlus :size="16" />
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>{{
+                            trans.action_add_companion
+                        }}</TooltipContent>
+                    </Tooltip>
                     <Tooltip>
                         <TooltipTrigger as-child>
                             <Button

@@ -44,6 +44,7 @@ return [
 
         'action_edit' => 'Edit',
         'action_delete' => 'Delete',
+        'action_add_companion' => 'Add companion',
 
         'delete_group_title' => 'Delete this group?',
         'delete_companion_title' => 'Delete this companion?',

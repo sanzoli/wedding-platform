@@ -18,6 +18,7 @@ import { usePage } from '@inertiajs/vue3';
 import { ChevronsDown, ChevronsRight } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import GuestListCompanionRow from './GuestListCompanionRow.vue';
+import GuestListCreateCompanionRow from './GuestListCreateCompanionRow.vue';
 import GuestListCreatePrimaryRow from './GuestListCreatePrimaryRow.vue';
 import GuestListGroupRow from './GuestListGroupRow.vue';
 
@@ -34,6 +35,14 @@ const emit = defineEmits<{
             surname: string;
             language: GuestLanguage;
             mobile: string;
+        },
+    ];
+    'create-companion': [
+        payload: {
+            groupId: string;
+            name: string;
+            surname: string;
+            language: GuestLanguage;
         },
     ];
 }>();
@@ -149,6 +158,28 @@ const onSavePrimary = (payload: {
 const onCancelCreate = () => {
     adding.value = false;
 };
+
+// Inline create companion. Tracks which group has the editor open; opening
+// it force-expands that group so the editor is visible.
+const addingCompanionIn = ref<string | null>(null);
+
+const requestAddCompanion = (groupId: string) => {
+    if (addingCompanionIn.value) return;
+    addingCompanionIn.value = groupId;
+    expanded.value = { ...expanded.value, [groupId]: true };
+};
+
+const onSaveCompanion = (
+    groupId: string,
+    payload: { name: string; surname: string; language: GuestLanguage },
+) => {
+    emit('create-companion', { groupId, ...payload });
+    addingCompanionIn.value = null;
+};
+
+const onCancelCompanion = () => {
+    addingCompanionIn.value = null;
+};
 </script>
 
 <template>
@@ -229,6 +260,7 @@ const onCancelCreate = () => {
                     :expanded="isExpanded(group.id)"
                     @toggle="toggle(group.id)"
                     @delete="requestDeleteGroup(group)"
+                    @add-companion="requestAddCompanion(group.id)"
                 />
                 <template v-if="isExpanded(group.id)">
                     <GuestListCompanionRow
@@ -236,6 +268,13 @@ const onCancelCreate = () => {
                         :key="companion.id"
                         :companion="companion"
                         @delete="requestDeleteCompanion(companion)"
+                    />
+                    <GuestListCreateCompanionRow
+                        v-if="addingCompanionIn === group.id"
+                        @save="
+                            (payload) => onSaveCompanion(group.id, payload)
+                        "
+                        @cancel="onCancelCompanion"
                     />
                 </template>
             </template>
