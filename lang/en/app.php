@@ -20,13 +20,12 @@ return [
         'meta_guests_other' => 'GUESTS',
         'meta_groups_one' => 'GROUP',
         'meta_groups_other' => 'GROUPS',
-        'meta_attention_one' => 'NEEDS ATTENTION',
-        'meta_attention_other' => 'NEED ATTENTION',
 
         'column_name' => 'Guest / Group',
         'column_members' => 'Members',
         'column_language' => 'Language',
         'column_mobile' => 'Mobile',
+        'column_attention' => 'Attention',
         'column_actions' => 'Actions',
 
         'add_group' => 'Add guest group',
@@ -41,6 +40,10 @@ return [
         'pending_other' => 'pending',
 
         'pending_placeholder' => 'Companion',
+
+        'attention_no_mobile' => 'Mobile number is missing',
+        'attention_pending_one' => 'Has 1 companion with unconfirmed name',
+        'attention_pending_other' => 'Has :count companions with unconfirmed names',
 
         'action_edit' => 'Edit',
         'action_delete' => 'Delete',

@@ -80,14 +80,14 @@ const fullName = computed(() =>
         <td class="px-4 py-2"></td>
         <td class="px-4 py-2">
             <div
-                class="flex items-center justify-end gap-1 opacity-0 transition-opacity group-hover/row:opacity-100"
+                class="flex items-center justify-center gap-1 opacity-0 transition-opacity group-hover/row:opacity-100"
             >
                 <Tooltip>
                     <TooltipTrigger as-child>
                         <Button
                             variant="ghost"
                             size="icon"
-                            class="size-8 cursor-pointer hover:bg-destructive/10"
+                            class="size-8 cursor-pointer hover:bg-destructive/10 dark:hover:bg-destructive/25"
                             :aria-label="trans.action_delete"
                             @click="onDeleteClick"
                         >
@@ -100,5 +100,6 @@ const fullName = computed(() =>
                 </Tooltip>
             </div>
         </td>
+        <td class="w-px py-2 pr-2.5 pl-2"></td>
     </tr>
 </template>

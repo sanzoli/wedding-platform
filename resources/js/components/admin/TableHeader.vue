@@ -1,11 +1,14 @@
 <script setup lang="ts">
+import { cn } from '@/lib/utils';
 import { SortOptions } from '@/types';
 import { ChevronDown, ChevronUp } from 'lucide-vue-next';
+import type { HTMLAttributes } from 'vue';
 import { computed } from 'vue';
 
 const props = defineProps<{
     sortBy?: string;
     sortOptions?: SortOptions;
+    class?: HTMLAttributes['class'];
 }>();
 
 const isCurrentSorting = computed(
@@ -23,7 +26,12 @@ const nextDirection = computed(function () {
 
 <template>
     <th
-        class="admin-type-table-header px-6 py-[22px] text-left text-muted-foreground"
+        :class="
+            cn(
+                'admin-type-table-header px-4 py-[22px] text-left text-muted-foreground',
+                props.class,
+            )
+        "
     >
         <div class="inline-flex items-center gap-2">
             <slot name="prefix" />

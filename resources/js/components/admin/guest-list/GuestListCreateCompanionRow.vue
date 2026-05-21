@@ -85,11 +85,11 @@ const onSave = () => {
         </td>
         <td class="px-4 py-2"></td>
         <td class="px-4 py-2">
-            <div class="flex items-center justify-end gap-1">
+            <div class="flex items-center justify-center gap-1">
                 <Button
                     variant="ghost"
                     size="icon"
-                    class="size-8 cursor-pointer hover:bg-primary/10"
+                    class="size-8 cursor-pointer hover:bg-primary/10 dark:hover:bg-primary/25"
                     :aria-label="trans.create_confirm"
                     @click="onSave"
                 >
@@ -106,5 +106,6 @@ const onSave = () => {
                 </Button>
             </div>
         </td>
+        <td class="w-px py-2 pr-2.5 pl-2"></td>
     </tr>
 </template>

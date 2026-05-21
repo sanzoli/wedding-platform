@@ -53,6 +53,7 @@ trans.column_name ??= 'Guest / Group';
 trans.column_members ??= 'Members';
 trans.column_language ??= 'Language';
 trans.column_mobile ??= 'Mobile';
+trans.column_attention ??= 'Attention';
 trans.column_actions ??= 'Actions';
 trans.expand_all ??= 'Expand all';
 trans.collapse_all ??= 'Collapse all';
@@ -74,9 +75,9 @@ const setSort = (type: string, direction: 'asc' | 'desc' | null) => {
     };
 };
 
-// Per-group expansion state. Groups default to expanded.
+// Per-group expansion state. Groups default to collapsed.
 const expanded = ref<Record<string, boolean>>({});
-const isExpanded = (id: string) => expanded.value[id] ?? true;
+const isExpanded = (id: string) => expanded.value[id] ?? false;
 const toggle = (id: string) => {
     expanded.value = { ...expanded.value, [id]: !isExpanded(id) };
 };
@@ -213,13 +214,9 @@ const searchValue = ref('');
                 <template #prefix>
                     <Tooltip v-if="hasCollapsibleGroups">
                         <TooltipTrigger as-child>
-                            <!--
-                                -ml-2 aligns the master chevron with the
-                                per-row chevrons (px-4 cells vs px-6 header).
-                            -->
                             <button
                                 type="button"
-                                class="-ml-2 inline-flex size-5 cursor-pointer items-center justify-center rounded text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                                class="inline-flex size-5 cursor-pointer items-center justify-center rounded text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                                 :aria-expanded="allExpanded"
                                 :aria-label="
                                     allExpanded
@@ -257,7 +254,12 @@ const searchValue = ref('');
                 >{{ trans.column_language }}</TableHeader
             >
             <TableHeader>{{ trans.column_mobile }}</TableHeader>
-            <TableHeader>{{ trans.column_actions }}</TableHeader>
+            <TableHeader class="text-center">{{
+                trans.column_actions
+            }}</TableHeader>
+            <TableHeader class="w-px pr-2.5 pl-2">
+                <span class="sr-only">{{ trans.column_attention }}</span>
+            </TableHeader>
         </template>
 
         <template #body>

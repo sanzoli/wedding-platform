@@ -43,6 +43,10 @@ trans.pending_one ??= 'pending';
 trans.pending_other ??= 'pending';
 trans.action_delete ??= 'Delete';
 trans.action_add_companion ??= 'Add companion';
+trans.attention_no_mobile ??= 'Mobile number is missing';
+trans.attention_pending_one ??= 'Has 1 companion with unconfirmed name';
+trans.attention_pending_other ??=
+    'Has :count companions with unconfirmed names';
 
 const initials = computed(() => {
     const first = props.group.primary.name.charAt(0).toUpperCase();
@@ -55,6 +59,22 @@ const fullName = computed(() =>
 );
 
 const hasCompanions = computed(() => props.group.companions.length > 0);
+
+const attentionText = computed(() => {
+    const reasons: string[] = [];
+    if (!props.group.primary.mobile?.trim()) {
+        reasons.push(trans.attention_no_mobile);
+    }
+    const pending = props.group.pendingCompanions;
+    if (pending > 0) {
+        const template =
+            pending === 1
+                ? trans.attention_pending_one
+                : trans.attention_pending_other;
+        reasons.push(template.replace(':count', String(pending)));
+    }
+    return reasons.join(' · ');
+});
 
 const subline = computed(() => {
     const total = props.group.companions.length;
@@ -131,55 +151,56 @@ const subline = computed(() => {
             <span v-else>—</span>
         </td>
         <td class="px-4 py-3">
-            <div class="flex items-center justify-end gap-1">
-                <span
-                    v-if="group.needsAttention"
-                    class="inline-flex size-8 items-center justify-center text-warning"
-                    aria-label="Necesita atención"
-                >
-                    <CircleAlert :size="16" />
-                </span>
-
-                <div
-                    class="flex items-center gap-1 opacity-0 transition-opacity group-hover/row:opacity-100"
-                >
-                    <Tooltip>
-                        <TooltipTrigger as-child>
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                class="size-8 cursor-pointer hover:bg-primary/10"
-                                :aria-label="trans.action_add_companion"
-                                @click="emit('add-companion')"
-                            >
-                                <UserPlus :size="16" />
-                            </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>{{
-                            trans.action_add_companion
-                        }}</TooltipContent>
-                    </Tooltip>
-                    <Tooltip>
-                        <TooltipTrigger as-child>
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                class="size-8 cursor-pointer hover:bg-destructive/10"
-                                :aria-label="trans.action_delete"
-                                @click="onDeleteClick"
-                            >
-                                <Trash2
-                                    :size="16"
-                                    class="text-destructive"
-                                />
-                            </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>{{
-                            trans.action_delete
-                        }}</TooltipContent>
-                    </Tooltip>
-                </div>
+            <div
+                class="flex items-center justify-center gap-1 opacity-0 transition-opacity group-hover/row:opacity-100"
+            >
+                <Tooltip>
+                    <TooltipTrigger as-child>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            class="size-8 cursor-pointer hover:bg-primary/10 hover:text-foreground dark:hover:bg-primary/25"
+                            :aria-label="trans.action_add_companion"
+                            @click="emit('add-companion')"
+                        >
+                            <UserPlus :size="16" />
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>{{
+                        trans.action_add_companion
+                    }}</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                    <TooltipTrigger as-child>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            class="size-8 cursor-pointer hover:bg-destructive/10 dark:hover:bg-destructive/25"
+                            :aria-label="trans.action_delete"
+                            @click="onDeleteClick"
+                        >
+                            <Trash2 :size="16" class="text-destructive" />
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>{{ trans.action_delete }}</TooltipContent>
+                </Tooltip>
             </div>
+        </td>
+        <td class="w-px py-3 pr-4 pl-2">
+            <span class="inline-flex size-8 items-center justify-center">
+                <Tooltip v-if="group.needsAttention">
+                    <TooltipTrigger as-child>
+                        <span
+                            tabindex="0"
+                            class="text-warning"
+                            :aria-label="attentionText"
+                        >
+                            <CircleAlert :size="16" />
+                        </span>
+                    </TooltipTrigger>
+                    <TooltipContent>{{ attentionText }}</TooltipContent>
+                </Tooltip>
+            </span>
         </td>
     </tr>
 </template>
