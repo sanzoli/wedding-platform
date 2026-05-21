@@ -205,6 +205,9 @@ const cancelFlowsInGroup = (groupId: string) => {
 const onCreateRequest = () => {
     if (adding.value) return;
     closePendingFlows();
+    // The NewGroup row mounts at the top of the table; smooth-scroll the
+    // page so it's visible no matter where the user was scrolled to.
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     adding.value = true;
 };
 
