@@ -17,10 +17,12 @@ import {
     UserPlus,
 } from 'lucide-vue-next';
 import { computed } from 'vue';
+import Highlight from './Highlight.vue';
 
 const props = defineProps<{
     group: GuestGroupView;
     expanded: boolean;
+    search: string;
 }>();
 
 const emit = defineEmits<{
@@ -123,7 +125,9 @@ const subline = computed(() => {
                         >
                     </Avatar>
                     <div class="min-w-0 flex-1">
-                        <p class="type-body text-foreground">{{ fullName }}</p>
+                        <p class="type-body text-foreground">
+                            <Highlight :text="fullName" :query="search" />
+                        </p>
                         <p
                             v-if="subline"
                             class="text-[0.78em] leading-[1.4] text-muted-foreground/70"
@@ -148,9 +152,9 @@ const subline = computed(() => {
         <td
             class="admin-type-data px-4 py-3 whitespace-nowrap text-muted-foreground"
         >
-            <template v-if="group.primary.mobile">{{
-                group.primary.mobile
-            }}</template>
+            <template v-if="group.primary.mobile">
+                <Highlight :text="group.primary.mobile" :query="search" />
+            </template>
             <span v-else>—</span>
         </td>
         <td class="px-4 py-3">

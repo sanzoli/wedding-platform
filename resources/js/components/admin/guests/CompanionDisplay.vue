@@ -10,9 +10,11 @@ import type { Guest } from '@/types/guests';
 import { usePage } from '@inertiajs/vue3';
 import { Pencil, Trash2 } from 'lucide-vue-next';
 import { computed } from 'vue';
+import Highlight from './Highlight.vue';
 
 const props = defineProps<{
     companion: Guest;
+    search: string;
 }>();
 
 const emit = defineEmits<{
@@ -68,9 +70,9 @@ const fullName = computed(() =>
                     class="type-body text-muted-foreground italic"
                     >{{ trans.pending_placeholder }}</span
                 >
-                <span v-else class="type-body text-foreground">{{
-                    fullName
-                }}</span>
+                <span v-else class="type-body text-foreground">
+                    <Highlight :text="fullName" :query="search" />
+                </span>
             </div>
         </td>
         <td class="px-4 py-2"></td>

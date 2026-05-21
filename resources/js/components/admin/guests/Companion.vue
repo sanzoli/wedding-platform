@@ -10,6 +10,7 @@ import CompanionEditor from './CompanionEditor.vue';
 const props = defineProps<{
     companion: Guest;
     editing: boolean;
+    search: string;
 }>();
 
 const emit = defineEmits<{
@@ -58,6 +59,7 @@ const onDelete = () => emit('delete');
     <CompanionDisplay
         v-else
         :companion
+        :search
         @edit="emit('start-edit')"
         @delete="onDelete"
     />

@@ -11,6 +11,7 @@ const props = defineProps<{
     group: GuestGroupView;
     expanded: boolean;
     editing: boolean;
+    search: string;
 }>();
 
 const emit = defineEmits<{
@@ -64,6 +65,7 @@ const onDelete = () => emit('delete');
         v-else
         :group
         :expanded
+        :search
         @toggle="emit('toggle')"
         @edit="emit('start-edit')"
         @delete="onDelete"
