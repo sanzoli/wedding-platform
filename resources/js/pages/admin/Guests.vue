@@ -142,6 +142,27 @@ const handleUpdateGroup = (payload: {
         };
     });
 };
+
+const handleUpdateCompanion = (payload: {
+    id: string;
+    name: string;
+    surname: string;
+    language: GuestLanguage;
+}) => {
+    const now = new Date().toISOString();
+    const hasName = payload.name !== '' || payload.surname !== '';
+    guests.value = guests.value.map((g) => {
+        if (g.id !== payload.id) return g;
+        return {
+            ...g,
+            name: payload.name,
+            surname: payload.surname,
+            language: payload.language,
+            name_status: hasName ? 'known' : 'pending',
+            updated_at: now,
+        };
+    });
+};
 </script>
 
 <template>
@@ -166,6 +187,7 @@ const handleUpdateGroup = (payload: {
                 @create-group="handleCreateGroup"
                 @create-companion="handleCreateCompanion"
                 @update-group="handleUpdateGroup"
+                @update-companion="handleUpdateCompanion"
             />
         </div>
     </AppLayout>

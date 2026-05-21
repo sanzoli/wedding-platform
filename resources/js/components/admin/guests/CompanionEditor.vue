@@ -3,10 +3,14 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectItem } from '@/components/ui/select';
-import type { GuestLanguage } from '@/types/guests';
+import type { Guest, GuestLanguage } from '@/types/guests';
 import { usePage } from '@inertiajs/vue3';
 import { Check, X } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
+
+const props = defineProps<{
+    companion: Guest;
+}>();
 
 const emit = defineEmits<{
     save: [
@@ -22,12 +26,12 @@ const emit = defineEmits<{
 const trans = usePage().props.trans.guests as Record<string, string>;
 trans.create_name_placeholder ??= 'Name';
 trans.create_surname_placeholder ??= 'Surname';
-trans.create_confirm ??= 'Confirm';
-trans.create_cancel ??= 'Cancel';
+trans.edit_confirm ??= 'Save changes';
+trans.edit_cancel ??= 'Discard changes';
 
-const name = ref('');
-const surname = ref('');
-const language = ref<GuestLanguage>('es');
+const name = ref(props.companion.name);
+const surname = ref(props.companion.surname);
+const language = ref<GuestLanguage>(props.companion.language);
 
 const initials = computed(() => {
     const f = name.value.charAt(0).toUpperCase();
@@ -36,7 +40,7 @@ const initials = computed(() => {
 });
 
 // Companions are allowed to save with empty name/surname; the parent flips
-// the row to a "pending" placeholder in that case.
+// the row back to a "pending" placeholder in that case.
 const onSave = () => {
     emit('save', {
         name: name.value.trim(),
@@ -44,22 +48,11 @@ const onSave = () => {
         language: language.value,
     });
 };
-
-// TODO(backend): swap the handler above for the Inertia version below;
-// then delete handleCreateCompanion in Guests.vue.
-//   import { router } from '@inertiajs/vue3';
-//   import { store } from '@/actions/App/Http/Controllers/GuestsController';
-//   const onSave = () => router.post(store(), {
-//       name: name.value.trim(),
-//       surname: surname.value.trim(),
-//       language: language.value,
-//   }, { only: ['guests'], onSuccess: () => emit('cancel') });
 </script>
 
 <template>
-    <tr
-        class="animate-in fade-in-0 slide-in-from-top-2 bg-muted/20 duration-300"
-    >
+    <!-- TODO(mobile): wrap with Teleport for fullscreen overlay on small viewports -->
+    <tr class="bg-muted/20">
         <td class="py-2 pr-4 pl-12">
             <div
                 class="flex items-center gap-3 border-l border-border/40 pl-4"
@@ -104,7 +97,7 @@ const onSave = () => {
                     variant="ghost"
                     size="icon"
                     class="size-8 cursor-pointer hover:bg-primary/10 dark:hover:bg-primary/25"
-                    :aria-label="trans.create_confirm"
+                    :aria-label="trans.edit_confirm"
                     @click="onSave"
                 >
                     <Check :size="16" class="text-primary" />
@@ -113,7 +106,7 @@ const onSave = () => {
                     variant="ghost"
                     size="icon"
                     class="size-8 cursor-pointer"
-                    :aria-label="trans.create_cancel"
+                    :aria-label="trans.edit_cancel"
                     @click="emit('cancel')"
                 >
                     <X :size="16" />

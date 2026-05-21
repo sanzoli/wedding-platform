@@ -55,6 +55,14 @@ const emit = defineEmits<{
             mobile: string;
         },
     ];
+    'update-companion': [
+        payload: {
+            id: string;
+            name: string;
+            surname: string;
+            language: GuestLanguage;
+        },
+    ];
 }>();
 
 const trans = usePage().props.trans.guests as Record<string, string>;
@@ -299,6 +307,9 @@ const searchValue = ref('');
                         :key="companion.id"
                         :companion="companion"
                         @delete="requestDeleteCompanion(companion)"
+                        @update-companion="
+                            (payload) => emit('update-companion', payload)
+                        "
                     />
                     <NewCompanion
                         v-if="addingCompanionIn === group.id"

@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/tooltip';
 import type { Guest } from '@/types/guests';
 import { usePage } from '@inertiajs/vue3';
-import { Trash2 } from 'lucide-vue-next';
+import { Pencil, Trash2 } from 'lucide-vue-next';
 import { computed } from 'vue';
 
 const props = defineProps<{
@@ -16,6 +16,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
+    edit: [];
     delete: [];
 }>();
 
@@ -29,6 +30,7 @@ const onDeleteClick = (event: MouseEvent) => {
 
 const trans = usePage().props.trans.guests as Record<string, string>;
 trans.pending_placeholder ??= 'Companion';
+trans.action_edit ??= 'Edit';
 trans.action_delete ??= 'Delete';
 
 const isPending = computed(
@@ -82,6 +84,20 @@ const fullName = computed(() =>
             <div
                 class="flex items-center justify-center gap-1 opacity-0 transition-opacity group-hover/row:opacity-100"
             >
+                <Tooltip>
+                    <TooltipTrigger as-child>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            class="size-8 cursor-pointer hover:bg-muted hover:text-foreground"
+                            :aria-label="trans.action_edit"
+                            @click="emit('edit')"
+                        >
+                            <Pencil :size="16" />
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>{{ trans.action_edit }}</TooltipContent>
+                </Tooltip>
                 <Tooltip>
                     <TooltipTrigger as-child>
                         <Button
