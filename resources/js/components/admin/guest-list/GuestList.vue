@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AddButton from '@/components/admin/AddButton.vue';
 import ConfirmDialog from '@/components/admin/ConfirmDialog.vue';
 import Table from '@/components/admin/Table.vue';
 import TableHeader from '@/components/admin/TableHeader.vue';
@@ -8,11 +9,16 @@ import {
     TooltipTrigger,
 } from '@/components/ui/tooltip';
 import type { SortOptions } from '@/types';
-import type { Guest, GuestGroupView } from '@/types/guest-list';
+import type {
+    Guest,
+    GuestGroupView,
+    GuestLanguage,
+} from '@/types/guest-list';
 import { usePage } from '@inertiajs/vue3';
 import { ChevronsDown, ChevronsRight } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import GuestListCompanionRow from './GuestListCompanionRow.vue';
+import GuestListCreatePrimaryRow from './GuestListCreatePrimaryRow.vue';
 import GuestListGroupRow from './GuestListGroupRow.vue';
 
 const props = defineProps<{
@@ -22,6 +28,14 @@ const props = defineProps<{
 const emit = defineEmits<{
     'delete-group': [groupId: string];
     'delete-companion': [companionId: string];
+    'create-group': [
+        payload: {
+            name: string;
+            surname: string;
+            language: GuestLanguage;
+            mobile: string;
+        },
+    ];
 }>();
 
 const trans = usePage().props.trans.guest_list as Record<string, string>;
@@ -37,6 +51,7 @@ trans.delete_companion_title ??= 'Delete this companion?';
 trans.delete_description ??= 'This action cannot be undone.';
 trans.delete_confirm ??= 'Delete';
 trans.delete_cancel ??= 'Cancel';
+trans.add_group ??= 'Add guest group';
 
 // TODO(backend): visual-only sort; the API will sort server-side.
 const sortOptions = ref<SortOptions>({ type: 'name', direction: 'asc' });
@@ -110,11 +125,41 @@ const dialogTitle = computed(() => {
         ? trans.delete_group_title
         : trans.delete_companion_title;
 });
+
+// Inline create primary group. The row is mounted at the top of the body
+// when adding is true; tick saves (with name|surname validation inside the
+// row), X cancels.
+const adding = ref(false);
+
+const onCreateRequest = () => {
+    if (adding.value) return;
+    adding.value = true;
+};
+
+const onSavePrimary = (payload: {
+    name: string;
+    surname: string;
+    language: GuestLanguage;
+    mobile: string;
+}) => {
+    emit('create-group', payload);
+    adding.value = false;
+};
+
+const onCancelCreate = () => {
+    adding.value = false;
+};
 </script>
 
 <template>
     <Table>
-        <template #toolbar><!-- Filled by commits 6 and 8. --></template>
+        <template #toolbar>
+            <div class="flex items-center justify-end gap-3">
+                <AddButton @add="onCreateRequest">{{
+                    trans.add_group
+                }}</AddButton>
+            </div>
+        </template>
 
         <template #header>
             <TableHeader
@@ -173,6 +218,11 @@ const dialogTitle = computed(() => {
         </template>
 
         <template #body>
+            <GuestListCreatePrimaryRow
+                v-if="adding"
+                @save="onSavePrimary"
+                @cancel="onCancelCreate"
+            />
             <template v-for="group in groups" :key="group.id">
                 <GuestListGroupRow
                     :group="group"

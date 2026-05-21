@@ -8,6 +8,7 @@ import {
     mockGuests,
 } from '@/lib/mock/guest-list';
 import { type BreadcrumbItem } from '@/types';
+import type { GuestLanguage } from '@/types/guest-list';
 import { Head, usePage } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 
@@ -44,6 +45,45 @@ const handleDeleteGroup = (groupId: string) => {
 
 const handleDeleteCompanion = (companionId: string) => {
     guests.value = guests.value.filter((g) => g.id !== companionId);
+};
+
+// TODO(backend): POST the payload and prepend the API response to the lists.
+const handleCreateGroup = (payload: {
+    name: string;
+    surname: string;
+    language: GuestLanguage;
+    mobile: string;
+}) => {
+    const now = new Date().toISOString();
+    const groupId = `gg_${Date.now()}`;
+    const primaryId = `g_${Date.now()}`;
+
+    guestGroups.value = [
+        {
+            id: groupId,
+            wedding_id: 'wed_colombia_brasil',
+            primary_guest_id: primaryId,
+            created_at: now,
+            updated_at: now,
+        },
+        ...guestGroups.value,
+    ];
+    guests.value = [
+        {
+            id: primaryId,
+            name: payload.name,
+            surname: payload.surname,
+            mobile: payload.mobile || null,
+            language: payload.language,
+            guest_group_id: groupId,
+            is_primary: true,
+            name_status: 'known',
+            archived_at: null,
+            created_at: now,
+            updated_at: now,
+        },
+        ...guests.value,
+    ];
 };
 
 const totals = computed(() => {
@@ -91,6 +131,7 @@ const strip = computed(() => {
                 :groups="groups"
                 @delete-group="handleDeleteGroup"
                 @delete-companion="handleDeleteCompanion"
+                @create-group="handleCreateGroup"
             />
         </div>
     </AppLayout>
