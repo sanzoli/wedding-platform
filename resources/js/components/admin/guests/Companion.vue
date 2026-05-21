@@ -1,17 +1,21 @@
 <script setup lang="ts">
 // Wrapper for the entity/display split. Hosts the edit toggle between
-// CompanionDisplay (read-only) and CompanionEditor (inline edit).
+// CompanionDisplay (read-only) and CompanionEditor (inline edit). The
+// editing state lives in GuestsTable so it can coordinate auto-cancel
+// across flows (other edits, creates, deletes).
 import type { Guest, GuestLanguage } from '@/types/guests';
-import { ref } from 'vue';
 import CompanionDisplay from './CompanionDisplay.vue';
 import CompanionEditor from './CompanionEditor.vue';
 
 const props = defineProps<{
     companion: Guest;
+    editing: boolean;
 }>();
 
 const emit = defineEmits<{
     delete: [];
+    'start-edit': [];
+    'cancel-edit': [];
     'update-companion': [
         payload: {
             id: string;
@@ -22,15 +26,13 @@ const emit = defineEmits<{
     ];
 }>();
 
-const editing = ref(false);
-
 const onSaveEdit = (input: {
     name: string;
     surname: string;
     language: GuestLanguage;
 }) => {
     emit('update-companion', { id: props.companion.id, ...input });
-    editing.value = false;
+    emit('cancel-edit');
 };
 
 const onDelete = () => emit('delete');
@@ -41,7 +43,7 @@ const onDelete = () => emit('delete');
 //   import { destroy, update } from '@/actions/App/Http/Controllers/GuestsController';
 //   const onSaveEdit = (input: { name: string; surname: string; language: GuestLanguage }) =>
 //       router.put(update(props.companion.id), input, {
-//           only: ['guests'], onSuccess: () => (editing.value = false),
+//           only: ['guests'], onSuccess: () => emit('cancel-edit'),
 //       });
 //   const onDelete = () => router.delete(destroy(props.companion.id), { only: ['guests'] });
 </script>
@@ -51,12 +53,12 @@ const onDelete = () => emit('delete');
         v-if="editing"
         :companion
         @save="onSaveEdit"
-        @cancel="editing = false"
+        @cancel="emit('cancel-edit')"
     />
     <CompanionDisplay
         v-else
         :companion
-        @edit="editing = true"
+        @edit="emit('start-edit')"
         @delete="onDelete"
     />
 </template>

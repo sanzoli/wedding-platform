@@ -96,7 +96,13 @@ const setSort = (type: string, direction: 'asc' | 'desc' | null) => {
 const expanded = ref<Record<string, boolean>>({});
 const isExpanded = (id: string) => expanded.value[id] ?? false;
 const toggle = (id: string) => {
-    expanded.value = { ...expanded.value, [id]: !isExpanded(id) };
+    const wasExpanded = isExpanded(id);
+    expanded.value = { ...expanded.value, [id]: !wasExpanded };
+    if (wasExpanded) {
+        // Collapse hides companion rows; cancel flows inside this group so
+        // nothing stays mounted invisibly.
+        cancelFlowsInGroup(id);
+    }
 };
 
 // Master expand/collapse. The control only renders if at least one group has
@@ -116,6 +122,11 @@ const toggleAll = () => {
     expanded.value = Object.fromEntries(
         props.groups.map((g) => [g.id, next]),
     );
+    if (!next) {
+        // Collapsing all hides every companion row; cancel any in-group flow.
+        addingCompanionIn.value = null;
+        editingCompanionId.value = null;
+    }
 };
 
 // Delete confirmation. The dialog lives at the table level; the parent owns
@@ -127,10 +138,12 @@ type PendingDelete =
 const pendingDelete = ref<PendingDelete | null>(null);
 
 const requestDeleteGroup = (group: GuestGroupView) => {
+    closePendingFlows();
     pendingDelete.value = { type: 'group', groupId: group.id };
 };
 
 const requestDeleteCompanion = (companion: Guest) => {
+    closePendingFlows();
     pendingDelete.value = { type: 'companion', companionId: companion.id };
 };
 
@@ -158,15 +171,40 @@ const dialogTitle = computed(() => {
         : trans.delete_companion_title;
 });
 
-// Inline create primary group. The row is mounted at the top of the body
-// when adding is true; tick saves (with name|surname validation inside the
-// row), X cancels.
+// Pending flows: only one create/edit row can be active at a time. Opening
+// any new flow auto-cancels the previous one (Linear/Notion-style). Expand
+// is read-only navigation and does not cancel anything; collapse hides
+// in-group rows so it cancels companion flows in that group.
 const adding = ref(false);
+const addingCompanionIn = ref<string | null>(null);
+const editingGroupId = ref<string | null>(null);
+const editingCompanionId = ref<string | null>(null);
+
+const closePendingFlows = () => {
+    adding.value = false;
+    addingCompanionIn.value = null;
+    editingGroupId.value = null;
+    editingCompanionId.value = null;
+};
+
+const cancelFlowsInGroup = (groupId: string) => {
+    if (addingCompanionIn.value === groupId) {
+        addingCompanionIn.value = null;
+    }
+    if (editingCompanionId.value !== null) {
+        const group = props.groups.find((g) => g.id === groupId);
+        const insideGroup = group?.companions.some(
+            (c) => c.id === editingCompanionId.value,
+        );
+        if (insideGroup) {
+            editingCompanionId.value = null;
+        }
+    }
+};
 
 const onCreateRequest = () => {
     if (adding.value) return;
-    // Cancel any companion create row that was left open.
-    addingCompanionIn.value = null;
+    closePendingFlows();
     adding.value = true;
 };
 
@@ -184,14 +222,9 @@ const onCancelCreate = () => {
     adding.value = false;
 };
 
-// Inline create companion. Tracks which group has the editor open; opening
-// it force-expands that group so the editor is visible.
-const addingCompanionIn = ref<string | null>(null);
-
 const requestAddCompanion = (groupId: string) => {
     if (addingCompanionIn.value === groupId) return;
-    // Cancel a primary create row or another companion create row left open.
-    adding.value = false;
+    closePendingFlows();
     addingCompanionIn.value = groupId;
     expanded.value = { ...expanded.value, [groupId]: true };
 };
@@ -206,6 +239,25 @@ const onSaveCompanion = (
 
 const onCancelCompanion = () => {
     addingCompanionIn.value = null;
+};
+
+const startEditGroup = (groupId: string) => {
+    if (editingGroupId.value === groupId) return;
+    closePendingFlows();
+    editingGroupId.value = groupId;
+};
+
+const startEditCompanion = (companionId: string) => {
+    if (editingCompanionId.value === companionId) return;
+    closePendingFlows();
+    editingCompanionId.value = companionId;
+    // Make sure the companion's group is expanded so the editor is visible.
+    const group = props.groups.find((g) =>
+        g.companions.some((c) => c.id === companionId),
+    );
+    if (group) {
+        expanded.value = { ...expanded.value, [group.id]: true };
+    }
 };
 
 // TODO(backend): wire `searchValue` to a debounced server query. For now the
@@ -296,9 +348,12 @@ const searchValue = ref('');
                 <Group
                     :group="group"
                     :expanded="isExpanded(group.id)"
+                    :editing="editingGroupId === group.id"
                     @toggle="toggle(group.id)"
                     @delete="requestDeleteGroup(group)"
                     @add-companion="requestAddCompanion(group.id)"
+                    @start-edit="startEditGroup(group.id)"
+                    @cancel-edit="editingGroupId = null"
                     @update-group="(payload) => emit('update-group', payload)"
                 />
                 <template v-if="isExpanded(group.id)">
@@ -306,7 +361,10 @@ const searchValue = ref('');
                         v-for="companion in group.companions"
                         :key="companion.id"
                         :companion="companion"
+                        :editing="editingCompanionId === companion.id"
                         @delete="requestDeleteCompanion(companion)"
+                        @start-edit="startEditCompanion(companion.id)"
+                        @cancel-edit="editingCompanionId = null"
                         @update-companion="
                             (payload) => emit('update-companion', payload)
                         "

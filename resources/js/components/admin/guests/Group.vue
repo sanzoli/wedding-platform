@@ -1,20 +1,24 @@
 <script setup lang="ts">
 // Wrapper for the entity/display split. Hosts the edit toggle between
-// GroupDisplay (read-only) and GroupEditor (inline edit).
+// GroupDisplay (read-only) and GroupEditor (inline edit). The editing
+// state lives in GuestsTable so it can coordinate auto-cancel across
+// flows (other edits, creates, deletes).
 import type { GuestGroupView, GuestLanguage } from '@/types/guests';
-import { ref } from 'vue';
 import GroupDisplay from './GroupDisplay.vue';
 import GroupEditor from './GroupEditor.vue';
 
 const props = defineProps<{
     group: GuestGroupView;
     expanded: boolean;
+    editing: boolean;
 }>();
 
 const emit = defineEmits<{
     toggle: [];
     delete: [];
     'add-companion': [];
+    'start-edit': [];
+    'cancel-edit': [];
     'update-group': [
         payload: {
             id: string;
@@ -26,8 +30,6 @@ const emit = defineEmits<{
     ];
 }>();
 
-const editing = ref(false);
-
 const onSaveEdit = (input: {
     name: string;
     surname: string;
@@ -35,7 +37,7 @@ const onSaveEdit = (input: {
     mobile: string;
 }) => {
     emit('update-group', { id: props.group.id, ...input });
-    editing.value = false;
+    emit('cancel-edit');
 };
 
 const onDelete = () => emit('delete');
@@ -46,7 +48,7 @@ const onDelete = () => emit('delete');
 //   import { destroy, update } from '@/actions/App/Http/Controllers/GuestGroupsController';
 //   const onSaveEdit = (input: { name: string; surname: string; language: GuestLanguage; mobile: string }) =>
 //       router.put(update(props.group.id), input, {
-//           only: ['guests'], onSuccess: () => (editing.value = false),
+//           only: ['guests'], onSuccess: () => emit('cancel-edit'),
 //       });
 //   const onDelete = () => router.delete(destroy(props.group.id), { only: ['guests'] });
 </script>
@@ -56,14 +58,14 @@ const onDelete = () => emit('delete');
         v-if="editing"
         :group
         @save="onSaveEdit"
-        @cancel="editing = false"
+        @cancel="emit('cancel-edit')"
     />
     <GroupDisplay
         v-else
         :group
         :expanded
         @toggle="emit('toggle')"
-        @edit="editing = true"
+        @edit="emit('start-edit')"
         @delete="onDelete"
         @add-companion="emit('add-companion')"
     />
