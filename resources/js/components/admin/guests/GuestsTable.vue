@@ -80,7 +80,7 @@ trans.delete_group_desc_one ??=
     '1 companion will also be removed. This action cannot be undone.';
 trans.delete_group_desc_other ??=
     ':count companions will also be removed. This action cannot be undone.';
-trans.delete_companion_title_named ??= 'Delete :name?';
+trans.delete_guest_named ??= 'Delete :name?';
 trans.delete_companion_title_pending ??= 'Delete this companion entry?';
 trans.delete_description ??= 'This action cannot be undone.';
 trans.delete_confirm ??= 'Delete';
@@ -184,12 +184,14 @@ const dialogTitle = computed(() => {
 
     if (pending.type === 'group') {
         const group = props.groups.find((g) => g.id === pending.groupId);
-        const name = group
-            ? `${group.primary.name} ${group.primary.surname}`.trim()
-            : '';
-        return name
-            ? trans.delete_group_title_named.replace(':name', name)
-            : trans.delete_group_title;
+        if (!group) return trans.delete_group_title;
+        const name = `${group.primary.name} ${group.primary.surname}`.trim();
+        if (!name) return trans.delete_group_title;
+        const template =
+            group.companions.length > 0
+                ? trans.delete_group_title_named
+                : trans.delete_guest_named;
+        return template.replace(':name', name);
     }
 
     const companion = findCompanion(pending.companionId);
@@ -200,7 +202,7 @@ const dialogTitle = computed(() => {
     if (isPending) return trans.delete_companion_title_pending;
     const name = `${companion.name} ${companion.surname}`.trim();
     return name
-        ? trans.delete_companion_title_named.replace(':name', name)
+        ? trans.delete_guest_named.replace(':name', name)
         : trans.delete_companion_title_pending;
 });
 

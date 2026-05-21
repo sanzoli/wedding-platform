@@ -53,7 +53,7 @@ return [
         'delete_group_title_named' => 'Delete :name and group?',
         'delete_group_desc_one' => '1 companion will also be removed. This action cannot be undone.',
         'delete_group_desc_other' => ':count companions will also be removed. This action cannot be undone.',
-        'delete_companion_title_named' => 'Delete :name?',
+        'delete_guest_named' => 'Delete :name?',
         'delete_companion_title_pending' => 'Delete this companion entry?',
         'delete_description' => 'This action cannot be undone.',
         'delete_confirm' => 'Delete',
