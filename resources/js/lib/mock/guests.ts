@@ -1,5 +1,5 @@
 /**
- * Mock data for the guest-list table.
+ * Mock data for the guests table.
  *
  * Mirrors the schema proposed for the backend (parallel WIP). When the API
  * lands, the page swaps `buildGuestGroupViews()` for an Inertia prop and
@@ -12,7 +12,7 @@ import type {
     GuestGroupView,
     GuestLanguage,
     GuestNameStatus,
-} from '@/types/guest-list';
+} from '@/types/guests';
 
 const TS = '2026-05-01T00:00:00Z';
 const WEDDING = 'wed_colombia_brasil';
@@ -257,7 +257,7 @@ export function buildGuestGroupViews(
 
         if (!primary) {
             throw new Error(
-                `[guest-list mock] group ${grp.id} has no active primary guest`,
+                `[guests mock] group ${grp.id} has no active primary guest`,
             );
         }
 

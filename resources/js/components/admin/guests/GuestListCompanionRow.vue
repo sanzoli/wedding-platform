@@ -6,7 +6,7 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from '@/components/ui/tooltip';
-import type { Guest } from '@/types/guest-list';
+import type { Guest } from '@/types/guests';
 import { usePage } from '@inertiajs/vue3';
 import { Trash2 } from 'lucide-vue-next';
 import { computed } from 'vue';
@@ -27,7 +27,7 @@ const onDeleteClick = (event: MouseEvent) => {
     emit('delete');
 };
 
-const trans = usePage().props.trans.guest_list as Record<string, string>;
+const trans = usePage().props.trans.guests as Record<string, string>;
 trans.pending_placeholder ??= 'Companion';
 trans.action_delete ??= 'Delete';
 

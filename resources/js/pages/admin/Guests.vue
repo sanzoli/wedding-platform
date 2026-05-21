@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import GuestList from '@/components/admin/guest-list/GuestList.vue';
+import GuestList from '@/components/admin/guests/GuestList.vue';
 import Heading from '@/components/Heading.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import {
     buildGuestGroupViews,
     mockGuestGroups,
     mockGuests,
-} from '@/lib/mock/guest-list';
-import type { GuestLanguage } from '@/types/guest-list';
+} from '@/lib/mock/guests';
+import type { GuestLanguage } from '@/types/guests';
 import { Head, usePage } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 
-const trans = usePage().props.trans.guest_list as Record<string, string>;
+const trans = usePage().props.trans.guests as Record<string, string>;
 trans.page_title ??= 'Guest list';
 trans.page_description ??=
     'Manage the guest groups for the Colombia → Brasil wedding.';

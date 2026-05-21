@@ -14,7 +14,7 @@ import type {
     Guest,
     GuestGroupView,
     GuestLanguage,
-} from '@/types/guest-list';
+} from '@/types/guests';
 import { usePage } from '@inertiajs/vue3';
 import { ChevronsDown, ChevronsRight } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
@@ -48,7 +48,7 @@ const emit = defineEmits<{
     ];
 }>();
 
-const trans = usePage().props.trans.guest_list as Record<string, string>;
+const trans = usePage().props.trans.guests as Record<string, string>;
 trans.column_name ??= 'Guest / Group';
 trans.column_members ??= 'Members';
 trans.column_language ??= 'Language';

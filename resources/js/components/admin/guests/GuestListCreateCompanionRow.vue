@@ -3,7 +3,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectItem } from '@/components/ui/select';
-import type { GuestLanguage } from '@/types/guest-list';
+import type { GuestLanguage } from '@/types/guests';
 import { usePage } from '@inertiajs/vue3';
 import { Check, X } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
@@ -19,7 +19,7 @@ const emit = defineEmits<{
     cancel: [];
 }>();
 
-const trans = usePage().props.trans.guest_list as Record<string, string>;
+const trans = usePage().props.trans.guests as Record<string, string>;
 trans.create_name_placeholder ??= 'Name';
 trans.create_surname_placeholder ??= 'Surname';
 trans.create_confirm ??= 'Confirm';

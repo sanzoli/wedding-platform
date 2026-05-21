@@ -12,7 +12,7 @@ return [
         'empty_search' => 'No items match your search',
         'empty_search_desc' => 'Try adjusting your search terms',
     ],
-    'guest_list' => [
+    'guests' => [
         'page_title' => 'Guest list',
         'page_description' => 'Manage the guest groups for the Colombia → Brasil wedding.',
 

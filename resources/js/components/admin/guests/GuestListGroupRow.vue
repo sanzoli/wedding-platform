@@ -6,7 +6,7 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from '@/components/ui/tooltip';
-import type { GuestGroupView } from '@/types/guest-list';
+import type { GuestGroupView } from '@/types/guests';
 import { usePage } from '@inertiajs/vue3';
 import {
     ChevronDown,
@@ -36,7 +36,7 @@ const onDeleteClick = (event: MouseEvent) => {
     emit('delete');
 };
 
-const trans = usePage().props.trans.guest_list as Record<string, string>;
+const trans = usePage().props.trans.guests as Record<string, string>;
 trans.companions_one ??= 'companion';
 trans.companions_other ??= 'companions';
 trans.pending_one ??= 'pending';

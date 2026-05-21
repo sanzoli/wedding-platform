@@ -1,5 +1,5 @@
 /**
- * Domain types for the guest-list feature.
+ * Domain types for the guests feature.
  *
  * The Guest / GuestGroup shapes mirror the schema proposed for the backend
  * (work-in-progress in another branch).
