@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AddButton from '@/components/admin/AddButton.vue';
 import ConfirmDialog from '@/components/admin/ConfirmDialog.vue';
+import SearchBar from '@/components/admin/SearchBar.vue';
 import Table from '@/components/admin/Table.vue';
 import TableHeader from '@/components/admin/TableHeader.vue';
 import {
@@ -61,6 +62,7 @@ trans.delete_description ??= 'This action cannot be undone.';
 trans.delete_confirm ??= 'Delete';
 trans.delete_cancel ??= 'Cancel';
 trans.add_group ??= 'Add guest group';
+trans.search_placeholder ??= 'Search guests...';
 
 // TODO(backend): visual-only sort; the API will sort server-side.
 const sortOptions = ref<SortOptions>({ type: 'name', direction: 'asc' });
@@ -180,15 +182,25 @@ const onSaveCompanion = (
 const onCancelCompanion = () => {
     addingCompanionIn.value = null;
 };
+
+// TODO(backend): wire `searchValue` to a debounced server query. For now the
+// input is visual only — typing does not filter the local mock.
+const searchValue = ref('');
 </script>
 
 <template>
     <Table>
         <template #toolbar>
-            <div class="flex items-center justify-end gap-3">
-                <AddButton @add="onCreateRequest">{{
-                    trans.add_group
-                }}</AddButton>
+            <div class="flex items-center gap-3">
+                <SearchBar
+                    v-model:search-value="searchValue"
+                    :placeholder="trans.search_placeholder"
+                />
+                <div class="ml-auto">
+                    <AddButton @add="onCreateRequest">{{
+                        trans.add_group
+                    }}</AddButton>
+                </div>
             </div>
         </template>
 
