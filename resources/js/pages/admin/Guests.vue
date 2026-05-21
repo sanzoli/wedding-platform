@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import GuestList from '@/components/admin/guests/GuestList.vue';
+import GuestsTable from '@/components/admin/guests/GuestsTable.vue';
 import Heading from '@/components/Heading.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import {
@@ -138,7 +138,7 @@ const handleCreateCompanion = (payload: {
                 {{ strip }}
             </p>
 
-            <GuestList
+            <GuestsTable
                 :groups="groups"
                 @delete-group="handleDeleteGroup"
                 @delete-companion="handleDeleteCompanion"

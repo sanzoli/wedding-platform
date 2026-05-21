@@ -18,10 +18,10 @@ import type {
 import { usePage } from '@inertiajs/vue3';
 import { ChevronsDown, ChevronsRight } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
-import GuestListCompanionRow from './GuestListCompanionRow.vue';
-import GuestListCreateCompanionRow from './GuestListCreateCompanionRow.vue';
-import GuestListCreatePrimaryRow from './GuestListCreatePrimaryRow.vue';
-import GuestListGroupRow from './GuestListGroupRow.vue';
+import Companion from './Companion.vue';
+import Group from './Group.vue';
+import NewCompanion from './NewCompanion.vue';
+import NewGroup from './NewGroup.vue';
 
 const props = defineProps<{
     groups: GuestGroupView[];
@@ -263,13 +263,13 @@ const searchValue = ref('');
         </template>
 
         <template #body>
-            <GuestListCreatePrimaryRow
+            <NewGroup
                 v-if="adding"
                 @save="onSavePrimary"
                 @cancel="onCancelCreate"
             />
             <template v-for="group in groups" :key="group.id">
-                <GuestListGroupRow
+                <Group
                     :group="group"
                     :expanded="isExpanded(group.id)"
                     @toggle="toggle(group.id)"
@@ -277,13 +277,13 @@ const searchValue = ref('');
                     @add-companion="requestAddCompanion(group.id)"
                 />
                 <template v-if="isExpanded(group.id)">
-                    <GuestListCompanionRow
+                    <Companion
                         v-for="companion in group.companions"
                         :key="companion.id"
                         :companion="companion"
                         @delete="requestDeleteCompanion(companion)"
                     />
-                    <GuestListCreateCompanionRow
+                    <NewCompanion
                         v-if="addingCompanionIn === group.id"
                         @save="
                             (payload) => onSaveCompanion(group.id, payload)
