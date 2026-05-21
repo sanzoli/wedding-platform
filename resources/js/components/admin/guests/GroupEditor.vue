@@ -3,10 +3,14 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectItem } from '@/components/ui/select';
-import type { GuestLanguage } from '@/types/guests';
+import type { GuestGroupView, GuestLanguage } from '@/types/guests';
 import { usePage } from '@inertiajs/vue3';
 import { Check, X } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
+
+const props = defineProps<{
+    group: GuestGroupView;
+}>();
 
 const emit = defineEmits<{
     save: [
@@ -24,13 +28,13 @@ const trans = usePage().props.trans.guests as Record<string, string>;
 trans.create_name_placeholder ??= 'Name';
 trans.create_surname_placeholder ??= 'Surname';
 trans.create_mobile_placeholder ??= 'Mobile';
-trans.create_confirm ??= 'Confirm';
-trans.create_cancel ??= 'Cancel';
+trans.edit_confirm ??= 'Save changes';
+trans.edit_cancel ??= 'Discard changes';
 
-const name = ref('');
-const surname = ref('');
-const language = ref<GuestLanguage>('es');
-const mobile = ref('');
+const name = ref(props.group.primary.name);
+const surname = ref(props.group.primary.surname);
+const language = ref<GuestLanguage>(props.group.primary.language);
+const mobile = ref(props.group.primary.mobile ?? '');
 
 const initials = computed(() => {
     const f = name.value.charAt(0).toUpperCase();
@@ -38,7 +42,7 @@ const initials = computed(() => {
     return `${f}${l}` || '?';
 });
 
-// Validation: primary needs at least name or surname to be creatable.
+// Validation: primary needs at least name or surname.
 const canSave = computed(
     () => name.value.trim() !== '' || surname.value.trim() !== '',
 );
@@ -52,26 +56,11 @@ const onSave = () => {
         mobile: mobile.value.trim(),
     });
 };
-
-// TODO(backend): swap the handler above for the Inertia version below;
-// then delete handleCreateGroup in Guests.vue.
-//   import { router } from '@inertiajs/vue3';
-//   import { store } from '@/actions/App/Http/Controllers/GuestGroupsController';
-//   const onSave = () => {
-//       if (!canSave.value) return;
-//       router.post(store(), {
-//           name: name.value.trim(),
-//           surname: surname.value.trim(),
-//           language: language.value,
-//           mobile: mobile.value.trim(),
-//       }, { only: ['guests'], onSuccess: () => emit('cancel') });
-//   };
 </script>
 
 <template>
-    <tr
-        class="animate-in fade-in-0 slide-in-from-top-2 bg-muted/20 duration-300"
-    >
+    <!-- TODO(mobile): wrap with Teleport for fullscreen overlay on small viewports -->
+    <tr class="bg-muted/20">
         <td class="px-4 py-3">
             <div class="flex items-center gap-3 pl-7">
                 <Avatar>
@@ -99,7 +88,9 @@ const onSave = () => {
                 </div>
             </div>
         </td>
-        <td class="admin-type-data px-4 py-3 text-muted-foreground">1</td>
+        <td class="admin-type-data px-4 py-3 text-muted-foreground">
+            {{ group.totalMembers }}
+        </td>
         <td class="px-4 py-3">
             <Select v-model="language">
                 <SelectItem value="es">ES</SelectItem>
@@ -123,7 +114,7 @@ const onSave = () => {
                     size="icon"
                     class="size-8 cursor-pointer hover:bg-primary/10 dark:hover:bg-primary/25"
                     :disabled="!canSave"
-                    :aria-label="trans.create_confirm"
+                    :aria-label="trans.edit_confirm"
                     @click="onSave"
                 >
                     <Check :size="16" class="text-primary" />
@@ -132,7 +123,7 @@ const onSave = () => {
                     variant="ghost"
                     size="icon"
                     class="size-8 cursor-pointer"
-                    :aria-label="trans.create_cancel"
+                    :aria-label="trans.edit_cancel"
                     @click="emit('cancel')"
                 >
                     <X :size="16" />

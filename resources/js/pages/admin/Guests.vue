@@ -20,8 +20,8 @@ trans.meta_guests_other ??= 'GUESTS';
 trans.meta_groups_one ??= 'GROUP';
 trans.meta_groups_other ??= 'GROUPS';
 
-// TODO(backend): mock data lives as mutable refs so deletes can drop entries
-// without an API. Swap these for Inertia props when the backend lands.
+// TODO(backend): delete this state + the handle* handlers below once the
+// API lands. Inertia calls live in Group/Companion/NewGroup/NewCompanion.
 const guests = ref([...mockGuests]);
 const guestGroups = ref([...mockGuestGroups]);
 
@@ -42,17 +42,18 @@ const strip = computed(() => {
 });
 
 const handleDeleteGroup = (groupId: string) => {
+    // Filter guestGroups first so the computed never sees an orphan group
+    // (a group with no primary, which makes buildGuestGroupViews throw).
+    guestGroups.value = guestGroups.value.filter((g) => g.id !== groupId);
     guests.value = guests.value.filter(
         (g) => g.guest_group_id !== groupId,
     );
-    guestGroups.value = guestGroups.value.filter((g) => g.id !== groupId);
 };
 
 const handleDeleteCompanion = (companionId: string) => {
     guests.value = guests.value.filter((g) => g.id !== companionId);
 };
 
-// TODO(backend): POST the payload and prepend the API response to the lists.
 const handleCreateGroup = (payload: {
     name: string;
     surname: string;
@@ -91,8 +92,6 @@ const handleCreateGroup = (payload: {
     ];
 };
 
-// TODO(backend): POST the companion. The API should infer name_status from
-// whether name/surname are provided.
 const handleCreateCompanion = (payload: {
     groupId: string;
     name: string;
@@ -121,6 +120,28 @@ const handleCreateCompanion = (payload: {
     ];
 };
 
+const handleUpdateGroup = (payload: {
+    id: string;
+    name: string;
+    surname: string;
+    language: GuestLanguage;
+    mobile: string;
+}) => {
+    const now = new Date().toISOString();
+    const hasName = payload.name !== '' || payload.surname !== '';
+    guests.value = guests.value.map((g) => {
+        if (g.guest_group_id !== payload.id || !g.is_primary) return g;
+        return {
+            ...g,
+            name: payload.name,
+            surname: payload.surname,
+            language: payload.language,
+            mobile: payload.mobile || null,
+            name_status: hasName ? 'known' : 'pending',
+            updated_at: now,
+        };
+    });
+};
 </script>
 
 <template>
@@ -144,6 +165,7 @@ const handleCreateCompanion = (payload: {
                 @delete-companion="handleDeleteCompanion"
                 @create-group="handleCreateGroup"
                 @create-companion="handleCreateCompanion"
+                @update-group="handleUpdateGroup"
             />
         </div>
     </AppLayout>

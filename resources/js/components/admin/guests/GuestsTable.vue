@@ -46,6 +46,15 @@ const emit = defineEmits<{
             language: GuestLanguage;
         },
     ];
+    'update-group': [
+        payload: {
+            id: string;
+            name: string;
+            surname: string;
+            language: GuestLanguage;
+            mobile: string;
+        },
+    ];
 }>();
 
 const trans = usePage().props.trans.guests as Record<string, string>;
@@ -122,13 +131,16 @@ const cancelDelete = () => {
 };
 
 const confirmDelete = () => {
-    if (!pendingDelete.value) return;
-    if (pendingDelete.value.type === 'group') {
-        emit('delete-group', pendingDelete.value.groupId);
-    } else {
-        emit('delete-companion', pendingDelete.value.companionId);
-    }
+    // Capture locally — the AlertDialog also fires @update:open(false) which
+    // calls cancelDelete(), and the order between the two is not guaranteed.
+    const pending = pendingDelete.value;
+    if (!pending) return;
     pendingDelete.value = null;
+    if (pending.type === 'group') {
+        emit('delete-group', pending.groupId);
+    } else {
+        emit('delete-companion', pending.companionId);
+    }
 };
 
 const dialogTitle = computed(() => {
@@ -145,6 +157,8 @@ const adding = ref(false);
 
 const onCreateRequest = () => {
     if (adding.value) return;
+    // Cancel any companion create row that was left open.
+    addingCompanionIn.value = null;
     adding.value = true;
 };
 
@@ -167,7 +181,9 @@ const onCancelCreate = () => {
 const addingCompanionIn = ref<string | null>(null);
 
 const requestAddCompanion = (groupId: string) => {
-    if (addingCompanionIn.value) return;
+    if (addingCompanionIn.value === groupId) return;
+    // Cancel a primary create row or another companion create row left open.
+    adding.value = false;
     addingCompanionIn.value = groupId;
     expanded.value = { ...expanded.value, [groupId]: true };
 };
@@ -275,6 +291,7 @@ const searchValue = ref('');
                     @toggle="toggle(group.id)"
                     @delete="requestDeleteGroup(group)"
                     @add-companion="requestAddCompanion(group.id)"
+                    @update-group="(payload) => emit('update-group', payload)"
                 />
                 <template v-if="isExpanded(group.id)">
                     <Companion

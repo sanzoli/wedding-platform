@@ -59,5 +59,8 @@ return [
         'create_cancel' => 'Cancel',
         'create_name_placeholder' => 'Name',
         'create_surname_placeholder' => 'Surname',
+
+        'edit_confirm' => 'Save changes',
+        'edit_cancel' => 'Discard changes',
     ],
 ];

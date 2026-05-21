@@ -38,7 +38,7 @@ trans.empty_search_desc ??= 'Try adjusting your search terms';
         <Card class="mt-4 hidden w-full gap-0 py-0 contain-paint sm:block">
             <table class="w-full">
                 <thead>
-                    <tr>
+                    <tr class="border-b border-border/50">
                         <slot name="header" />
                     </tr>
                 </thead>

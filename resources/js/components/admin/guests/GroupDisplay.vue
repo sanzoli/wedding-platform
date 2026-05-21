@@ -12,6 +12,7 @@ import {
     ChevronDown,
     ChevronRight,
     CircleAlert,
+    Pencil,
     Trash2,
     UserPlus,
 } from 'lucide-vue-next';
@@ -24,6 +25,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     toggle: [];
+    edit: [];
     delete: [];
     'add-companion': [];
 }>();
@@ -41,6 +43,7 @@ trans.companions_one ??= 'companion';
 trans.companions_other ??= 'companions';
 trans.pending_one ??= 'pending';
 trans.pending_other ??= 'pending';
+trans.action_edit ??= 'Edit';
 trans.action_delete ??= 'Delete';
 trans.action_add_companion ??= 'Add companion';
 trans.attention_no_mobile ??= 'Mobile number is missing';
@@ -154,6 +157,20 @@ const subline = computed(() => {
             <div
                 class="flex items-center justify-center gap-1 opacity-0 transition-opacity group-hover/row:opacity-100"
             >
+                <Tooltip>
+                    <TooltipTrigger as-child>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            class="size-8 cursor-pointer hover:bg-muted hover:text-foreground"
+                            :aria-label="trans.action_edit"
+                            @click="emit('edit')"
+                        >
+                            <Pencil :size="16" />
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>{{ trans.action_edit }}</TooltipContent>
+                </Tooltip>
                 <Tooltip>
                     <TooltipTrigger as-child>
                         <Button
