@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {
     AlertDialog,
-    AlertDialogAction,
     AlertDialogCancel,
     AlertDialogContent,
     AlertDialogDescription,
@@ -9,7 +8,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { buttonVariants } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { computed } from 'vue';
 
 /**
@@ -61,11 +60,9 @@ const confirmClass = computed(() =>
             </AlertDialogHeader>
             <AlertDialogFooter>
                 <AlertDialogCancel>{{ cancelLabel }}</AlertDialogCancel>
-                <AlertDialogAction
-                    :class="confirmClass"
-                    @click="emit('confirm')"
-                    >{{ confirmLabel }}</AlertDialogAction
-                >
+                <Button :class="confirmClass" @click="emit('confirm')">{{
+                    confirmLabel
+                }}</Button>
             </AlertDialogFooter>
         </AlertDialogContent>
     </AlertDialog>
