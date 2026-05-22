@@ -22,6 +22,16 @@ const nextDirection = computed(function () {
 
     return props.sortOptions.direction === 'asc' ? 'desc' : null;
 });
+
+const ariaSort = computed<
+    'ascending' | 'descending' | 'none' | undefined
+>(() => {
+    if (!props.sortBy) return undefined;
+    if (!isCurrentSorting.value || !props.sortOptions?.direction) {
+        return 'none';
+    }
+    return props.sortOptions.direction === 'asc' ? 'ascending' : 'descending';
+});
 </script>
 
 <template>
@@ -32,6 +42,7 @@ const nextDirection = computed(function () {
                 props.class,
             )
         "
+        :aria-sort="ariaSort"
     >
         <div class="inline-flex items-center gap-2">
             <slot name="prefix" />
