@@ -89,7 +89,7 @@ const subline = computed(() => {
                     class="mt-1.5 inline-flex size-5 cursor-pointer items-center justify-center rounded text-muted-foreground hover:bg-muted"
                     :aria-expanded="expanded"
                     :aria-label="
-                        expanded ? 'Collapse group' : 'Expand group'
+                        expanded ? trans.collapse_group : trans.expand_group
                     "
                     @click="emit('toggle')"
                 >
@@ -140,7 +140,7 @@ const subline = computed(() => {
         </td>
         <td class="px-4 py-3">
             <div
-                class="flex items-center justify-center gap-1 opacity-0 transition-opacity group-hover/row:opacity-100"
+                class="flex items-center justify-center gap-1 opacity-0 transition-opacity group-hover/row:opacity-100 group-focus-within/row:opacity-100"
             >
                 <IconButton
                     :label="trans.action_edit"

@@ -21,6 +21,8 @@ return [
 
     'expand_all' => 'Expand all',
     'collapse_all' => 'Collapse all',
+    'expand_group' => 'Expand group',
+    'collapse_group' => 'Collapse group',
 
     'companions_one' => 'companion',
     'companions_other' => 'companions',

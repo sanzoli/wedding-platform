@@ -68,7 +68,7 @@ const fullName = computed(() =>
         <td class="px-4 py-2"></td>
         <td class="px-4 py-2">
             <div
-                class="flex items-center justify-center gap-1 opacity-0 transition-opacity group-hover/row:opacity-100"
+                class="flex items-center justify-center gap-1 opacity-0 transition-opacity group-hover/row:opacity-100 group-focus-within/row:opacity-100"
             >
                 <IconButton
                     :label="trans.action_edit"
