@@ -88,7 +88,8 @@ trans.delete_cancel ??= 'Cancel';
 trans.add_group ??= 'Add guest group';
 trans.search_placeholder ??= 'Search guests...';
 
-// TODO(backend): visual-only sort; the API will sort server-side.
+// TODO(backend): mock-side sort over the Guest/Group column. When the
+// API ships, the sort will go server-side via a query param.
 const sortOptions = ref<SortOptions>({ type: 'name', direction: 'asc' });
 
 const setSort = (type: string, direction: 'asc' | 'desc' | null) => {
@@ -97,6 +98,18 @@ const setSort = (type: string, direction: 'asc' | 'desc' | null) => {
         direction,
     };
 };
+
+const getSortKey = (guest: Guest): string =>
+    (guest.surname.trim() || guest.name.trim()).toLowerCase();
+
+const sortedGroups = computed(() => {
+    const { type, direction } = sortOptions.value;
+    if (type !== 'name' || !direction) return props.groups;
+    return [...props.groups].sort((a, b) => {
+        const cmp = getSortKey(a.primary).localeCompare(getSortKey(b.primary));
+        return direction === 'asc' ? cmp : -cmp;
+    });
+});
 
 // Per-group expansion state. Groups default to collapsed.
 const expanded = ref<Record<string, boolean>>({});
@@ -370,18 +383,8 @@ const searchValue = ref('');
                 </template>
                 {{ trans.column_name }}
             </TableHeader>
-            <TableHeader
-                sort-by="members"
-                :sort-options="sortOptions"
-                @update:sortOptions="setSort"
-                >{{ trans.column_members }}</TableHeader
-            >
-            <TableHeader
-                sort-by="language"
-                :sort-options="sortOptions"
-                @update:sortOptions="setSort"
-                >{{ trans.column_language }}</TableHeader
-            >
+            <TableHeader>{{ trans.column_members }}</TableHeader>
+            <TableHeader>{{ trans.column_language }}</TableHeader>
             <TableHeader>{{ trans.column_mobile }}</TableHeader>
             <TableHeader class="text-center">{{
                 trans.column_actions
@@ -397,7 +400,7 @@ const searchValue = ref('');
                 @save="onSavePrimary"
                 @cancel="onCancelCreate"
             />
-            <template v-for="group in groups" :key="group.id">
+            <template v-for="group in sortedGroups" :key="group.id">
                 <Group
                     :group="group"
                     :expanded="isExpanded(group.id)"
