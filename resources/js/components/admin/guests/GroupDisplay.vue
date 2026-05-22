@@ -34,17 +34,6 @@ const emit = defineEmits<{
 }>();
 
 const trans = usePage().props.trans.guests as Record<string, string>;
-trans.companions_one ??= 'companion';
-trans.companions_other ??= 'companions';
-trans.pending_one ??= 'pending';
-trans.pending_other ??= 'pending';
-trans.action_edit ??= 'Edit';
-trans.action_delete ??= 'Delete';
-trans.action_add_companion ??= 'Add companion';
-trans.attention_no_mobile ??= 'Mobile number is missing';
-trans.attention_pending_one ??= 'Has 1 companion with unconfirmed name';
-trans.attention_pending_other ??=
-    'Has :count companions with unconfirmed names';
 
 const initials = computed(() => {
     const { name, surname } = props.group.primary;

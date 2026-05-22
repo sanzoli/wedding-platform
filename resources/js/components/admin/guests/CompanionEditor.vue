@@ -25,10 +25,6 @@ const emit = defineEmits<{
 }>();
 
 const trans = usePage().props.trans.guests as Record<string, string>;
-trans.create_name_placeholder ??= 'Name';
-trans.create_surname_placeholder ??= 'Surname';
-trans.edit_confirm ??= 'Save changes';
-trans.edit_cancel ??= 'Discard changes';
 
 const name = ref(props.companion.name);
 const surname = ref(props.companion.surname);

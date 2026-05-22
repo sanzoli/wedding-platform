@@ -12,13 +12,6 @@ import { Head, usePage } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 
 const trans = usePage().props.trans.guests as Record<string, string>;
-trans.page_title ??= 'Guest list';
-trans.page_description ??=
-    'Manage the guest groups for the Colombia → Brasil wedding.';
-trans.meta_guests_one ??= 'GUEST';
-trans.meta_guests_other ??= 'GUESTS';
-trans.meta_groups_one ??= 'GROUP';
-trans.meta_groups_other ??= 'GROUPS';
 
 // TODO(backend): delete this state + the handle* handlers below once the
 // API lands. Inertia calls live in Group/Companion/NewGroup/NewCompanion.

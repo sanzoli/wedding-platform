@@ -21,10 +21,6 @@ const emit = defineEmits<{
 }>();
 
 const trans = usePage().props.trans.guests as Record<string, string>;
-trans.create_name_placeholder ??= 'Name';
-trans.create_surname_placeholder ??= 'Surname';
-trans.create_confirm ??= 'Confirm';
-trans.create_cancel ??= 'Cancel';
 
 const name = ref('');
 const surname = ref('');

@@ -19,9 +19,6 @@ const emit = defineEmits<{
 }>();
 
 const trans = usePage().props.trans.guests as Record<string, string>;
-trans.pending_placeholder ??= 'Companion';
-trans.action_edit ??= 'Edit';
-trans.action_delete ??= 'Delete';
 
 const isPending = computed(
     () =>

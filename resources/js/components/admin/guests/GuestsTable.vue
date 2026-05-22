@@ -66,27 +66,6 @@ const emit = defineEmits<{
 }>();
 
 const trans = usePage().props.trans.guests as Record<string, string>;
-trans.column_name ??= 'Guest / Group';
-trans.column_members ??= 'Members';
-trans.column_language ??= 'Language';
-trans.column_mobile ??= 'Mobile';
-trans.column_attention ??= 'Attention';
-trans.column_actions ??= 'Actions';
-trans.expand_all ??= 'Expand all';
-trans.collapse_all ??= 'Collapse all';
-trans.delete_group_title ??= 'Delete this group?';
-trans.delete_group_title_named ??= 'Delete :name and group?';
-trans.delete_group_desc_one ??=
-    '1 companion will also be removed. This action cannot be undone.';
-trans.delete_group_desc_other ??=
-    ':count companions will also be removed. This action cannot be undone.';
-trans.delete_guest_named ??= 'Delete :name?';
-trans.delete_companion_title_pending ??= 'Delete this companion entry?';
-trans.delete_description ??= 'This action cannot be undone.';
-trans.delete_confirm ??= 'Delete';
-trans.delete_cancel ??= 'Cancel';
-trans.add_group ??= 'Add guest group';
-trans.search_placeholder ??= 'Search guests...';
 
 // TODO(backend): sort will move server-side via query param.
 const sortOptions = ref<SortOptions>({ type: 'name', direction: 'asc' });
