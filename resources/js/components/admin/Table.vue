@@ -10,6 +10,8 @@ defineEmits<{
 
 defineProps<{
     search?: string;
+    columns?: number;
+    emptyAddLabel?: string;
 }>();
 
 const trans = usePage().props.trans.table;
@@ -22,23 +24,34 @@ trans.empty_search_desc ??= 'Try adjusting your search terms';
 <template>
     <section class="w-full">
         <section
-            class="sticky top-24 z-30 -mx-6 mb-3 bg-background/95 px-6 py-3 backdrop-blur-sm transition-shadow duration-200 sm:mb-4 sm:py-4"
+            class="sticky top-16 z-30 -mx-6 bg-background/95 px-6 py-3 backdrop-blur-sm transition-shadow duration-200 group-has-data-[collapsible=icon]/sidebar-wrapper:top-12 sm:py-4"
         >
             <slot name="toolbar" />
         </section>
 
         <!-- ─── Desktop table (sm and up) ─── -->
-        <Card class="hidden w-full gap-0 overflow-hidden py-0 sm:block">
+        <!--
+            contain-paint clips children to the Card's border-radius (so
+            row hovers don't bleed past the corners) without creating a
+            scroll container — overflow-hidden would do the same job but
+            would also make any future sticky descendants resolve relative
+            to the Card instead of the viewport.
+        -->
+        <Card class="mt-4 hidden w-full gap-0 py-0 contain-paint sm:block">
             <div class="overflow-x-auto">
                 <table class="w-full">
-                    <thead>
-                        <tr class="border-b border-border">
-                            <slot name="header" />
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-border/50">
-                        <slot name="body">
-                            <td colspan="4" class="px-6 py-12 text-center">
+                <thead>
+                    <tr class="border-b border-border/50">
+                        <slot name="header" />
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-border/50">
+                    <slot name="body">
+                        <tr>
+                            <td
+                                :colspan="columns ?? 4"
+                                class="px-6 py-12 text-center"
+                            >
                                 <div
                                     v-if="search"
                                     class="flex flex-col items-center gap-3"
@@ -59,7 +72,7 @@ trans.empty_search_desc ??= 'Try adjusting your search terms';
                                 >
                                     <Button @click="$emit('addItem')">
                                         <Plus :size="16" :stroke-width="2" />
-                                        {{ trans.add_button }}
+                                        {{ emptyAddLabel ?? trans.add_button }}
                                     </Button>
                                     <div class="space-y-2">
                                         <p
@@ -70,9 +83,10 @@ trans.empty_search_desc ??= 'Try adjusting your search terms';
                                     </div>
                                 </div>
                             </td>
-                        </slot>
-                    </tbody>
-                </table>
+                        </tr>
+                    </slot>
+                </tbody>
+            </table>
             </div>
         </Card>
 
