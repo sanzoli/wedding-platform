@@ -106,7 +106,13 @@ const sortedGroups = computed(() => {
     const { type, direction } = sortOptions.value;
     if (type !== 'name' || !direction) return props.groups;
     return [...props.groups].sort((a, b) => {
-        const cmp = getSortKey(a.primary).localeCompare(getSortKey(b.primary));
+        // sensitivity: 'base' makes the sort accent-insensitive (Á === A),
+        // important for the mixed ES/PT/EN dataset.
+        const cmp = getSortKey(a.primary).localeCompare(
+            getSortKey(b.primary),
+            undefined,
+            { sensitivity: 'base' },
+        );
         return direction === 'asc' ? cmp : -cmp;
     });
 });

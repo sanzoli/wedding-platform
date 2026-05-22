@@ -63,6 +63,7 @@ return [
         'create_cancel' => 'Cancel',
         'create_name_placeholder' => 'Name',
         'create_surname_placeholder' => 'Surname',
+        'create_mobile_placeholder' => 'Mobile',
 
         'edit_confirm' => 'Save changes',
         'edit_cancel' => 'Discard changes',
