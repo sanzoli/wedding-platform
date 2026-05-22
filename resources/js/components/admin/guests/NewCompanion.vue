@@ -35,8 +35,7 @@ const initials = computed(() => {
     return `${f}${l}` || '?';
 });
 
-// Companions are allowed to save with empty name/surname; the parent flips
-// the row to a "pending" placeholder in that case.
+// Empty save → parent flips the row to a 'pending' placeholder.
 const onSave = () => {
     emit('save', {
         name: name.value.trim(),

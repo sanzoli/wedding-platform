@@ -42,8 +42,7 @@ const strip = computed(() => {
 });
 
 const handleDeleteGroup = (groupId: string) => {
-    // Filter guestGroups first so the computed never sees an orphan group
-    // (a group with no primary, which makes buildGuestGroupViews throw).
+    // Filter guestGroups first; an orphan group would make the computed throw.
     guestGroups.value = guestGroups.value.filter((g) => g.id !== groupId);
     guests.value = guests.value.filter(
         (g) => g.guest_group_id !== groupId,

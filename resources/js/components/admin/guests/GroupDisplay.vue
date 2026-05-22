@@ -32,9 +32,8 @@ const emit = defineEmits<{
     'add-companion': [];
 }>();
 
-// Blur the trigger before emitting so Radix does not return focus to it
-// after the AlertDialog closes — otherwise the Tooltip re-opens on focus
-// and stays stuck while the mouse is still over the hovered row.
+// Blur first so Radix doesn't refocus after the dialog closes, which
+// would re-open the stuck tooltip.
 const onDeleteClick = (event: MouseEvent) => {
     (event.currentTarget as HTMLElement | null)?.blur();
     emit('delete');

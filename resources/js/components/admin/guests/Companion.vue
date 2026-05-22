@@ -1,8 +1,4 @@
 <script setup lang="ts">
-// Wrapper for the entity/display split. Hosts the edit toggle between
-// CompanionDisplay (read-only) and CompanionEditor (inline edit). The
-// editing state lives in GuestsTable so it can coordinate auto-cancel
-// across flows (other edits, creates, deletes).
 import type { Guest, GuestLanguage } from '@/types/guests';
 import CompanionDisplay from './CompanionDisplay.vue';
 import CompanionEditor from './CompanionEditor.vue';

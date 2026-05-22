@@ -1,8 +1,4 @@
 <script setup lang="ts">
-// Wrapper for the entity/display split. Hosts the edit toggle between
-// GroupDisplay (read-only) and GroupEditor (inline edit). The editing
-// state lives in GuestsTable so it can coordinate auto-cancel across
-// flows (other edits, creates, deletes).
 import type { GuestGroupView, GuestLanguage } from '@/types/guests';
 import GroupDisplay from './GroupDisplay.vue';
 import GroupEditor from './GroupEditor.vue';

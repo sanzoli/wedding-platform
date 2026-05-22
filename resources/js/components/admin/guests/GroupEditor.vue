@@ -42,7 +42,6 @@ const initials = computed(() => {
     return `${f}${l}` || '?';
 });
 
-// Validation: primary needs at least name or surname.
 const canSave = computed(
     () => name.value.trim() !== '' || surname.value.trim() !== '',
 );

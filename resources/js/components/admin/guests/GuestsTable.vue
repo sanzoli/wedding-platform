@@ -88,8 +88,7 @@ trans.delete_cancel ??= 'Cancel';
 trans.add_group ??= 'Add guest group';
 trans.search_placeholder ??= 'Search guests...';
 
-// TODO(backend): mock-side sort over the Guest/Group column. When the
-// API ships, the sort will go server-side via a query param.
+// TODO(backend): sort will move server-side via query param.
 const sortOptions = ref<SortOptions>({ type: 'name', direction: 'asc' });
 
 const setSort = (type: string, direction: 'asc' | 'desc' | null) => {
@@ -106,8 +105,7 @@ const sortedGroups = computed(() => {
     const { type, direction } = sortOptions.value;
     if (type !== 'name' || !direction) return props.groups;
     return [...props.groups].sort((a, b) => {
-        // sensitivity: 'base' makes the sort accent-insensitive (Á === A),
-        // important for the mixed ES/PT/EN dataset.
+        // sensitivity: 'base' is accent-insensitive (Á === A).
         const cmp = getSortKey(a.primary).localeCompare(
             getSortKey(b.primary),
             undefined,
@@ -117,21 +115,15 @@ const sortedGroups = computed(() => {
     });
 });
 
-// Per-group expansion state. Groups default to collapsed.
 const expanded = ref<Record<string, boolean>>({});
 const isExpanded = (id: string) => expanded.value[id] ?? false;
 const toggle = (id: string) => {
     const wasExpanded = isExpanded(id);
     expanded.value = { ...expanded.value, [id]: !wasExpanded };
-    if (wasExpanded) {
-        // Collapse hides companion rows; cancel flows inside this group so
-        // nothing stays mounted invisibly.
-        cancelFlowsInGroup(id);
-    }
+    // Collapse cancels in-group flows so nothing stays mounted invisibly.
+    if (wasExpanded) cancelFlowsInGroup(id);
 };
 
-// Master expand/collapse. The control only renders if at least one group has
-// companions to fold — otherwise there is nothing to expand.
 const hasCollapsibleGroups = computed(() =>
     props.groups.some((g) => g.companions.length > 0),
 );
@@ -147,15 +139,13 @@ const toggleAll = () => {
     expanded.value = Object.fromEntries(
         props.groups.map((g) => [g.id, next]),
     );
+    // Collapsing all cancels in-group flows.
     if (!next) {
-        // Collapsing all hides every companion row; cancel any in-group flow.
         addingCompanionIn.value = null;
         editingCompanionId.value = null;
     }
 };
 
-// Delete confirmation. The dialog lives at the table level; the parent owns
-// the mutation, so we emit on confirm and let it decide what to drop.
 type PendingDelete =
     | { type: 'group'; groupId: string }
     | { type: 'companion'; companionId: string };
@@ -177,8 +167,7 @@ const cancelDelete = () => {
 };
 
 const confirmDelete = () => {
-    // Capture locally — the AlertDialog also fires @update:open(false) which
-    // calls cancelDelete(), and the order between the two is not guaranteed.
+    // Capture locally — @update:open(false) races with @confirm.
     const pending = pendingDelete.value;
     if (!pending) return;
     pendingDelete.value = null;
@@ -240,10 +229,7 @@ const dialogDescription = computed(() => {
     return template.replace(':count', String(count));
 });
 
-// Pending flows: only one create/edit row can be active at a time. Opening
-// any new flow auto-cancels the previous one (Linear/Notion-style). Expand
-// is read-only navigation and does not cancel anything; collapse hides
-// in-group rows so it cancels companion flows in that group.
+// Only one create/edit flow active at a time; opening a new one auto-cancels.
 const adding = ref(false);
 const addingCompanionIn = ref<string | null>(null);
 const editingGroupId = ref<string | null>(null);
@@ -274,8 +260,7 @@ const cancelFlowsInGroup = (groupId: string) => {
 const onCreateRequest = () => {
     if (adding.value) return;
     closePendingFlows();
-    // The NewGroup row mounts at the top of the table; smooth-scroll the
-    // page so it's visible no matter where the user was scrolled to.
+    // NewGroup mounts at the top; scroll there so it's visible.
     window.scrollTo({ top: 0, behavior: 'smooth' });
     adding.value = true;
 };
@@ -323,7 +308,7 @@ const startEditCompanion = (companionId: string) => {
     if (editingCompanionId.value === companionId) return;
     closePendingFlows();
     editingCompanionId.value = companionId;
-    // Make sure the companion's group is expanded so the editor is visible.
+    // Force-expand the group so the editor is visible.
     const group = props.groups.find((g) =>
         g.companions.some((c) => c.id === companionId),
     );
@@ -332,8 +317,7 @@ const startEditCompanion = (companionId: string) => {
     }
 };
 
-// TODO(backend): wire `searchValue` to a debounced server query. For now the
-// input is visual only — typing does not filter the local mock.
+// TODO(backend): debounced server query. Currently visual-only.
 const searchValue = ref('');
 </script>
 

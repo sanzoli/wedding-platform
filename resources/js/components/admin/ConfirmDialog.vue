@@ -11,18 +11,8 @@ import {
 import { Button, buttonVariants } from '@/components/ui/button';
 import { computed } from 'vue';
 
-/**
- * Confirmation dialog pattern.
- *
- * Wraps the AlertDialog primitive with a fixed shape (title, optional
- * description, confirm + cancel buttons) and a default styling that the
- * caller varies via `confirmVariant`.
- *
- * Use for any decision that must be answered before continuing: destructive
- * deletes, irreversible state changes, important sends. For modals that
- * collect input (forms, settings) use ui/dialog directly.
- */
-
+// For decisions that need confirmation (destructive deletes, irreversible
+// actions). For input-collecting modals use ui/dialog instead.
 const props = withDefaults(
     defineProps<{
         open: boolean;

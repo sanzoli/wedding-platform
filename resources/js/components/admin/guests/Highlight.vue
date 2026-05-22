@@ -1,8 +1,5 @@
 <script setup lang="ts">
-// Renders `text` with substrings matching `query` wrapped in <mark>.
-// Visual-only: the parent decides whether to filter rows or not. When
-// the backend wires a real server-side search, the same `query` prop
-// keeps producing the correct highlight on the returned rows.
+// Wraps substrings of `text` matching `query` in <mark>. Parent decides filtering.
 import { computed } from 'vue';
 
 const props = defineProps<{
