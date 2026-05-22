@@ -10,6 +10,7 @@ defineEmits<{
 
 defineProps<{
     search?: string;
+    columns?: number;
 }>();
 
 const trans = usePage().props.trans.table;
@@ -44,38 +45,43 @@ trans.empty_search_desc ??= 'Try adjusting your search terms';
                 </thead>
                 <tbody class="divide-y divide-border/50">
                     <slot name="body">
-                        <td colspan="4" class="px-6 py-12 text-center">
-                            <div
-                                v-if="search"
-                                class="flex flex-col items-center gap-3"
+                        <tr>
+                            <td
+                                :colspan="columns ?? 4"
+                                class="px-6 py-12 text-center"
                             >
-                                <p
-                                    class="text-sm font-medium text-foreground/80"
+                                <div
+                                    v-if="search"
+                                    class="flex flex-col items-center gap-3"
                                 >
-                                    {{ trans.empty_search }}
-                                </p>
-                                <p class="text-xs text-muted-foreground">
-                                    {{ trans.empty_search_desc }}
-                                </p>
-                            </div>
-
-                            <div
-                                v-else
-                                class="flex flex-col items-center gap-4"
-                            >
-                                <Button @click="$emit('addItem')">
-                                    <Plus :size="16" :stroke-width="2" />
-                                    {{ trans.add_button }}
-                                </Button>
-                                <div class="space-y-2">
                                     <p
                                         class="text-sm font-medium text-foreground/80"
                                     >
-                                        {{ trans.no_items }}
+                                        {{ trans.empty_search }}
+                                    </p>
+                                    <p class="text-xs text-muted-foreground">
+                                        {{ trans.empty_search_desc }}
                                     </p>
                                 </div>
-                            </div>
-                        </td>
+
+                                <div
+                                    v-else
+                                    class="flex flex-col items-center gap-4"
+                                >
+                                    <Button @click="$emit('addItem')">
+                                        <Plus :size="16" :stroke-width="2" />
+                                        {{ trans.add_button }}
+                                    </Button>
+                                    <div class="space-y-2">
+                                        <p
+                                            class="text-sm font-medium text-foreground/80"
+                                        >
+                                            {{ trans.no_items }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
                     </slot>
                 </tbody>
             </table>
