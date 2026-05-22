@@ -38,7 +38,8 @@ trans.empty_search_desc ??= 'Try adjusting your search terms';
             to the Card instead of the viewport.
         -->
         <Card class="mt-4 hidden w-full gap-0 py-0 contain-paint sm:block">
-            <table class="w-full">
+            <div class="overflow-x-auto">
+                <table class="w-full">
                 <thead>
                     <tr class="border-b border-border/50">
                         <slot name="header" />
@@ -86,6 +87,7 @@ trans.empty_search_desc ??= 'Try adjusting your search terms';
                     </slot>
                 </tbody>
             </table>
+            </div>
         </Card>
 
         <!-- ─── Mobile card list (below sm) ─── -->
