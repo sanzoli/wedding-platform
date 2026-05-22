@@ -40,7 +40,7 @@ const parts = computed<Array<{ text: string; match: boolean }>>(() => {
     <template v-for="(p, idx) in parts" :key="idx">
         <mark
             v-if="p.match"
-            class="rounded-sm bg-accent/30 px-0.5 text-foreground"
+            class="rounded-xs bg-accent/30 text-foreground"
             >{{ p.text }}</mark
         >
         <template v-else>{{ p.text }}</template>

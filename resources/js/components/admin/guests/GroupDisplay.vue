@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import IconButton from '@/components/admin/IconButton.vue';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
 import {
     Tooltip,
     TooltipContent,
@@ -31,13 +31,6 @@ const emit = defineEmits<{
     delete: [];
     'add-companion': [];
 }>();
-
-// Blur first so Radix doesn't refocus after the dialog closes, which
-// would re-open the stuck tooltip.
-const onDeleteClick = (event: MouseEvent) => {
-    (event.currentTarget as HTMLElement | null)?.blur();
-    emit('delete');
-};
 
 const trans = usePage().props.trans.guests as Record<string, string>;
 trans.companions_one ??= 'companion';
@@ -160,50 +153,27 @@ const subline = computed(() => {
             <div
                 class="flex items-center justify-center gap-1 opacity-0 transition-opacity group-hover/row:opacity-100"
             >
-                <Tooltip>
-                    <TooltipTrigger as-child>
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            class="size-8 cursor-pointer hover:bg-muted hover:text-foreground"
-                            :aria-label="trans.action_edit"
-                            @click="emit('edit')"
-                        >
-                            <Pencil :size="16" />
-                        </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>{{ trans.action_edit }}</TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                    <TooltipTrigger as-child>
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            class="size-8 cursor-pointer hover:bg-primary/10 hover:text-foreground dark:hover:bg-primary/25"
-                            :aria-label="trans.action_add_companion"
-                            @click="emit('add-companion')"
-                        >
-                            <UserPlus :size="16" />
-                        </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>{{
-                        trans.action_add_companion
-                    }}</TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                    <TooltipTrigger as-child>
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            class="size-8 cursor-pointer hover:bg-destructive/10 dark:hover:bg-destructive/25"
-                            :aria-label="trans.action_delete"
-                            @click="onDeleteClick"
-                        >
-                            <Trash2 :size="16" class="text-destructive" />
-                        </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>{{ trans.action_delete }}</TooltipContent>
-                </Tooltip>
+                <IconButton
+                    :label="trans.action_edit"
+                    variant="muted"
+                    @click="emit('edit')"
+                >
+                    <Pencil :size="16" />
+                </IconButton>
+                <IconButton
+                    :label="trans.action_add_companion"
+                    variant="primary"
+                    @click="emit('add-companion')"
+                >
+                    <UserPlus :size="16" />
+                </IconButton>
+                <IconButton
+                    :label="trans.action_delete"
+                    variant="destructive"
+                    @click="emit('delete')"
+                >
+                    <Trash2 :size="16" class="text-destructive" />
+                </IconButton>
             </div>
         </td>
         <td class="w-px py-3 pr-4 pl-2">
