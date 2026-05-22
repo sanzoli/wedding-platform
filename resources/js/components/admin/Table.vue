@@ -11,6 +11,7 @@ defineEmits<{
 defineProps<{
     search?: string;
     columns?: number;
+    emptyAddLabel?: string;
 }>();
 
 const trans = usePage().props.trans.table;
@@ -70,7 +71,7 @@ trans.empty_search_desc ??= 'Try adjusting your search terms';
                                 >
                                     <Button @click="$emit('addItem')">
                                         <Plus :size="16" :stroke-width="2" />
-                                        {{ trans.add_button }}
+                                        {{ emptyAddLabel ?? trans.add_button }}
                                     </Button>
                                     <div class="space-y-2">
                                         <p

@@ -308,7 +308,11 @@ const searchValue = ref('');
 </script>
 
 <template>
-    <Table :columns="6">
+    <Table
+        :columns="6"
+        :empty-add-label="trans.add_group"
+        @add-item="onCreateRequest"
+    >
         <template #toolbar>
             <div class="flex items-center gap-3">
                 <SearchBar
