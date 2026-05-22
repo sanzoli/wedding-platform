@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import IconButton from '@/components/admin/IconButton.vue';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { getInitials } from '@/composables/useInitials';
 import type { Guest } from '@/types/guests';
 import { usePage } from '@inertiajs/vue3';
 import { Pencil, Trash2 } from 'lucide-vue-next';
@@ -30,9 +31,8 @@ const isPending = computed(
 
 const initials = computed(() => {
     if (isPending.value) return '?';
-    const first = props.companion.name.charAt(0).toUpperCase();
-    const last = props.companion.surname.charAt(0).toUpperCase();
-    return `${first}${last}` || '?';
+    const { name, surname } = props.companion;
+    return getInitials(`${name} ${surname}`.trim()) || '?';
 });
 
 const fullName = computed(() =>

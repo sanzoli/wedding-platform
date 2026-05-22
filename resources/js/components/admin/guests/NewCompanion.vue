@@ -3,6 +3,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectItem } from '@/components/ui/select';
+import { getInitials } from '@/composables/useInitials';
 import type { GuestLanguage } from '@/types/guests';
 import { usePage } from '@inertiajs/vue3';
 import { Check, X } from 'lucide-vue-next';
@@ -29,11 +30,9 @@ const name = ref('');
 const surname = ref('');
 const language = ref<GuestLanguage>('es');
 
-const initials = computed(() => {
-    const f = name.value.charAt(0).toUpperCase();
-    const l = surname.value.charAt(0).toUpperCase();
-    return `${f}${l}` || '?';
-});
+const initials = computed(
+    () => getInitials(`${name.value} ${surname.value}`.trim()) || '?',
+);
 
 // Empty save → parent flips the row to a 'pending' placeholder.
 const onSave = () => {

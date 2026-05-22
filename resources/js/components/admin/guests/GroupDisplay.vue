@@ -6,6 +6,7 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { getInitials } from '@/composables/useInitials';
 import type { GuestGroupView } from '@/types/guests';
 import { usePage } from '@inertiajs/vue3';
 import {
@@ -46,9 +47,8 @@ trans.attention_pending_other ??=
     'Has :count companions with unconfirmed names';
 
 const initials = computed(() => {
-    const first = props.group.primary.name.charAt(0).toUpperCase();
-    const last = props.group.primary.surname.charAt(0).toUpperCase();
-    return `${first}${last}` || '?';
+    const { name, surname } = props.group.primary;
+    return getInitials(`${name} ${surname}`.trim()) || '?';
 });
 
 const fullName = computed(() =>
