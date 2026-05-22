@@ -25,6 +25,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Guests',
+        // TODO(backend): replace with Wayfinder helper when GuestsController exists.
         href: '/admin/guests',
         icon: Users,
     },
