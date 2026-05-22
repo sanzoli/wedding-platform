@@ -214,6 +214,13 @@ const addingCompanionIn = ref<string | null>(null);
 const editingGroupId = ref<string | null>(null);
 const editingCompanionId = ref<string | null>(null);
 
+const hasBodyContent = computed(
+    () =>
+        sortedGroups.value.length > 0 ||
+        adding.value ||
+        addingCompanionIn.value !== null,
+);
+
 const closePendingFlows = () => {
     adding.value = false;
     addingCompanionIn.value = null;
@@ -301,7 +308,7 @@ const searchValue = ref('');
 </script>
 
 <template>
-    <Table>
+    <Table :columns="6">
         <template #toolbar>
             <div class="flex items-center gap-3">
                 <SearchBar
@@ -363,7 +370,7 @@ const searchValue = ref('');
             </TableHeader>
         </template>
 
-        <template #body>
+        <template v-if="hasBodyContent" #body>
             <NewGroup
                 v-if="adding"
                 @save="onSavePrimary"
