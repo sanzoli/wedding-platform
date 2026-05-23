@@ -1,14 +1,11 @@
 <script setup lang="ts">
-import { cn } from '@/lib/utils';
 import { SortOptions } from '@/types';
 import { ChevronDown, ChevronUp } from 'lucide-vue-next';
-import type { HTMLAttributes } from 'vue';
 import { computed } from 'vue';
 
 const props = defineProps<{
     sortBy?: string;
     sortOptions?: SortOptions;
-    class?: HTMLAttributes['class'];
 }>();
 
 const isCurrentSorting = computed(
@@ -22,59 +19,39 @@ const nextDirection = computed(function () {
 
     return props.sortOptions.direction === 'asc' ? 'desc' : null;
 });
-
-const ariaSort = computed<
-    'ascending' | 'descending' | 'none' | undefined
->(() => {
-    if (!props.sortBy) return undefined;
-    if (!isCurrentSorting.value || !props.sortOptions?.direction) {
-        return 'none';
-    }
-    return props.sortOptions.direction === 'asc' ? 'ascending' : 'descending';
-});
 </script>
 
 <template>
     <th
-        :class="
-            cn(
-                'admin-type-table-header px-4 py-[22px] text-left text-muted-foreground',
-                props.class,
-            )
-        "
-        :aria-sort="ariaSort"
+        class="admin-type-table-header px-6 py-[22px] text-left text-muted-foreground"
     >
-        <div class="inline-flex items-center gap-2">
-            <slot name="prefix" />
+        <button
+            v-if="sortBy"
+            type="button"
+            class="inline-flex items-center gap-1.5 transition-colors hover:text-foreground"
+            @click="$emit('update:sortOptions', sortBy, nextDirection)"
+        >
+            <span><slot /></span>
 
-            <button
-                v-if="sortBy"
-                type="button"
-                class="inline-flex items-center gap-1.5 transition-colors hover:text-foreground"
-                @click="$emit('update:sortOptions', sortBy, nextDirection)"
+            <span
+                v-if="!isCurrentSorting || !sortOptions?.direction"
+                class="flex flex-col leading-none"
             >
-                <span><slot /></span>
+                <ChevronUp :size="12" class="-mb-1 opacity-30" />
+                <ChevronDown :size="12" class="opacity-30" />
+            </span>
+            <ChevronUp
+                v-else-if="sortOptions?.direction === 'asc'"
+                :size="13"
+                class="opacity-80"
+            />
+            <ChevronDown
+                v-else-if="sortOptions?.direction === 'desc'"
+                :size="13"
+                class="opacity-80"
+            />
+        </button>
 
-                <span
-                    v-if="!isCurrentSorting || !sortOptions?.direction"
-                    class="flex flex-col leading-none"
-                >
-                    <ChevronUp :size="12" class="-mb-1 opacity-30" />
-                    <ChevronDown :size="12" class="opacity-30" />
-                </span>
-                <ChevronUp
-                    v-else-if="sortOptions?.direction === 'asc'"
-                    :size="13"
-                    class="opacity-80"
-                />
-                <ChevronDown
-                    v-else-if="sortOptions?.direction === 'desc'"
-                    :size="13"
-                    class="opacity-80"
-                />
-            </button>
-
-            <slot v-else />
-        </div>
+        <slot v-else />
     </th>
 </template>
