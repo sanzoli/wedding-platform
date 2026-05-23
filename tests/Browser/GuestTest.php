@@ -24,3 +24,17 @@ test('shows guest list', function () {
             ->assertSee($guest->mobile);
     }
 });
+
+test('can search guest list', function () {
+    Guest::factory()->count(5)->create();
+    Guest::factory()->create(['first_name' => 'John Jake', 'last_name' => 'Doe Dae']);
+
+    $page = visit(route('guests.index'))
+        ->type('input[type="search"]', 'Jake Doe');
+
+    $page->assertSee('John Jake Doe Dae')
+        ->assertNoSmoke()
+        ->assertNoAccessibilityIssues()
+        ->assertNoConsoleLogs()
+        ->assertNoJavaScriptErrors();
+});
