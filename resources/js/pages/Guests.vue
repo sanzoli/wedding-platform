@@ -11,6 +11,7 @@ import TableHeader from '@/components/admin/TableHeader.vue';
 import Table from '@/components/admin/Table.vue';
 import IconButton from '@/components/IconButton.vue';
 import { useQueryOptions } from '@/composables/useQueryOptions';
+import HighlightableText from '@/components/HighlightableText.vue';
 
 const props = defineProps<{
     filters: QueryOptions;
@@ -48,10 +49,12 @@ const queryOptions = useQueryOptions(index.url(), props.filters);
                         :key="guest.id"
                     >
                         <td class="w-75 px-6 py-3 text-[15px] font-medium">
-                            {{ guest.name }}
+                            <HighlightableText :text="guest.name" :query="queryOptions.search"></HighlightableText>
                         </td>
                         <td class="px-6 py-3">{{ guest.lang }}</td>
-                        <td class="px-6 py-3">{{ guest.mobile }}</td>
+                        <td class="px-6 py-3">
+                            <HighlightableText :text="guest.mobile" :query="queryOptions.search"></HighlightableText>
+                        </td>
                         <td class="px-6 py-3">
                             <div class="flex items-center gap-1.5">
                                 <IconButton

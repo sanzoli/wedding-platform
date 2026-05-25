@@ -33,6 +33,7 @@ test('can search guest list', function () {
         ->type('input[type="search"]', 'Jake Doe');
 
     $page->assertSee('John Jake Doe Dae')
+        ->assertSourceHas('John <mark class="rounded-xs bg-accent/30 text-foreground">Jake Doe</mark> Dae')
         ->assertNoSmoke()
         ->assertNoAccessibilityIssues()
         ->assertNoConsoleLogs()
