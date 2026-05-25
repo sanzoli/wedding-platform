@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { Head, router } from '@inertiajs/vue3';
-import AppLayout from '@/layouts/AppLayout.vue';
-import { Guest } from '@/types/guests';
-import Heading from '@/components/Heading.vue';
-import { QueryOptions } from '@/types';
-import { index, destroy } from '@/actions/App/Http/Controllers/GuestController';
+import { destroy, index } from '@/actions/App/Http/Controllers/GuestController';
 import SearchBar from '@/components/admin/SearchBar.vue';
-import { Pencil, Trash2 } from 'lucide-vue-next';
-import TableHeader from '@/components/admin/TableHeader.vue';
 import Table from '@/components/admin/Table.vue';
-import IconButton from '@/components/IconButton.vue';
-import { useQueryOptions } from '@/composables/useQueryOptions';
+import TableHeader from '@/components/admin/TableHeader.vue';
+import Heading from '@/components/Heading.vue';
 import HighlightableText from '@/components/HighlightableText.vue';
+import IconButton from '@/components/IconButton.vue';
 import { confirmDelete } from '@/composables/admin/useAlert';
+import { useQueryOptions } from '@/composables/useQueryOptions';
+import AppLayout from '@/layouts/AppLayout.vue';
+import { QueryOptions } from '@/types';
+import { Guest } from '@/types/guests';
+import { Head, router } from '@inertiajs/vue3';
+import { Pencil, Trash2 } from 'lucide-vue-next';
 
 const props = defineProps<{
     filters: QueryOptions;
@@ -24,9 +24,7 @@ const props = defineProps<{
 const queryOptions = useQueryOptions(index.url(), props.filters);
 
 const deleteItem = (id: number) =>
-    confirmDelete(() =>
-        router.delete(destroy.url(id), { only: ['guests'], preserveScroll: true }),
-    );
+    confirmDelete(() => router.delete(destroy.url(id), { only: ['guests'], preserveScroll: true }));
 </script>
 
 <template>
@@ -55,17 +53,11 @@ const deleteItem = (id: number) =>
                         :key="guest.id"
                     >
                         <td class="w-75 px-6 py-3 text-[15px] font-medium">
-                            <HighlightableText
-                                :text="guest.name"
-                                :query="queryOptions.search"
-                            ></HighlightableText>
+                            <HighlightableText :text="guest.name" :query="queryOptions.search"></HighlightableText>
                         </td>
                         <td class="px-6 py-3">{{ guest.lang }}</td>
                         <td class="px-6 py-3">
-                            <HighlightableText
-                                :text="guest.mobile"
-                                :query="queryOptions.search"
-                            ></HighlightableText>
+                            <HighlightableText :text="guest.mobile" :query="queryOptions.search"></HighlightableText>
                         </td>
                         <td class="px-6 py-3">
                             <div class="flex items-center gap-1.5">

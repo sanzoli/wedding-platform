@@ -16,11 +16,7 @@ import { Form, Head } from '@inertiajs/vue3';
     >
         <Head title="Confirm password" />
 
-        <Form
-            v-bind="store.form()"
-            reset-on-success
-            v-slot="{ errors, processing }"
-        >
+        <Form v-bind="store.form()" reset-on-success v-slot="{ errors, processing }">
             <div class="space-y-6">
                 <div class="grid gap-2">
                     <Label htmlFor="password">Password</Label>
@@ -38,11 +34,7 @@ import { Form, Head } from '@inertiajs/vue3';
                 </div>
 
                 <div class="flex items-center">
-                    <Button
-                        class="w-full"
-                        :disabled="processing"
-                        data-test="confirm-password-button"
-                    >
+                    <Button class="w-full" :disabled="processing" data-test="confirm-password-button">
                         <Spinner v-if="processing" />
                         Confirm Password
                     </Button>

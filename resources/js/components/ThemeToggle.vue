@@ -16,9 +16,7 @@ function toggleTheme() {
         updateAppearance('dark');
     } else {
         // For 'system', check actual resolved theme and toggle to opposite
-        const systemDark = window.matchMedia(
-            '(prefers-color-scheme: dark)',
-        ).matches;
+        const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         updateAppearance(systemDark ? 'light' : 'dark');
     }
 }
@@ -34,9 +32,7 @@ const updateIsDark = () => {
         isDark.value = false;
     } else {
         // system: check actual preference
-        isDark.value = window.matchMedia(
-            '(prefers-color-scheme: dark)',
-        ).matches;
+        isDark.value = window.matchMedia('(prefers-color-scheme: dark)').matches;
     }
 };
 

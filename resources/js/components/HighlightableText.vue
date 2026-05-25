@@ -22,7 +22,7 @@ const fragments = computed<Fragment[]>(() => {
         return [{ text: props.text, highlighted: false }];
     }
 
-    needle = needle.toLowerCase()
+    needle = needle.toLowerCase();
     const searchable = props.text.toLowerCase();
     const result: Fragment[] = [];
 
@@ -49,11 +49,7 @@ const fragments = computed<Fragment[]>(() => {
 
 <template>
     <template v-for="(fragment, i) in fragments" :key="i">
-        <mark
-            v-if="fragment.highlighted"
-            class="rounded-xs bg-accent/30 text-foreground"
-            >{{ fragment.text }}</mark
-        >
+        <mark v-if="fragment.highlighted" class="rounded-xs bg-accent/30 text-foreground">{{ fragment.text }}</mark>
         <template v-else>{{ fragment.text }}</template>
     </template>
 </template>

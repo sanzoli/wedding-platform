@@ -35,8 +35,7 @@
     /* ----------------------------
    * Typography tokens
    * ---------------------------- */
-    --font-sans:
-        'Instrument Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
     --font-serif: 'Playfair Display', ui-serif, Georgia, serif;
 
     /* ----------------------------

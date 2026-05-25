@@ -18,9 +18,7 @@ declare module '@inertiajs/core' {
             appName: string;
             trans: {
                 [key: string]: {
-                    [key: string]:
-                        | string
-                        | { [key: string]: string | { [key: string]: string } };
+                    [key: string]: string | { [key: string]: string | { [key: string]: string } };
                 };
             };
         };

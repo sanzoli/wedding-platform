@@ -1,7 +1,7 @@
 import { QueryOptions } from '@/types';
-import { reactive } from 'vue';
-import { watchDebounced } from '@vueuse/core';
 import { router } from '@inertiajs/vue3';
+import { watchDebounced } from '@vueuse/core';
+import { reactive } from 'vue';
 
 export function useQueryOptions(url: URL | string, options?: QueryOptions) {
     const queryOptions = reactive({

@@ -46,7 +46,7 @@ test('can delete guest', function () {
 
     $page = visit(route('guests.index'))
         ->assertSee('John Doe')
-        ->click('@guest-delete-button-'. $guest->id)
+        ->click('@guest-delete-button-'.$guest->id)
         ->click('.swal2-confirm');
 
     $page->assertDontSee('John Doe')

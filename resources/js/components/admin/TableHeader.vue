@@ -8,9 +8,7 @@ const props = defineProps<{
     sortOptions?: SortOptions;
 }>();
 
-const isCurrentSorting = computed(
-    () => props.sortOptions?.type === props.sortBy,
-);
+const isCurrentSorting = computed(() => props.sortOptions?.type === props.sortBy);
 
 const nextDirection = computed(function () {
     if (!isCurrentSorting.value || !props.sortOptions?.direction) {
@@ -22,9 +20,7 @@ const nextDirection = computed(function () {
 </script>
 
 <template>
-    <th
-        class="admin-type-table-header px-6 py-[22px] text-left text-muted-foreground"
-    >
+    <th class="admin-type-table-header px-6 py-[22px] text-left text-muted-foreground">
         <button
             v-if="sortBy"
             type="button"
@@ -33,23 +29,12 @@ const nextDirection = computed(function () {
         >
             <span><slot /></span>
 
-            <span
-                v-if="!isCurrentSorting || !sortOptions?.direction"
-                class="flex flex-col leading-none"
-            >
+            <span v-if="!isCurrentSorting || !sortOptions?.direction" class="flex flex-col leading-none">
                 <ChevronUp :size="12" class="-mb-1 opacity-30" />
                 <ChevronDown :size="12" class="opacity-30" />
             </span>
-            <ChevronUp
-                v-else-if="sortOptions?.direction === 'asc'"
-                :size="13"
-                class="opacity-80"
-            />
-            <ChevronDown
-                v-else-if="sortOptions?.direction === 'desc'"
-                :size="13"
-                class="opacity-80"
-            />
+            <ChevronUp v-else-if="sortOptions?.direction === 'asc'" :size="13" class="opacity-80" />
+            <ChevronDown v-else-if="sortOptions?.direction === 'desc'" :size="13" class="opacity-80" />
         </button>
 
         <slot v-else />

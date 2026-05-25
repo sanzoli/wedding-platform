@@ -25,7 +25,7 @@ class Guest extends Model
     protected function name(): Attribute
     {
         return Attribute::make(
-            get: fn ($value, array $attributes) => $attributes['first_name'] . " " . $attributes['last_name'],
+            get: fn ($value, array $attributes) => $attributes['first_name'].' '.$attributes['last_name'],
         );
     }
 
@@ -33,9 +33,9 @@ class Guest extends Model
     protected function quickSearch(Builder $query, ?string $value): Builder
     {
         return $query->when($value, fn ($query) => $query
-            ->whereLike('first_name',  '%'.$value.'%')
-            ->orWhereLike('last_name',  '%'.$value.'%')
-            ->orWhereLike('mobile',  '%'.$value.'%')
+            ->whereLike('first_name', '%'.$value.'%')
+            ->orWhereLike('last_name', '%'.$value.'%')
+            ->orWhereLike('mobile', '%'.$value.'%')
             ->orWhereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ["%{$value}%"])
         );
     }
