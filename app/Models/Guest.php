@@ -10,6 +10,11 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property ?string $first_name
+ * @property ?string $last_name
+ * @property ?string $mobile
+ */
 class Guest extends Model
 {
     /** @use HasFactory<GuestFactory> */

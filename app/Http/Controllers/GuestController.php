@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Guest\DeleteGuest;
+use App\Actions\Guest\StoreGuest;
+use App\Enum\Language;
 use App\Http\Requests\StoreGuestRequest;
 use App\Http\Requests\UpdateGuestRequest;
 use App\Http\Resources\GuestResource;
@@ -15,14 +17,17 @@ class GuestController extends Controller
     public function index(Request $request)
     {
         return Inertia::render('Guests', [
-            'guests' => GuestResource::collection(Guest::quickSearch($request->input('search'))->get()),
+            'guests' => GuestResource::collection(Guest::quickSearch($request->input('search'))->latest()->get()),
             'filters' => request()->only('search'),
+            'languages' => Language::displayList(),
         ]);
     }
 
-    public function store(StoreGuestRequest $request)
+    public function store(StoreGuestRequest $request, StoreGuest $action)
     {
-        //
+        $action->store($request->validated());
+
+        return back();
     }
 
     public function update(UpdateGuestRequest $request, Guest $guest)

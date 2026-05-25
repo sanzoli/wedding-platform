@@ -47,13 +47,24 @@ test('does not list guests when unauthenticated', function () {
         ->assertStatus(401);
 });
 
+test('can create a guest', function () {
+    $data = Guest::factory()->make()->toArray();
+
+    $this->actingAs(User::factory()->create())
+        ->post(route('guests.store'), $data)
+        ->assertRedirectBackWithoutErrors();
+
+    $this->assertDatabaseCount('guests', 1);
+    $this->assertDatabaseHas('guests', $data);
+});
+
 test('can delete guest', function () {
     $guest = Guest::factory()->create();
     Guest::factory()->count(3)->create();
 
     $this->actingAs(User::factory()->create())
         ->delete(route('guests.destroy', $guest))
-        ->assertRedirectBack();
+        ->assertRedirectBackWithoutErrors();
 
     $this->assertDatabaseMissing('guests', $guest->toArray());
     $this->assertDatabaseCount('guests', 3);

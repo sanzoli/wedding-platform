@@ -13,7 +13,7 @@ class GuestResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'mobile' => $this->mobile,
-            'lang' => $this->lang->value,
+            'lang' => $this->lang?->value,
         ];
     }
 }

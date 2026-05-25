@@ -40,6 +40,21 @@ test('can search guest list', function () {
         ->assertNoJavaScriptErrors();
 });
 
+test('can create a guest', function () {
+    $page = visit(route('guests.index'))
+        ->click('@add-button')
+        ->type('first_name', 'John')
+        ->type('last_name', 'Doe')
+        ->click('@guest-save-button');
+
+    $page->assertUrlIs(route('guests.index'))
+        ->assertSee('John Doe')
+        ->assertNoSmoke()
+        ->assertNoAccessibilityIssues()
+        ->assertNoConsoleLogs()
+        ->assertNoJavaScriptErrors();
+});
+
 test('can delete guest', function () {
     $list = Guest::factory()->count(5)->create();
     $guest = Guest::factory()->create(['first_name' => 'John', 'last_name' => 'Doe']);
