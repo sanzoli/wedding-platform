@@ -46,3 +46,15 @@ test('does not list guests when unauthenticated', function () {
     $this->getJson(route('guests.index'))
         ->assertStatus(401);
 });
+
+test('can delete guest', function () {
+    $guest = Guest::factory()->create();
+    Guest::factory()->count(3)->create();
+
+    $this->actingAs(User::factory()->create())
+        ->delete(route('guests.destroy', $guest))
+        ->assertRedirectBack();
+
+    $this->assertDatabaseMissing('guests', $guest->toArray());
+    $this->assertDatabaseCount('guests', 3);
+});

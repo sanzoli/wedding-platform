@@ -39,3 +39,21 @@ test('can search guest list', function () {
         ->assertNoConsoleLogs()
         ->assertNoJavaScriptErrors();
 });
+
+test('can delete guest', function () {
+    $list = Guest::factory()->count(5)->create();
+    $guest = Guest::factory()->create(['first_name' => 'John', 'last_name' => 'Doe']);
+
+    $page = visit(route('guests.index'))
+        ->assertSee('John Doe')
+        ->click('@guest-delete-button-'. $guest->id)
+        ->click('.swal2-confirm');
+
+    $page->assertDontSee('John Doe')
+        ->assertSee($list->first()->name)
+        ->assertNoSmoke()
+        ->assertNoAccessibilityIssues()
+        ->assertNoConsoleLogs()
+        ->assertNoJavaScriptErrors();
+
+});

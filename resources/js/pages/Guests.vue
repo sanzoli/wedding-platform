@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Guest } from '@/types/guests';
 import Heading from '@/components/Heading.vue';
 import { QueryOptions } from '@/types';
-import { index } from '@/actions/App/Http/Controllers/GuestController';
+import { index, destroy } from '@/actions/App/Http/Controllers/GuestController';
 import SearchBar from '@/components/admin/SearchBar.vue';
 import { Pencil, Trash2 } from 'lucide-vue-next';
 import TableHeader from '@/components/admin/TableHeader.vue';
@@ -12,6 +12,7 @@ import Table from '@/components/admin/Table.vue';
 import IconButton from '@/components/IconButton.vue';
 import { useQueryOptions } from '@/composables/useQueryOptions';
 import HighlightableText from '@/components/HighlightableText.vue';
+import { confirmDelete } from '@/composables/admin/useAlert';
 
 const props = defineProps<{
     filters: QueryOptions;
@@ -21,6 +22,11 @@ const props = defineProps<{
 }>();
 
 const queryOptions = useQueryOptions(index.url(), props.filters);
+
+const deleteItem = (id: number) =>
+    confirmDelete(() =>
+        router.delete(destroy.url(id), { only: ['guests'], preserveScroll: true }),
+    );
 </script>
 
 <template>
@@ -49,11 +55,17 @@ const queryOptions = useQueryOptions(index.url(), props.filters);
                         :key="guest.id"
                     >
                         <td class="w-75 px-6 py-3 text-[15px] font-medium">
-                            <HighlightableText :text="guest.name" :query="queryOptions.search"></HighlightableText>
+                            <HighlightableText
+                                :text="guest.name"
+                                :query="queryOptions.search"
+                            ></HighlightableText>
                         </td>
                         <td class="px-6 py-3">{{ guest.lang }}</td>
                         <td class="px-6 py-3">
-                            <HighlightableText :text="guest.mobile" :query="queryOptions.search"></HighlightableText>
+                            <HighlightableText
+                                :text="guest.mobile"
+                                :query="queryOptions.search"
+                            ></HighlightableText>
                         </td>
                         <td class="px-6 py-3">
                             <div class="flex items-center gap-1.5">
@@ -65,8 +77,9 @@ const queryOptions = useQueryOptions(index.url(), props.filters);
                                     <Pencil></Pencil>
                                 </IconButton>
                                 <IconButton
-                                    @click="$emit('delete')"
+                                    @click="deleteItem(guest.id)"
                                     class="hover:bg-destructive/10 hover:text-destructive"
+                                    :data-test="'guest-delete-button-' + guest.id"
                                     aria-label="delete"
                                 >
                                     <Trash2></Trash2>

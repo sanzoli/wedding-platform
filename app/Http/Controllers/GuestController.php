@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Guest\DeleteGuest;
 use App\Http\Requests\StoreGuestRequest;
 use App\Http\Requests\UpdateGuestRequest;
 use App\Http\Resources\GuestResource;
@@ -29,8 +30,10 @@ class GuestController extends Controller
         //
     }
 
-    public function destroy(Guest $guest)
+    public function destroy(Guest $guest, DeleteGuest $action)
     {
-        //
+        $action->delete($guest);
+
+        return back();
     }
 }
