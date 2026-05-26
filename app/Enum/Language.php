@@ -19,7 +19,7 @@ enum Language: string
 
     public static function displayList(): array
     {
-        return collect(self::cases())->mapWithKeys(fn(self $item) => [
+        return collect(self::cases())->mapWithKeys(fn (self $item) => [
             $item->value => [
                 'label' => $item->name,
                 'value' => $item->value,

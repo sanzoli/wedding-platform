@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { destroy } from '@/actions/App/Http/Controllers/GuestController';
+import GuestEditor from '@/components/guests/GuestEditor.vue';
 import HighlightableText from '@/components/HighlightableText.vue';
 import IconButton from '@/components/IconButton.vue';
 import { confirmDelete } from '@/composables/admin/useAlert';
@@ -7,7 +8,6 @@ import { Guest } from '@/types/guests';
 import { router, usePage } from '@inertiajs/vue3';
 import { Pencil, Trash2 } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
-import GuestEditor from '@/components/guests/GuestEditor.vue';
 
 const props = defineProps<{
     guest: Guest;

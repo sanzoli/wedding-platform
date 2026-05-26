@@ -59,10 +59,10 @@ test('can update a guest', function () {
     $guest = Guest::factory()->create(['first_name' => 'John', 'last_name' => 'Doe']);
 
     $page = visit(route('guests.index'))
-        ->click('@guest-edit-button-' . $guest->id)
+        ->click('@guest-edit-button-'.$guest->id)
         ->type('first_name', 'Jake')
         ->type('mobile', '+573008764321')
-        ->click('@guest-update-button-' . $guest->id);
+        ->click('@guest-update-button-'.$guest->id);
 
     $page->assertUrlIs(route('guests.index'))
         ->assertSee('Jake Doe')
