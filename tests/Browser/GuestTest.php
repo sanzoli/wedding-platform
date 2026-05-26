@@ -45,10 +45,28 @@ test('can create a guest', function () {
         ->click('@add-button')
         ->type('first_name', 'John')
         ->type('last_name', 'Doe')
-        ->click('@guest-save-button');
+        ->click('@guest-store-button');
 
     $page->assertUrlIs(route('guests.index'))
         ->assertSee('John Doe')
+        ->assertNoSmoke()
+        ->assertNoAccessibilityIssues()
+        ->assertNoConsoleLogs()
+        ->assertNoJavaScriptErrors();
+});
+
+test('can update a guest', function () {
+    $guest = Guest::factory()->create(['first_name' => 'John', 'last_name' => 'Doe']);
+
+    $page = visit(route('guests.index'))
+        ->click('@guest-edit-button-' . $guest->id)
+        ->type('first_name', 'Jake')
+        ->type('mobile', '+573008764321')
+        ->click('@guest-update-button-' . $guest->id);
+
+    $page->assertUrlIs(route('guests.index'))
+        ->assertSee('Jake Doe')
+        ->assertSee('+573008764321')
         ->assertNoSmoke()
         ->assertNoAccessibilityIssues()
         ->assertNoConsoleLogs()

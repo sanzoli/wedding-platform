@@ -11,14 +11,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * @property int $id
  * @property ?string $first_name
  * @property ?string $last_name
+ * @property ?Language $lang
  * @property ?string $mobile
  */
 class Guest extends Model
 {
     /** @use HasFactory<GuestFactory> */
     use HasFactory;
+
+    protected $guarded = [];
 
     protected function casts(): array
     {

@@ -58,6 +58,24 @@ test('can create a guest', function () {
     $this->assertDatabaseHas('guests', $data);
 });
 
+test('can update a guest', function () {
+    $guest = Guest::factory()->create();
+    $data = Guest::factory()->make()->toArray();
+
+    $this->actingAs(User::factory()->create())
+        ->put(route('guests.update', $guest), $data)
+        ->assertRedirectBackWithoutErrors();
+
+    $this->assertDatabaseCount('guests', 1);
+    $this->assertDatabaseHas('guests', [
+        'id' => $guest->id,
+        'first_name' => $data['first_name'],
+        'last_name' => $data['last_name'],
+        'mobile' => $data['mobile'],
+        'lang' => $data['lang'],
+    ]);
+});
+
 test('can delete guest', function () {
     $guest = Guest::factory()->create();
     Guest::factory()->count(3)->create();
