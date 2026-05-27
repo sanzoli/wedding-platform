@@ -5,8 +5,8 @@ export function useSortOptions(
     queryOptions?: QueryOptions,
 ): [SortOptions, (type: string, direction: 'asc' | 'desc' | null) => void] {
     const sortOptions: SortOptions = reactive({
-        type: queryOptions?.sort,
-        direction: queryOptions?.sortDirection,
+        type: queryOptions?.sortBy,
+        direction: queryOptions?.sort,
     });
 
     const sort = function (type: string, direction: 'asc' | 'desc' | null) {
