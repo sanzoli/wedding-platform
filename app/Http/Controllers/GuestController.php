@@ -18,7 +18,12 @@ class GuestController extends Controller
     public function index(Request $request)
     {
         return Inertia::render('Guests', [
-            'guests' => GuestResource::collection(Guest::quickSearch($request->input('search'))->latest()->get()),
+            'guests' => GuestResource::collection(
+                Guest::quickSearch($request->input('search'))
+                    ->orderByWhen($request->input('sortBy'), $request->input('sort'))
+                    ->latest()
+                    ->get()
+            ),
             'filters' => request()->only('search'),
             'languages' => Language::displayList(),
         ]);

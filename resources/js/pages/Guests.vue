@@ -7,6 +7,7 @@ import TableHeader from '@/components/admin/TableHeader.vue';
 import GuestEditor from '@/components/guests/GuestEditor.vue';
 import GuestRow from '@/components/guests/GuestRow.vue';
 import Heading from '@/components/Heading.vue';
+import { useSortOptions } from '@/composables/admin/useSortOptions';
 import { useQueryOptions } from '@/composables/useQueryOptions';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { QueryOptions } from '@/types';
@@ -22,6 +23,7 @@ const props = defineProps<{
 }>();
 
 const queryOptions = useQueryOptions(index.url(), props.filters);
+const [sortOptions, sort] = useSortOptions(queryOptions);
 const adding = ref(false);
 </script>
 
@@ -42,9 +44,11 @@ const adding = ref(false);
                 </template>
 
                 <template #header>
-                    <TableHeader class="text-left">Name</TableHeader>
-                    <TableHeader>Language</TableHeader>
-                    <TableHeader>Mobile</TableHeader>
+                    <TableHeader sort-by="first_name" :sortOptions @update:sort-options="sort" class="text-left">
+                        Name
+                    </TableHeader>
+                    <TableHeader sort-by="lang" :sortOptions @update:sort-options="sort">Language</TableHeader>
+                    <TableHeader sort-by="mobile" :sortOptions @update:sort-options="sort">Mobile</TableHeader>
                     <TableHeader class="w-30"></TableHeader>
                 </template>
 

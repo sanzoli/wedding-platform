@@ -5,13 +5,14 @@ import { reactive } from 'vue';
 
 export function useQueryOptions(url: URL | string, options?: QueryOptions) {
     const queryOptions = reactive({
-        search: options?.search,
+        ...options,
     });
 
     watchDebounced(
         queryOptions,
         () =>
             router.get(url, queryOptions, {
+                preserveScroll: true,
                 preserveState: true,
                 replace: true,
             }),
