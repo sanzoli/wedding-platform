@@ -14,4 +14,12 @@ Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('admin/guests', function () {
+    return Inertia::render('admin/Guests', [
+        'groups' => [],
+        'totalGuests' => 0,
+        'totalGroups' => 0,
+    ]);
+})->middleware(['auth', 'verified'])->name('admin.guests');
+
 require __DIR__.'/settings.php';

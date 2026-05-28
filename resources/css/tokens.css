@@ -78,6 +78,9 @@
     --destructive: var(--p-red-600);
     --destructive-foreground: var(--p-neutral-0);
 
+    --warning: var(--p-orange-600);
+    --warning-foreground: var(--p-neutral-0);
+
     --border: var(--p-neutral-200);
     --input: var(--p-neutral-200);
     --ring: var(--p-teal-700);
@@ -132,6 +135,9 @@
 
     --destructive: hsl(8 73% 48%);
     --destructive-foreground: hsl(0 0% 98%);
+
+    --warning: hsl(21 77% 50%);
+    --warning-foreground: hsl(0 0% 98%);
 
     --border: hsl(220 15% 22%);
     --input: hsl(220 15% 22%);
