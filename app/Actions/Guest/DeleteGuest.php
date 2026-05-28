@@ -6,8 +6,12 @@ use App\Models\Guest;
 
 class DeleteGuest
 {
-    public function delete(Guest $guest): ?bool
+    public function delete(Guest $guest)
     {
-        return $guest->delete();
+        $guest->delete();
+
+        if ($guest->is_primary) {
+            $guest->group()->delete();
+        }
     }
 }

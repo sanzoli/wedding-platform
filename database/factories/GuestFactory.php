@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Enum\Language;
 use App\Models\Guest;
+use App\Models\GuestGroup;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,6 +19,15 @@ class GuestFactory extends Factory
             'last_name' => fake()->lastName(),
             'lang' => Language::English->value,
             'mobile' => fake()->e164PhoneNumber(),
+            'group_id' => fn (array $attributes) => GuestGroup::factory(),
         ];
+    }
+
+    public function companion(): Factory
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_primary' => false,
+            'group_id' => fn (array $attributes) => GuestGroup::first()->id ?? GuestGroup::factory(),
+        ]);
     }
 }

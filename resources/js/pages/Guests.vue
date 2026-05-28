@@ -5,20 +5,20 @@ import SearchBar from '@/components/admin/SearchBar.vue';
 import Table from '@/components/admin/Table.vue';
 import TableHeader from '@/components/admin/TableHeader.vue';
 import GuestEditor from '@/components/guests/GuestEditor.vue';
-import GuestRow from '@/components/guests/GuestRow.vue';
+import GroupRow from '@/components/guests/GroupRow.vue';
 import Heading from '@/components/Heading.vue';
 import { useSortOptions } from '@/composables/admin/useSortOptions';
 import { useQueryOptions } from '@/composables/useQueryOptions';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { QueryOptions } from '@/types';
-import { Guest } from '@/types/guests';
+import { GuestGroup } from '@/types/guests';
 import { Head } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
 const props = defineProps<{
     filters: QueryOptions;
-    guests: {
-        data: Guest[];
+    guestGroups: {
+        data: GuestGroup[];
     };
 }>();
 
@@ -47,6 +47,7 @@ const adding = ref(false);
                     <TableHeader sort-by="first_name" :sortOptions @update:sort-options="sort" class="text-left">
                         Name
                     </TableHeader>
+                    <TableHeader>Members</TableHeader>
                     <TableHeader sort-by="lang" :sortOptions @update:sort-options="sort">Language</TableHeader>
                     <TableHeader sort-by="mobile" :sortOptions @update:sort-options="sort">Mobile</TableHeader>
                     <TableHeader class="w-30"></TableHeader>
@@ -54,12 +55,11 @@ const adding = ref(false);
 
                 <template #body>
                     <GuestEditor v-if="adding" @close="adding = false"></GuestEditor>
-                    <GuestRow
-                        v-for="guest in guests.data"
-                        :key="guest.id"
-                        :guest
-                        :query="queryOptions.search"
-                    ></GuestRow>
+                    <GroupRow
+                        v-for="group in guestGroups.data"
+                        :key="group.id"
+                        :group
+                    ></GroupRow>
                 </template>
             </Table>
         </div>

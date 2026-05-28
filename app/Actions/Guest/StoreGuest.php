@@ -3,6 +3,7 @@
 namespace App\Actions\Guest;
 
 use App\Models\Guest;
+use App\Models\GuestGroup;
 
 class StoreGuest
 {
@@ -15,7 +16,7 @@ class StoreGuest
         $guest->lang = $params['lang'] ?? null;
         $guest->mobile = $params['mobile'] ?? null;
 
-        $guest->save();
+        GuestGroup::create([])->guests()->save($guest);
 
         return $guest;
     }

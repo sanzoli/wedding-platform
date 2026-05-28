@@ -4,14 +4,14 @@ namespace App\Models;
 
 use App\Enum\Language;
 use Database\Factories\GuestFactory;
-use Illuminate\Database\Eloquent\Attributes\Scope;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
+ * @property string $name
  * @property ?string $first_name
  * @property ?string $last_name
  * @property ?Language $lang
@@ -24,6 +24,13 @@ class Guest extends Model
 
     protected $guarded = [];
 
+    protected $touches = ['group'];
+
+    public function group(): BelongsTo
+    {
+        return $this->belongsTo(GuestGroup::class, 'group_id');
+    }
+
     protected function casts(): array
     {
         return [
@@ -35,17 +42,6 @@ class Guest extends Model
     {
         return Attribute::make(
             get: fn ($value, array $attributes) => $attributes['first_name'].' '.$attributes['last_name'],
-        );
-    }
-
-    #[Scope]
-    protected function quickSearch(Builder $query, ?string $value): Builder
-    {
-        return $query->when($value, fn ($query) => $query
-            ->whereLike('first_name', '%'.$value.'%')
-            ->orWhereLike('last_name', '%'.$value.'%')
-            ->orWhereLike('mobile', '%'.$value.'%')
-            ->orWhereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ["%{$value}%"])
         );
     }
 }
