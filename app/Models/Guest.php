@@ -38,10 +38,19 @@ class Guest extends Model
         ];
     }
 
-    protected function name(): Attribute
+    protected function fullName(): Attribute
     {
         return Attribute::make(
-            get: fn ($value, array $attributes) => $attributes['first_name'].' '.$attributes['last_name'],
+            get: fn ($value, array $attributes) => trim($attributes['first_name'].' '.$attributes['last_name']),
+        );
+    }
+
+    protected function initials(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value, array $attributes) => strtoupper(
+                substr($attributes['first_name'],0,1).substr($attributes['last_name'],0,1)
+            ) ?? '?',
         );
     }
 }

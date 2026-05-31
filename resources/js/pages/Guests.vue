@@ -11,9 +11,10 @@ import { useSortOptions } from '@/composables/admin/useSortOptions';
 import { useQueryOptions } from '@/composables/useQueryOptions';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { QueryOptions } from '@/types';
-import { GuestGroup } from '@/types/guests';
-import { Head } from '@inertiajs/vue3';
+import { Guest, GuestGroup } from '@/types/guests';
+import { Head, InertiaForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import { storeGuest } from '@/composables/admin/useGuest';
 
 const props = defineProps<{
     filters: QueryOptions;
@@ -25,6 +26,8 @@ const props = defineProps<{
 const queryOptions = useQueryOptions(index.url(), props.filters);
 const [sortOptions, sort] = useSortOptions(queryOptions);
 const adding = ref(false);
+
+const addGuest = (form: InertiaForm<Guest>) => storeGuest(form, { onSuccess: () => (adding.value = false) });
 </script>
 
 <template>
@@ -54,12 +57,13 @@ const adding = ref(false);
                 </template>
 
                 <template #body>
-                    <GuestEditor v-if="adding" @close="adding = false"></GuestEditor>
+                    <GuestEditor v-if="adding" @save="addGuest" @close="adding = false"></GuestEditor>
                     <GroupRow
                         v-for="group in guestGroups.data"
                         :key="group.id"
                         :group
-                    ></GroupRow>
+                        :query="queryOptions.search">
+                    </GroupRow>
                 </template>
             </Table>
         </div>

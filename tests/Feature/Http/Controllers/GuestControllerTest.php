@@ -12,7 +12,7 @@ test('can list guests', function () {
         ->get(route('guests.index'))
         ->assertInertia(fn (Assert $page) => $page
             ->component('Guests')
-            ->has('guests.data', 3)
+            ->has('guestGroups.data', 3)
         );
 });
 
@@ -25,7 +25,7 @@ test('can search list guests by name', function () {
         ->get(route('guests.index', ['search' => 'john doe']))
         ->assertInertia(fn (Assert $page) => $page
             ->component('Guests')
-            ->has('guests.data', 1)
+            ->has('guestGroups.data', 1)
         );
 });
 
@@ -38,7 +38,7 @@ test('can search list guests by mobile', function () {
         ->get(route('guests.index', ['search' => '059']))
         ->assertInertia(fn (Assert $page) => $page
             ->component('Guests')
-            ->has('guests.data', 1)
+            ->has('guestGroups.data', 1)
         );
 });
 
@@ -55,7 +55,12 @@ test('can create a guest', function () {
         ->assertRedirectBackWithoutErrors();
 
     $this->assertDatabaseCount('guests', 1);
-    $this->assertDatabaseHas('guests', $data);
+    $this->assertDatabaseHas('guests', [
+        'first_name' => $data['first_name'],
+        'last_name' => $data['last_name'],
+        'mobile' => $data['mobile'],
+        'lang' => $data['lang'],
+    ]);
 });
 
 test('can update a guest', function () {

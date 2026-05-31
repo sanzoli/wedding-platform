@@ -1,9 +1,12 @@
 export interface Guest {
     id: number;
-    first_name: ?string;
-    last_name: ?string;
-    mobile: ?string;
-    lang: 'en' | 'es' | 'pt' | null;
+    full_name: string;
+    first_name: string;
+    last_name: string;
+    initials: string;
+    mobile: string;
+    lang: 'en' | 'es' | 'pt' | '';
+    flag: string;
 }
 
 export interface GuestGroup {

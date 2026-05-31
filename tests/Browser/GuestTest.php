@@ -19,7 +19,7 @@ test('shows guest list', function () {
         ->assertSee('Guest List');
 
     foreach ($guests as $guest) {
-        $page->assertSee($guest->name)
+        $page->assertSee($guest->fullName)
             ->assertSee($guest->lang->value)
             ->assertSee($guest->mobile);
     }
@@ -83,7 +83,7 @@ test('can delete guest', function () {
         ->click('.swal2-confirm');
 
     $page->assertDontSee('John Doe')
-        ->assertSee($list->first()->name)
+        ->assertSee($list->first()->fullName)
         ->assertNoSmoke()
         ->assertNoAccessibilityIssues()
         ->assertNoConsoleLogs()
