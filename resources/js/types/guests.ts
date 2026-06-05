@@ -25,3 +25,21 @@ export interface GuestGroupView {
     pendingCompanions: number;
     needsAttention: boolean;
 }
+
+export interface SelectGroupOption {
+    groupId: string;
+    name: string;
+    surname: string;
+}
+
+export type SelectGroupDialogStatus =
+    | 'idle'
+    | 'submitting'
+    | 'success'
+    | 'error';
+
+export interface SelectGroupSource {
+    guestId: string;
+    name: string;
+    surname: string;
+}

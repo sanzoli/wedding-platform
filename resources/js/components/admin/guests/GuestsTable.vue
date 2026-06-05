@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import AddButton from '@/components/admin/AddButton.vue';
-import ConfirmDialog from '@/components/admin/ConfirmDialog.vue';
 import SearchBar from '@/components/admin/SearchBar.vue';
 import Table from '@/components/admin/Table.vue';
 import TableHeader from '@/components/admin/TableHeader.vue';
@@ -9,7 +8,13 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from '@/components/ui/tooltip';
-import type { CompanionView, GuestGroupView } from '@/types/guests';
+import type {
+    CompanionView,
+    GuestGroupView,
+    SelectGroupDialogStatus,
+    SelectGroupOption,
+    SelectGroupSource,
+} from '@/types/guests';
 import { usePage } from '@inertiajs/vue3';
 import { ChevronsDown, ChevronsRight } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
@@ -17,194 +22,207 @@ import Companion from './Companion.vue';
 import Group from './Group.vue';
 import NewCompanion from './NewCompanion.vue';
 import NewGroup from './NewGroup.vue';
+import SelectGroupDialog from './SelectGroupDialog.vue';
 
-const props = defineProps<{
-    groups: GuestGroupView[];
-}>();
-
-const emit = defineEmits<{
-    'delete-group': [groupId: string];
-    'delete-companion': [companionId: string];
-}>();
+const props = withDefaults(
+    defineProps<{
+        tableGroups: GuestGroupView[];
+        allGroups: GuestGroupView[];
+        dialogStatus?: SelectGroupDialogStatus;
+    }>(),
+    { dialogStatus: 'idle' },
+);
 
 const trans = usePage().props.trans.guests as Record<string, string>;
 
+// --- active flow management (one at a time) -----------------------------------------------
+
+type ActiveFlow =
+    | { kind: 'idle' }
+    | { kind: 'adding-group' }
+    | { kind: 'adding-companion'; groupId: string }
+    | { kind: 'editing-group'; groupId: string }
+    | { kind: 'editing-companion'; companionId: string }
+    | {
+          kind: 'select-group';
+          mode: 'change' | 'join';
+          source: SelectGroupSource;
+          excludeGroupId: string;
+      };
+
+const activeFlow = ref<ActiveFlow>({ kind: 'idle' });
+
+const resetActiveFlow = () => {
+    activeFlow.value = { kind: 'idle' };
+};
+
+const isAddingGroup = computed(() => activeFlow.value.kind === 'adding-group');
+const isAddingCompanionIn = (groupId: string) =>
+    activeFlow.value.kind === 'adding-companion' &&
+    activeFlow.value.groupId === groupId;
+const isEditingGroup = (groupId: string) =>
+    activeFlow.value.kind === 'editing-group' &&
+    activeFlow.value.groupId === groupId;
+const isEditingCompanion = (companionId: string) =>
+    activeFlow.value.kind === 'editing-companion' &&
+    activeFlow.value.companionId === companionId;
+
+const selectGroupDialogFlow = computed(() =>
+    activeFlow.value.kind === 'select-group' ? activeFlow.value : null,
+);
+
+// --- expand/collapse management -----------------------------------------------
+
 const expanded = ref<Record<string, boolean>>({});
 const isExpanded = (id: string) => expanded.value[id] ?? false;
-const toggle = (id: string) => {
-    const wasExpanded = isExpanded(id);
-    expanded.value = { ...expanded.value, [id]: !wasExpanded };
-    if (wasExpanded) cancelFlowsInGroup(id);
+const setExpanded = (id: string, value: boolean) => {
+    expanded.value = { ...expanded.value, [id]: value };
+};
+
+const toggle = (group: GuestGroupView) => {
+    const wasExpanded = isExpanded(group.id);
+    setExpanded(group.id, !wasExpanded);
+    if (wasExpanded) cancelFlowsInGroup(group);
 };
 
 const hasCollapsibleGroups = computed(() =>
-    props.groups.some((g) => g.companions.length > 0),
+    props.tableGroups.some((g) => g.companions.length > 0),
 );
 
 const allExpanded = computed(() =>
-    props.groups.every((g) => g.companions.length === 0 || isExpanded(g.id)),
+    props.tableGroups.every(
+        (g) => g.companions.length === 0 || isExpanded(g.id),
+    ),
 );
 
 const toggleAll = () => {
     const next = !allExpanded.value;
-    expanded.value = Object.fromEntries(props.groups.map((g) => [g.id, next]));
+    expanded.value = Object.fromEntries(
+        props.tableGroups.map((g) => [g.id, next]),
+    );
     if (!next) {
-        addingCompanionIn.value = null;
-        editingCompanionId.value = null;
+        const kind = activeFlow.value.kind;
+        if (kind === 'adding-companion' || kind === 'editing-companion') {
+            resetActiveFlow();
+        }
     }
 };
 
-// In-flight flows — only one open at a time.
-const adding = ref(false);
-const addingCompanionIn = ref<string | null>(null);
-const editingGroupId = ref<string | null>(null);
-const editingCompanionId = ref<string | null>(null);
+const cancelFlowsInGroup = (group: GuestGroupView) => {
+    const flow = activeFlow.value;
+    if (flow.kind === 'adding-companion' && flow.groupId === group.id) {
+        resetActiveFlow();
+        return;
+    }
+    if (
+        flow.kind === 'editing-companion' &&
+        group.companions.some((c) => c.id === flow.companionId)
+    ) {
+        resetActiveFlow();
+    }
+};
 
 const hasBodyContent = computed(
     () =>
-        props.groups.length > 0 ||
-        adding.value ||
-        addingCompanionIn.value !== null,
+        props.tableGroups.length > 0 ||
+        activeFlow.value.kind === 'adding-group'
 );
 
-const closePendingFlows = () => {
-    adding.value = false;
-    addingCompanionIn.value = null;
-    editingGroupId.value = null;
-    editingCompanionId.value = null;
-};
-
-const cancelFlowsInGroup = (groupId: string) => {
-    if (addingCompanionIn.value === groupId) {
-        addingCompanionIn.value = null;
-    }
-    if (editingCompanionId.value !== null) {
-        const group = props.groups.find((g) => g.id === groupId);
-        const insideGroup = group?.companions.some(
-            (c) => c.id === editingCompanionId.value,
-        );
-        if (insideGroup) editingCompanionId.value = null;
-    }
-};
-
 const onCreateRequest = () => {
-    if (adding.value) return;
-    closePendingFlows();
+    if (isAddingGroup.value) return;
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    adding.value = true;
-};
-
-const onCancelCreate = () => {
-    adding.value = false;
+    activeFlow.value = { kind: 'adding-group' };
 };
 
 const requestAddCompanion = (groupId: string) => {
-    if (addingCompanionIn.value === groupId) return;
-    closePendingFlows();
-    addingCompanionIn.value = groupId;
-    expanded.value = { ...expanded.value, [groupId]: true };
-};
-
-const onCancelCompanion = () => {
-    addingCompanionIn.value = null;
+    if (isAddingCompanionIn(groupId)) return;
+    activeFlow.value = { kind: 'adding-companion', groupId };
+    setExpanded(groupId, true);
 };
 
 const startEditGroup = (groupId: string) => {
-    if (editingGroupId.value === groupId) return;
-    closePendingFlows();
-    editingGroupId.value = groupId;
+    if (isEditingGroup(groupId)) return;
+    activeFlow.value = { kind: 'editing-group', groupId };
 };
 
 const startEditCompanion = (companionId: string) => {
-    if (editingCompanionId.value === companionId) return;
-    closePendingFlows();
-    editingCompanionId.value = companionId;
-    const group = props.groups.find((g) =>
+    if (isEditingCompanion(companionId)) return;
+    activeFlow.value = { kind: 'editing-companion', companionId };
+    const group = props.tableGroups.find((g) =>
         g.companions.some((c) => c.id === companionId),
     );
-    if (group) {
-        expanded.value = { ...expanded.value, [group.id]: true };
-    }
+    if (group) setExpanded(group.id, true);
 };
 
-type PendingDelete =
-    | { type: 'group'; groupId: string }
-    | { type: 'companion'; companionId: string };
+// --- Move / Join — select-group dialog management -----------------------------------
 
-const pendingDelete = ref<PendingDelete | null>(null);
+const hasMultipleGroups = computed(() => props.allGroups.length >= 2);
 
-const requestDeleteGroup = (group: GuestGroupView) => {
-    closePendingFlows();
-    pendingDelete.value = { type: 'group', groupId: group.id };
-};
-
-const requestDeleteCompanion = (companion: CompanionView) => {
-    closePendingFlows();
-    pendingDelete.value = { type: 'companion', companionId: companion.id };
-};
-
-const cancelDelete = () => {
-    pendingDelete.value = null;
-};
-
-const confirmDelete = () => {
-    const pending = pendingDelete.value;
-    if (!pending) return;
-    pendingDelete.value = null;
-    if (pending.type === 'group') {
-        emit('delete-group', pending.groupId);
-    } else {
-        emit('delete-companion', pending.companionId);
-    }
-};
-
-const findCompanion = (companionId: string): CompanionView | null => {
-    for (const group of props.groups) {
-        const found = group.companions.find((c) => c.id === companionId);
-        if (found) return found;
-    }
-    return null;
-};
-
-const dialogTitle = computed(() => {
-    const pending = pendingDelete.value;
-    if (!pending) return '';
-
-    if (pending.type === 'group') {
-        const group = props.groups.find((g) => g.id === pending.groupId);
-        if (!group) return trans.delete_group_title;
-        const name = `${group.primary.name} ${group.primary.surname}`.trim();
-        if (!name) return trans.delete_group_title;
-        const template =
-            group.companions.length > 0
-                ? trans.delete_group_title_named
-                : trans.delete_guest_named;
-        return template.replace(':name', name);
-    }
-
-    const companion = findCompanion(pending.companionId);
-    if (!companion) return trans.delete_companion_title_pending;
-    if (companion.isPending) return trans.delete_companion_title_pending;
-    const name = `${companion.name} ${companion.surname}`.trim();
-    return name
-        ? trans.delete_guest_named.replace(':name', name)
-        : trans.delete_companion_title_pending;
+const selectGroupDialogOptions = computed<SelectGroupOption[]>(() => {
+    const flow = selectGroupDialogFlow.value;
+    if (!flow) return [];
+    return props.allGroups
+        .filter((g) => g.id !== flow.excludeGroupId)
+        .map((g) => ({
+            groupId: g.id,
+            name: g.primary.name,
+            surname: g.primary.surname,
+        }))
+        .sort((a, b) => {
+            const aKey = a.name.trim() || a.surname.trim();
+            const bKey = b.name.trim() || b.surname.trim();
+            return aKey.localeCompare(bKey);
+        });
 });
 
-const dialogDescription = computed(() => {
-    const pending = pendingDelete.value;
-    if (!pending) return trans.delete_description;
-    if (pending.type !== 'group') return trans.delete_description;
+const openSelectGroupDialog = (
+    mode: 'change' | 'join',
+    source: SelectGroupSource,
+    excludeGroupId: string,
+) => {
+    activeFlow.value = { kind: 'select-group', mode, source, excludeGroupId };
+};
 
-    const group = props.groups.find((g) => g.id === pending.groupId);
-    const count = group?.companions.length ?? 0;
-    if (count === 0) return trans.delete_description;
+const onChangeGroup = (companion: CompanionView, group: GuestGroupView) =>
+    openSelectGroupDialog(
+        'change',
+        {
+            guestId: companion.id,
+            name: companion.name,
+            surname: companion.surname,
+        },
+        group.id,
+    );
+
+const onJoin = (group: GuestGroupView) =>
+    openSelectGroupDialog(
+        'join',
+        {
+            guestId: group.primary.id,
+            name: group.primary.name,
+            surname: group.primary.surname,
+        },
+        group.id,
+    );
+
+const onSplit = () => resetActiveFlow();
+const onLeaveGroup = () => resetActiveFlow();
+const onDeleteGroup = () => resetActiveFlow();
+const onDeleteCompanion = () => resetActiveFlow();
+
+const onSelectGroupDialogConfirm = () => {};
+
+const selectGroupDialogTitle = computed(() => {
+    const flow = selectGroupDialogFlow.value;
+    if (!flow) return '';
     const template =
-        count === 1
-            ? trans.delete_group_desc_one
-            : trans.delete_group_desc_other;
-    return template.replace(':count', String(count));
+        flow.mode === 'change'
+            ? trans.change_group_dialog_title
+            : trans.join_group_dialog_title;
+    const sourceLabel = `${flow.source.name} ${flow.source.surname}`.trim();
+    return template.replaceAll(':name', sourceLabel);
 });
+
 </script>
 
 <template>
@@ -267,45 +285,51 @@ const dialogDescription = computed(() => {
         </template>
 
         <template v-if="hasBodyContent" #body>
-            <NewGroup v-if="adding" @cancel="onCancelCreate" />
-            <template v-for="group in props.groups" :key="group.id">
+            <NewGroup v-if="isAddingGroup" @cancel="resetActiveFlow" />
+            <template v-for="group in props.tableGroups" :key="group.id">
                 <Group
                     :group="group"
                     :expanded="isExpanded(group.id)"
-                    :editing="editingGroupId === group.id"
-                    @toggle="toggle(group.id)"
-                    @delete="requestDeleteGroup(group)"
+                    :editing="isEditingGroup(group.id)"
+                    :can-join="hasMultipleGroups"
+                    @toggle="toggle(group)"
+                    @delete="onDeleteGroup"
                     @add-companion="requestAddCompanion(group.id)"
                     @edit="startEditGroup(group.id)"
-                    @cancel-edit="editingGroupId = null"
+                    @cancel-edit="resetActiveFlow"
+                    @split="onSplit"
+                    @join="onJoin(group)"
                 />
                 <template v-if="isExpanded(group.id)">
+                    <NewCompanion
+                        v-if="isAddingCompanionIn(group.id)"
+                        @cancel="resetActiveFlow"
+                    />
                     <Companion
                         v-for="companion in group.companions"
                         :key="companion.id"
                         :companion="companion"
-                        :editing="editingCompanionId === companion.id"
-                        @delete="requestDeleteCompanion(companion)"
+                        :editing="isEditingCompanion(companion.id)"
+                        :can-change-group="hasMultipleGroups"
+                        @delete="onDeleteCompanion"
                         @edit="startEditCompanion(companion.id)"
-                        @cancel-edit="editingCompanionId = null"
-                    />
-                    <NewCompanion
-                        v-if="addingCompanionIn === group.id"
-                        @cancel="onCancelCompanion"
+                        @cancel-edit="resetActiveFlow"
+                        @change-group="onChangeGroup(companion, group)"
+                        @leave-group="onLeaveGroup"
                     />
                 </template>
             </template>
         </template>
     </Table>
 
-    <ConfirmDialog
-        :open="pendingDelete !== null"
-        :title="dialogTitle"
-        :description="dialogDescription"
-        :confirm-label="trans.delete_confirm"
-        :cancel-label="trans.delete_cancel"
-        confirm-variant="destructive"
-        @update:open="(v) => !v && cancelDelete()"
-        @confirm="confirmDelete"
-    />
+    <SelectGroupDialog
+        :open="selectGroupDialogFlow !== null"
+        :status="dialogStatus"
+        :source="selectGroupDialogFlow?.source ?? null"
+        :groups="selectGroupDialogOptions"
+        @update:open="(v: boolean) => !v && resetActiveFlow()"
+        @confirm="onSelectGroupDialogConfirm"
+    >
+        <template #title>{{ selectGroupDialogTitle }}</template>
+    </SelectGroupDialog>
 </template>

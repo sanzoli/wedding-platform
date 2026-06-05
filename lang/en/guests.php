@@ -38,6 +38,10 @@ return [
     'action_edit' => 'Edit',
     'action_delete' => 'Delete',
     'action_add_companion' => 'Add companion',
+    'action_split_group' => 'Split group',
+    'action_join_group' => 'Join another group',
+    'action_change_group' => 'Move to another group',
+    'action_leave_group' => 'Leave group',
 
     'delete_group_title' => 'Delete this group?',
     'delete_group_title_named' => 'Delete :name and group?',
@@ -48,6 +52,16 @@ return [
     'delete_description' => 'This action cannot be undone.',
     'delete_confirm' => 'Delete',
     'delete_cancel' => 'Cancel',
+
+    'select_group_placeholder' => 'Search the destination group…',
+    'select_group_confirm' => 'Confirm',
+    'select_group_success' => 'Transfer successful.',
+    'select_group_error' => 'Something went wrong. Try again.',
+    'select_group_no_matches' => 'No matches.',
+    'select_group_dialog_description' => 'Pick a destination group from the list and confirm the transfer.',
+
+    'change_group_dialog_title' => 'Move :name to another group',
+    'join_group_dialog_title' => 'Join :name to another group',
 
     'create_confirm' => 'Confirm',
     'create_cancel' => 'Cancel',

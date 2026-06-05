@@ -8,8 +8,9 @@ withDefaults(
         group: GuestGroupView;
         expanded?: boolean;
         editing?: boolean;
+        canJoin?: boolean;
     }>(),
-    { expanded: false, editing: false },
+    { expanded: false, editing: false, canJoin: false },
 );
 
 defineEmits<{
@@ -17,6 +18,8 @@ defineEmits<{
     edit: [];
     delete: [];
     'add-companion': [];
+    split: [];
+    join: [];
     'cancel-edit': [];
     save: [
         payload: {
@@ -40,9 +43,12 @@ defineEmits<{
         v-else
         :group
         :expanded
+        :can-join
         @toggle="$emit('toggle')"
         @edit="$emit('edit')"
         @delete="$emit('delete')"
         @add-companion="$emit('add-companion')"
+        @split="$emit('split')"
+        @join="$emit('join')"
     />
 </template>

@@ -7,7 +7,7 @@ import { getInitials } from '@/composables/useInitials';
 import type { GuestLanguage } from '@/types/guests';
 import { usePage } from '@inertiajs/vue3';
 import { Check, X } from 'lucide-vue-next';
-import { computed, ref } from 'vue';
+import { computed, nextTick, onMounted, ref, useTemplateRef } from 'vue';
 
 const emit = defineEmits<{
     save: [
@@ -22,6 +22,11 @@ const emit = defineEmits<{
 }>();
 
 const trans = usePage().props.trans.guests as Record<string, string>;
+
+const nameInput = useTemplateRef('nameInput');
+onMounted(() =>
+    nextTick(() => (nameInput.value as any)?.$el?.focus()),
+);
 
 const name = ref('');
 const surname = ref('');
@@ -56,15 +61,15 @@ const onSave = () =>
                 </Avatar>
                 <div class="flex gap-2">
                     <Input
+                        ref="nameInput"
                         v-model="name"
-                        autofocus
                         :placeholder="trans.create_name_placeholder"
-                        class="h-9 max-w-[10rem]"
+                        class="h-9 max-w-40"
                     />
                     <Input
                         v-model="surname"
                         :placeholder="trans.create_surname_placeholder"
-                        class="h-9 max-w-[10rem]"
+                        class="h-9 max-w-40"
                     />
                 </div>
             </div>
@@ -83,7 +88,7 @@ const onSave = () =>
             <Input
                 v-model="mobile"
                 :placeholder="trans.create_mobile_placeholder"
-                class="mx-auto h-9 max-w-[12rem]"
+                class="mx-auto h-9 max-w-48"
             />
         </td>
         <td class="px-4 py-3">

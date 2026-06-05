@@ -37,7 +37,10 @@ const strip = computed(() =>
                 {{ strip }}
             </p>
 
-            <GuestsTable :groups="props.groups" />
+            <GuestsTable
+                :table-groups="props.groups"
+                :all-groups="props.groups"
+            />
         </div>
     </AppLayout>
 </template>

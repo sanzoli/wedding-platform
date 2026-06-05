@@ -7,13 +7,16 @@ withDefaults(
     defineProps<{
         companion: CompanionView;
         editing?: boolean;
+        canChangeGroup?: boolean;
     }>(),
-    { editing: false },
+    { editing: false, canChangeGroup: false },
 );
 
 defineEmits<{
     edit: [];
     delete: [];
+    'change-group': [];
+    'leave-group': [];
     'cancel-edit': [];
     save: [
         payload: {
@@ -36,7 +39,10 @@ defineEmits<{
     <CompanionDisplay
         v-else
         :companion
+        :can-change-group
         @edit="$emit('edit')"
         @delete="$emit('delete')"
+        @change-group="$emit('change-group')"
+        @leave-group="$emit('leave-group')"
     />
 </template>

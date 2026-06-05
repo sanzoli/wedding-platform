@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import IconButton from '@/components/admin/IconButton.vue';
+import IconButton from '@/components/IconButton.vue';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
     Tooltip,
@@ -13,7 +13,9 @@ import {
     ChevronDown,
     ChevronRight,
     CircleAlert,
+    CornerDownRight,
     Pencil,
+    Split,
     Trash2,
     UserPlus,
 } from 'lucide-vue-next';
@@ -22,6 +24,7 @@ import { computed } from 'vue';
 const props = defineProps<{
     group: GuestGroupView;
     expanded: boolean;
+    canJoin: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -29,18 +32,17 @@ const emit = defineEmits<{
     edit: [];
     delete: [];
     'add-companion': [];
+    split: [];
+    join: [];
 }>();
 
 const trans = usePage().props.trans.guests as Record<string, string>;
 
-const initials = computed(() => {
-    const { name, surname } = props.group.primary;
-    return getInitials(`${name} ${surname}`.trim()) || '?';
-});
-
 const fullName = computed(() =>
     `${props.group.primary.name} ${props.group.primary.surname}`.trim(),
 );
+
+const initials = computed(() => getInitials(fullName.value) || '?');
 
 const hasCompanions = computed(() => props.group.companions.length > 0);
 
@@ -135,27 +137,72 @@ const subline = computed(() => {
             <div
                 class="flex items-center justify-center gap-1 opacity-100 transition-opacity sm:opacity-0 sm:group-hover/row:opacity-100 sm:group-focus-within/row:opacity-100"
             >
-                <IconButton
-                    :label="trans.action_add_companion"
-                    variant="primary"
-                    @click="emit('add-companion')"
-                >
-                    <UserPlus :size="16" />
-                </IconButton>
-                <IconButton
-                    :label="trans.action_edit"
-                    variant="muted"
-                    @click="emit('edit')"
-                >
-                    <Pencil :size="16" />
-                </IconButton>
-                <IconButton
-                    :label="trans.action_delete"
-                    variant="destructive"
-                    @click="emit('delete')"
-                >
-                    <Trash2 :size="16" class="text-destructive" />
-                </IconButton>
+                <Tooltip>
+                    <TooltipTrigger as-child>
+                        <IconButton
+                            class="cursor-pointer hover:bg-primary/10 hover:text-foreground dark:hover:bg-primary/25"
+                            :aria-label="trans.action_add_companion"
+                            @click="emit('add-companion')"
+                        >
+                            <UserPlus :size="16" />
+                        </IconButton>
+                    </TooltipTrigger>
+                    <TooltipContent>{{
+                        trans.action_add_companion
+                    }}</TooltipContent>
+                </Tooltip>
+                <Tooltip v-if="hasCompanions">
+                    <TooltipTrigger as-child>
+                        <IconButton
+                            class="cursor-pointer hover:bg-muted hover:text-foreground"
+                            :aria-label="trans.action_split_group"
+                            @click="emit('split')"
+                        >
+                            <Split :size="16" class="rotate-90" />
+                        </IconButton>
+                    </TooltipTrigger>
+                    <TooltipContent>{{
+                        trans.action_split_group
+                    }}</TooltipContent>
+                </Tooltip>
+                <Tooltip v-else-if="canJoin">
+                    <TooltipTrigger as-child>
+                        <IconButton
+                            class="cursor-pointer hover:bg-muted hover:text-foreground"
+                            :aria-label="trans.action_join_group"
+                            @click="emit('join')"
+                        >
+                            <CornerDownRight :size="16" />
+                        </IconButton>
+                    </TooltipTrigger>
+                    <TooltipContent>{{
+                        trans.action_join_group
+                    }}</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                    <TooltipTrigger as-child>
+                        <IconButton
+                            class="cursor-pointer hover:bg-muted hover:text-foreground"
+                            :aria-label="trans.action_edit"
+                            @click="emit('edit')"
+                        >
+                            <Pencil :size="16" class="text-primary" />
+                        </IconButton>
+                    </TooltipTrigger>
+                    <TooltipContent>{{ trans.action_edit }}</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                    <TooltipTrigger as-child>
+                        <IconButton
+                            class="cursor-pointer hover:bg-destructive/10 dark:hover:bg-destructive/25"
+                            :aria-label="trans.action_delete"
+                            @click="emit('delete')"
+                        >
+                            <Trash2 :size="16" class="text-destructive" />
+                        </IconButton>
+                    </TooltipTrigger>
+                    <TooltipContent>{{ trans.action_delete }}</TooltipContent>
+                </Tooltip>
             </div>
         </td>
         <td class="w-px py-3 pr-4 pl-2">
