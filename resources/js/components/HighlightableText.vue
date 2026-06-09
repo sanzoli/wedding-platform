@@ -11,7 +11,11 @@ interface Fragment {
     highlighted: boolean;
 }
 
-const createFragment = (start?: number, end?: number, highlighted?: boolean): Fragment => ({
+const createFragment = (
+    start?: number,
+    end?: number,
+    highlighted?: boolean,
+): Fragment => ({
     text: props.text?.slice(start, end),
     highlighted: highlighted ?? false,
 });
@@ -38,7 +42,9 @@ const fragments = computed<Fragment[]>(() => {
             result.push(createFragment(currentPosition, foundPosition));
         }
 
-        result.push(createFragment(foundPosition, foundPosition + needle.length, true));
+        result.push(
+            createFragment(foundPosition, foundPosition + needle.length, true),
+        );
 
         currentPosition = foundPosition + needle.length;
     }
@@ -49,7 +55,11 @@ const fragments = computed<Fragment[]>(() => {
 
 <template>
     <template v-for="(fragment, i) in fragments" :key="i">
-        <mark v-if="fragment.highlighted" class="rounded-xs bg-accent/30 text-foreground">{{ fragment.text }}</mark>
+        <mark
+            v-if="fragment.highlighted"
+            class="rounded-xs bg-accent/30 text-foreground"
+            >{{ fragment.text }}</mark
+        >
         <template v-else>{{ fragment.text }}</template>
     </template>
 </template>

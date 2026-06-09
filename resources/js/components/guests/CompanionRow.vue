@@ -15,21 +15,32 @@ defineProps<{
 }>();
 
 const editing = ref(false);
-const update = (form: InertiaForm<Guest>) => updateGuest(form, { onSuccess: () => (editing.value = false) });
+const update = (form: InertiaForm<Guest>) =>
+    updateGuest(form, { onSuccess: () => (editing.value = false) });
 </script>
 
 <template>
-    <CompanionEditor v-if="editing" :companion @save="update" @close="editing = false" />
+    <CompanionEditor
+        v-if="editing"
+        :companion
+        @save="update"
+        @close="editing = false"
+    />
     <tr v-else class="group/row transition-colors hover:bg-muted/30">
         <td class="py-2 pr-4 pl-12">
             <div class="flex items-center gap-3 border-l border-border/40 pl-4">
                 <Avatar>
-                    <AvatarFallback class="admin-type-action bg-muted text-muted-foreground">
+                    <AvatarFallback
+                        class="admin-type-action bg-muted text-muted-foreground"
+                    >
                         {{ companion.initials }}
                     </AvatarFallback>
                 </Avatar>
                 <div class="type-body text-foreground">
-                    <HighlightableText :text="companion.full_name" :query></HighlightableText>
+                    <HighlightableText
+                        :text="companion.full_name"
+                        :query
+                    ></HighlightableText>
                 </div>
             </div>
         </td>
@@ -37,8 +48,13 @@ const update = (form: InertiaForm<Guest>) => updateGuest(form, { onSuccess: () =
         <td class="px-4 py-2 text-center">
             {{ companion.flag }}
         </td>
-        <td class="admin-type-data px-4 py-2 text-center whitespace-nowrap text-muted-foreground">
-            <HighlightableText :text="companion.mobile" :query></HighlightableText>
+        <td
+            class="admin-type-data px-4 py-2 text-center whitespace-nowrap text-muted-foreground"
+        >
+            <HighlightableText
+                :text="companion.mobile"
+                :query
+            ></HighlightableText>
         </td>
         <td class="px-4 py-3">
             <div

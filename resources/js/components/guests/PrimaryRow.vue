@@ -17,30 +17,45 @@ defineProps<{
 }>();
 
 const editing = ref(false);
-const update = (form: InertiaForm<Guest>) => updateGuest(form, { onSuccess: () => (editing.value = false) });
+const update = (form: InertiaForm<Guest>) =>
+    updateGuest(form, { onSuccess: () => (editing.value = false) });
 </script>
 
 <template>
-    <PrimaryEditor v-if="editing" :guest="guest" @save="update" @close="editing = false"></PrimaryEditor>
+    <PrimaryEditor
+        v-if="editing"
+        :guest="guest"
+        @save="update"
+        @close="editing = false"
+    ></PrimaryEditor>
 
     <tr v-else class="group/row transition-colors hover:bg-muted/30">
         <td class="px-4 py-3">
             <div class="flex min-w-0 flex-1 items-start gap-3">
                 <Avatar>
-                    <AvatarFallback class="admin-type-action bg-secondary text-secondary-foreground">
+                    <AvatarFallback
+                        class="admin-type-action bg-secondary text-secondary-foreground"
+                    >
                         {{ guest.initials }}
                     </AvatarFallback>
                 </Avatar>
                 <div class="min-w-0 flex-1">
-                    <HighlightableText :text="guest.full_name" :query></HighlightableText>
+                    <HighlightableText
+                        :text="guest.full_name"
+                        :query
+                    ></HighlightableText>
                 </div>
             </div>
         </td>
-        <td class="admin-type-data px-4 py-3 text-center">{{ members && members > 1 ? members : '' }}</td>
+        <td class="admin-type-data px-4 py-3 text-center">
+            {{ members && members > 1 ? members : '' }}
+        </td>
         <td class="admin-type-data px-6 py-3 text-center">
             {{ guest.flag }}
         </td>
-        <td class="admin-type-data px-4 py-3 text-center whitespace-nowrap text-muted-foreground">
+        <td
+            class="admin-type-data px-4 py-3 text-center whitespace-nowrap text-muted-foreground"
+        >
             <HighlightableText :text="guest.mobile" :query></HighlightableText>
         </td>
         <td class="px-4 py-3">

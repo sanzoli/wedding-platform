@@ -23,7 +23,12 @@ defineEmits(['update:searchValue']);
             type="search"
             :placeholder="placeholder"
             :value="searchValue"
-            @input="$emit('update:searchValue', ($event.target as HTMLInputElement).value)"
+            @input="
+                $emit(
+                    'update:searchValue',
+                    ($event.target as HTMLInputElement).value,
+                )
+            "
             class="h-9.5 w-full rounded-[10px] border border-border/60 bg-card pr-8 pl-8 text-[14px] text-foreground shadow-none transition-colors outline-none placeholder:text-muted-foreground focus:border-ring focus:ring-2 focus:ring-ring/20 dark:bg-input/30 [&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden"
         />
         <button

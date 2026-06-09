@@ -1,10 +1,19 @@
-import { destroy, store, update } from '@/actions/App/Http/Controllers/GuestController';
+import {
+    destroy,
+    store,
+    update,
+} from '@/actions/App/Http/Controllers/GuestController';
 import { confirmDelete, toastError } from '@/composables/admin/useAlert';
 import { Guest } from '@/types/guests';
 import { InertiaForm, router } from '@inertiajs/vue3';
 
 export function deleteGuest(guest: Guest) {
-    return confirmDelete(() => router.delete(destroy.url(guest), { only: ['guestGroups'], preserveScroll: true }));
+    return confirmDelete(() =>
+        router.delete(destroy.url(guest), {
+            only: ['guestGroups'],
+            preserveScroll: true,
+        }),
+    );
 }
 
 export function storeGuest(form: InertiaForm<Guest>, options?: object) {

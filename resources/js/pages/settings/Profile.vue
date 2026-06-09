@@ -38,7 +38,10 @@ const user = page.props.auth.user;
 
         <SettingsLayout>
             <div class="flex flex-col space-y-6">
-                <HeadingSmall title="Profile information" description="Update your name and email address" />
+                <HeadingSmall
+                    title="Profile information"
+                    description="Update your name and email address"
+                />
 
                 <Form
                     v-bind="ProfileController.update.form()"
@@ -90,12 +93,17 @@ const user = page.props.auth.user;
                             v-if="status === 'verification-link-sent'"
                             class="mt-2 text-sm font-medium text-green-600 dark:text-green-400"
                         >
-                            A new verification link has been sent to your email address.
+                            A new verification link has been sent to your email
+                            address.
                         </div>
                     </div>
 
                     <div class="flex items-center gap-4">
-                        <Button :disabled="processing" data-test="update-profile-button">Save</Button>
+                        <Button
+                            :disabled="processing"
+                            data-test="update-profile-button"
+                            >Save</Button
+                        >
 
                         <Transition
                             enter-active-class="transition ease-in-out"
@@ -103,7 +111,12 @@ const user = page.props.auth.user;
                             leave-active-class="transition ease-in-out"
                             leave-to-class="opacity-0"
                         >
-                            <p v-show="recentlySuccessful" class="text-sm text-muted-foreground">Saved.</p>
+                            <p
+                                v-show="recentlySuccessful"
+                                class="text-sm text-muted-foreground"
+                            >
+                                Saved.
+                            </p>
                         </Transition>
                     </div>
                 </Form>

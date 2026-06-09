@@ -20,10 +20,16 @@ defineProps<{
 </script>
 
 <template>
-    <AuthBase title="Log in to your account" description="Enter your email and password below to log in">
+    <AuthBase
+        title="Log in to your account"
+        description="Enter your email and password below to log in"
+    >
         <Head title="Log in" />
 
-        <div v-if="status" class="mb-4 text-center text-sm font-medium text-green-600 dark:text-green-400">
+        <div
+            v-if="status"
+            class="mb-4 text-center text-sm font-medium text-green-600 dark:text-green-400"
+        >
             {{ status }}
         </div>
 
@@ -52,7 +58,12 @@ defineProps<{
                 <div class="grid gap-2">
                     <div class="flex items-center justify-between">
                         <Label for="password">Password</Label>
-                        <TextLink v-if="canResetPassword" :href="request()" class="text-sm" :tabindex="5">
+                        <TextLink
+                            v-if="canResetPassword"
+                            :href="request()"
+                            class="text-sm"
+                            :tabindex="5"
+                        >
                             Forgot password?
                         </TextLink>
                     </div>
@@ -75,13 +86,22 @@ defineProps<{
                     </Label>
                 </div>
 
-                <Button type="submit" class="mt-4 w-full" :tabindex="4" :disabled="processing" data-test="login-button">
+                <Button
+                    type="submit"
+                    class="mt-4 w-full"
+                    :tabindex="4"
+                    :disabled="processing"
+                    data-test="login-button"
+                >
                     <Spinner v-if="processing" />
                     Log in
                 </Button>
             </div>
 
-            <div class="text-center text-sm text-muted-foreground" v-if="canRegister">
+            <div
+                class="text-center text-sm text-muted-foreground"
+                v-if="canRegister"
+            >
                 Don't have an account?
                 <TextLink :href="register()" :tabindex="5">Sign up</TextLink>
             </div>

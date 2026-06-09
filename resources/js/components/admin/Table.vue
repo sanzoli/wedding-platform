@@ -39,8 +39,13 @@ trans.empty_search_desc ??= 'Try adjusting your search terms';
                     <tbody class="divide-y divide-border/50">
                         <slot name="body">
                             <td colspan="4" class="px-6 py-12 text-center">
-                                <div v-if="search" class="flex flex-col items-center gap-3">
-                                    <p class="text-sm font-medium text-foreground/80">
+                                <div
+                                    v-if="search"
+                                    class="flex flex-col items-center gap-3"
+                                >
+                                    <p
+                                        class="text-sm font-medium text-foreground/80"
+                                    >
                                         {{ trans.empty_search }}
                                     </p>
                                     <p class="text-xs text-muted-foreground">
@@ -48,13 +53,18 @@ trans.empty_search_desc ??= 'Try adjusting your search terms';
                                     </p>
                                 </div>
 
-                                <div v-else class="flex flex-col items-center gap-4">
+                                <div
+                                    v-else
+                                    class="flex flex-col items-center gap-4"
+                                >
                                     <Button @click="$emit('addItem')">
                                         <Plus :size="16" :stroke-width="2" />
                                         {{ trans.add_button }}
                                     </Button>
                                     <div class="space-y-2">
-                                        <p class="text-sm font-medium text-foreground/80">
+                                        <p
+                                            class="text-sm font-medium text-foreground/80"
+                                        >
                                             {{ trans.no_items }}
                                         </p>
                                     </div>

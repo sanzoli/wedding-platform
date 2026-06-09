@@ -6,7 +6,11 @@ defineEmits(['add']);
 </script>
 
 <template>
-    <Button class="hidden sm:inline-flex" data-test="add-button" @click="$emit('add')">
+    <Button
+        class="hidden sm:inline-flex"
+        data-test="add-button"
+        @click="$emit('add')"
+    >
         <Plus :size="15" :stroke-width="2"></Plus>
         <slot></slot>
     </Button>

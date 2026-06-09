@@ -21,8 +21,13 @@ defineProps<{
             class="relative hidden h-full flex-col border-r border-border bg-primary p-10 text-primary-foreground lg:flex"
         >
             <div class="absolute inset-0 bg-primary" />
-            <Link :href="home()" class="relative z-20 flex items-center text-lg font-medium">
-                <AppLogoIcon class="mr-2 size-8 fill-current text-primary-foreground" />
+            <Link
+                :href="home()"
+                class="relative z-20 flex items-center text-lg font-medium"
+            >
+                <AppLogoIcon
+                    class="mr-2 size-8 fill-current text-primary-foreground"
+                />
                 {{ name }}
             </Link>
             <div v-if="quote" class="relative z-20 mt-auto">
@@ -35,7 +40,9 @@ defineProps<{
             </div>
         </div>
         <div class="lg:p-8">
-            <div class="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+            <div
+                class="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]"
+            >
                 <div class="flex flex-col space-y-2 text-center">
                     <h1 class="type-heading text-foreground" v-if="title">
                         {{ title }}

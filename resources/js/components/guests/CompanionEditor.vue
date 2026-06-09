@@ -33,7 +33,9 @@ const form = useForm({
         <td class="py-2 pr-4 pl-12">
             <div class="flex items-center gap-3 border-l border-border/40 pl-4">
                 <Avatar>
-                    <AvatarFallback class="admin-type-action bg-muted text-muted-foreground">
+                    <AvatarFallback
+                        class="admin-type-action bg-muted text-muted-foreground"
+                    >
                         {{ initials }}
                     </AvatarFallback>
                 </Avatar>
@@ -62,7 +64,10 @@ const form = useForm({
         <td class="px-4 py-2"></td>
         <td class="px-4 py-2">
             <Select v-model="form.lang" name="lang">
-                <SelectItem v-for="(data, value) in languages" :value :key="value"
+                <SelectItem
+                    v-for="(data, value) in languages"
+                    :value
+                    :key="value"
                     >{{ data.flag }} {{ data.label }}</SelectItem
                 >
             </Select>
@@ -81,12 +86,19 @@ const form = useForm({
             <div class="flex items-center justify-center gap-1">
                 <IconButton
                     @click="$emit('save', form)"
-                    :data-test="companion?.id ? 'companion-update-button-' + companion.id : 'companion-store-button'"
+                    :data-test="
+                        companion?.id
+                            ? 'companion-update-button-' + companion.id
+                            : 'companion-store-button'
+                    "
                     class="hover:bg-muted hover:text-foreground"
                 >
                     <Check></Check>
                 </IconButton>
-                <IconButton @click="$emit('close')" class="hover:bg-destructive/10 hover:text-destructive">
+                <IconButton
+                    @click="$emit('close')"
+                    class="hover:bg-destructive/10 hover:text-destructive"
+                >
                     <X></X>
                 </IconButton>
             </div>

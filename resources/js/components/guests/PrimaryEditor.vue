@@ -32,7 +32,9 @@ const initials = computed(() => getInitials(form.first_name, form.last_name));
         <td class="px-4 py-3">
             <div class="flex items-center gap-3">
                 <Avatar>
-                    <AvatarFallback class="admin-type-action bg-secondary text-secondary-foreground">
+                    <AvatarFallback
+                        class="admin-type-action bg-secondary text-secondary-foreground"
+                    >
                         {{ initials }}
                     </AvatarFallback>
                 </Avatar>
@@ -58,10 +60,15 @@ const initials = computed(() => getInitials(form.first_name, form.last_name));
                 </div>
             </div>
         </td>
-        <td class="admin-type-data px-4 py-3 text-center text-muted-foreground"></td>
+        <td
+            class="admin-type-data px-4 py-3 text-center text-muted-foreground"
+        ></td>
         <td class="px-4 py-3">
             <Select v-model="form.lang" name="lang">
-                <SelectItem v-for="(data, value) in languages" :value :key="value"
+                <SelectItem
+                    v-for="(data, value) in languages"
+                    :value
+                    :key="value"
                     >{{ data.flag }} {{ data.label }}</SelectItem
                 >
             </Select>
@@ -80,12 +87,19 @@ const initials = computed(() => getInitials(form.first_name, form.last_name));
             <div class="flex items-center justify-center gap-1">
                 <IconButton
                     @click="$emit('save', form)"
-                    :data-test="guest?.id ? 'guest-update-button-' + guest.id : 'guest-store-button'"
+                    :data-test="
+                        guest?.id
+                            ? 'guest-update-button-' + guest.id
+                            : 'guest-store-button'
+                    "
                     class="hover:bg-muted hover:text-foreground"
                 >
                     <Check></Check>
                 </IconButton>
-                <IconButton @click="$emit('close')" class="hover:bg-destructive/10 hover:text-destructive">
+                <IconButton
+                    @click="$emit('close')"
+                    class="hover:bg-destructive/10 hover:text-destructive"
+                >
                     <X></X>
                 </IconButton>
             </div>

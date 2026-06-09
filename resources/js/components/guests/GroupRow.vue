@@ -13,12 +13,22 @@ defineProps<{
 }>();
 
 const adding = ref(false);
-const storeCompanion = (form: InertiaForm<Guest>) => storeGuest(form, { onSuccess: () => (adding.value = false) });
+const storeCompanion = (form: InertiaForm<Guest>) =>
+    storeGuest(form, { onSuccess: () => (adding.value = false) });
 </script>
 
 <template>
-    <PrimaryRow :guest="group.primary" :query :members="group.count" @addCompanion="adding = true" />
-    <CompanionRow v-for="(companion, i) in group.companies" :key="i" :companion></CompanionRow>
+    <PrimaryRow
+        :guest="group.primary"
+        :query
+        :members="group.count"
+        @addCompanion="adding = true"
+    />
+    <CompanionRow
+        v-for="(companion, i) in group.companies"
+        :key="i"
+        :companion
+    ></CompanionRow>
     <CompanionEditor
         v-if="adding"
         :group-id="group.id"
