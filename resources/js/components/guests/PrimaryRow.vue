@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import HighlightableText from '@/components/HighlightableText.vue';
-import { Pencil, Trash2 } from 'lucide-vue-next';
+import { Pencil, Trash2, UserPlus } from 'lucide-vue-next';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import GuestEditor from '@/components/guests/GuestEditor.vue';
+import PrimaryEditor from '@/components/guests/PrimaryEditor.vue';
 import IconButton from '@/components/IconButton.vue';
 import { Guest } from '@/types/guests';
 import { ref } from 'vue';
@@ -21,7 +21,7 @@ const update = (form: InertiaForm<Guest>) => updateGuest(form, { onSuccess: () =
 </script>
 
 <template>
-    <GuestEditor v-if="editing" :guest="guest" @save="update" @close="editing = false"></GuestEditor>
+    <PrimaryEditor v-if="editing" :guest="guest" @save="update" @close="editing = false"></PrimaryEditor>
 
     <tr v-else class="group/row transition-colors hover:bg-muted/30">
         <td class="px-4 py-3">
@@ -47,6 +47,13 @@ const update = (form: InertiaForm<Guest>) => updateGuest(form, { onSuccess: () =
             <div
                 class="flex items-center justify-center gap-1 opacity-100 transition-opacity sm:opacity-0 sm:group-focus-within/row:opacity-100 sm:group-hover/row:opacity-100"
             >
+                <IconButton
+                    @click="$emit('addCompanion')"
+                    :data-test="'guest-add-companion-button-' + guest.id"
+                    aria-label="Add Companion"
+                >
+                    <UserPlus></UserPlus>
+                </IconButton>
                 <IconButton
                     @click="editing = true"
                     :data-test="'guest-edit-button-' + guest.id"

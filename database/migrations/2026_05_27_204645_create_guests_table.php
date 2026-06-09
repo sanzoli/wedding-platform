@@ -20,7 +20,11 @@ return new class extends Migration
             $table->boolean('is_primary')->default(true);
             $table->timestamps();
 
-            $table->unique(['group_id', 'is_primary'])->where('is_primary', true);
+            $table->integer('group_id_for_unique')
+                ->virtualAs('IF(is_primary, group_id, NULL)')
+                ->nullable();
+
+            $table->unique('group_id_for_unique', 'unique_group_primary');
         });
     }
 

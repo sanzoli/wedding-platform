@@ -4,7 +4,7 @@ import AddButton from '@/components/admin/AddButton.vue';
 import SearchBar from '@/components/admin/SearchBar.vue';
 import Table from '@/components/admin/Table.vue';
 import TableHeader from '@/components/admin/TableHeader.vue';
-import GuestEditor from '@/components/guests/GuestEditor.vue';
+import PrimaryEditor from '@/components/guests/PrimaryEditor.vue';
 import GroupRow from '@/components/guests/GroupRow.vue';
 import Heading from '@/components/Heading.vue';
 import { useSortOptions } from '@/composables/admin/useSortOptions';
@@ -57,7 +57,7 @@ const addGuest = (form: InertiaForm<Guest>) => storeGuest(form, { onSuccess: () 
                 </template>
 
                 <template #body>
-                    <GuestEditor v-if="adding" @save="addGuest" @close="adding = false"></GuestEditor>
+                    <PrimaryEditor v-if="adding" @save="addGuest" @close="adding = false"></PrimaryEditor>
                     <GroupRow
                         v-for="group in guestGroups.data"
                         :key="group.id"

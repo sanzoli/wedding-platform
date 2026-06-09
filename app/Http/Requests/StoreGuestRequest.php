@@ -11,10 +11,19 @@ class StoreGuestRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'first_name' => 'nullable|string',
-            'last_name' => 'nullable|string',
+            'first_name' => [
+                'nullable',
+                'string',
+                Rule::requiredIf(fn() => !request('group_id') && !request('last_name')),
+            ],
+            'last_name' => [
+                'nullable',
+                'string',
+                Rule::requiredIf(fn() => !request('group_id') && !request('first_name')),
+            ],
             'lang' => ['nullable', Rule::in(array_column(Language::cases(), 'value'))],
-            'mobile' => 'nullable|string',
+            'mobile' => 'nullable|regex:/^\+\d{9,}$/',
+            'group_id' => 'nullable|exists:App\Models\GuestGroup,id'
         ];
     }
 }

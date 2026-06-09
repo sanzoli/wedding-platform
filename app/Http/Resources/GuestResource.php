@@ -11,6 +11,7 @@ class GuestResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'group_id' => $this->group_id,
             'full_name' => $this->fullName,
             'initials' => $this->initials,
             'first_name' => $this->first_name ?? '',

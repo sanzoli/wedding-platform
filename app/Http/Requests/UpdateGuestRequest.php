@@ -16,7 +16,7 @@ class UpdateGuestRequest extends FormRequest
             'first_name' => 'nullable|string',
             'last_name' => 'nullable|string',
             'lang' => ['nullable', Rule::in(array_column(Language::cases(), 'value'))],
-            'mobile' => 'nullable|string',
+            'mobile' => 'nullable|regex:/^\+\d{9,}$/',
         ];
     }
 }

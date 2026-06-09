@@ -7,6 +7,7 @@ export interface Guest {
     mobile: string;
     lang: 'en' | 'es' | 'pt' | '';
     flag: string;
+    group_id: number;
 }
 
 export interface GuestGroup {

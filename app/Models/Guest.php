@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property ?string $last_name
  * @property ?Language $lang
  * @property ?string $mobile
+ * @property int $group_id
+ * @property bool $is_primary
  */
 class Guest extends Model
 {
@@ -35,6 +37,7 @@ class Guest extends Model
     {
         return [
             'lang' => Language::class,
+            'is_primary' => 'boolean',
         ];
     }
 

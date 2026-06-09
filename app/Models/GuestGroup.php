@@ -39,7 +39,7 @@ class GuestGroup extends Model
 
     public function primaryGuest(): Guest
     {
-        return $this->guests()->where('is_primary', true)->first();
+        return $this->primary()->first();
     }
 
     #[Scope]

@@ -55,6 +55,26 @@ test('can create a guest', function () {
         ->assertNoJavaScriptErrors();
 });
 
+test('can create a companion', function () {
+    $primary = Guest::factory()->create();
+
+    $page = visit(route('guests.index'))
+        ->click('@guest-add-companion-button-'. $primary->id)
+        ->type('first_name', 'John')
+        ->type('last_name', 'Doe')
+        ->click('@companion-store-button');
+
+    $page->assertUrlIs(route('guests.index'))
+        ->assertSee('John Doe')
+        ->assertNoSmoke()
+        ->assertNoAccessibilityIssues()
+        ->assertNoConsoleLogs()
+        ->assertNoJavaScriptErrors();
+
+    $companion = Guest::where('first_name', 'John')->first();
+    expect($companion->group_id)->toBe($primary->group_id);
+});
+
 test('can update a guest', function () {
     $guest = Guest::factory()->create(['first_name' => 'John', 'last_name' => 'Doe']);
 
@@ -63,6 +83,24 @@ test('can update a guest', function () {
         ->type('first_name', 'Jake')
         ->type('mobile', '+573008764321')
         ->click('@guest-update-button-'.$guest->id);
+
+    $page->assertUrlIs(route('guests.index'))
+        ->assertSee('Jake Doe')
+        ->assertSee('+573008764321')
+        ->assertNoSmoke()
+        ->assertNoAccessibilityIssues()
+        ->assertNoConsoleLogs()
+        ->assertNoJavaScriptErrors();
+});
+
+test('can update a companion', function () {
+    $companion = Guest::factory()->companion()->create(['first_name' => 'John', 'last_name' => 'Doe']);
+
+    $page = visit(route('guests.index'))
+        ->click('@companion-edit-button-'.$companion->id)
+        ->type('first_name', 'Jake')
+        ->type('mobile', '+573008764321')
+        ->click('@companion-update-button-'.$companion->id);
 
     $page->assertUrlIs(route('guests.index'))
         ->assertSee('Jake Doe')
