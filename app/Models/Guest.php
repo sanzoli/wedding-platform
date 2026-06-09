@@ -52,7 +52,7 @@ class Guest extends Model
     {
         return Attribute::make(
             get: fn ($value, array $attributes) => strtoupper(
-                substr($attributes['first_name'],0,1).substr($attributes['last_name'],0,1)
+                substr($attributes['first_name'], 0, 1).substr($attributes['last_name'], 0, 1)
             ) ?? '?',
         );
     }

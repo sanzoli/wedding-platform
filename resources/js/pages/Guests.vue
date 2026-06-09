@@ -4,9 +4,10 @@ import AddButton from '@/components/admin/AddButton.vue';
 import SearchBar from '@/components/admin/SearchBar.vue';
 import Table from '@/components/admin/Table.vue';
 import TableHeader from '@/components/admin/TableHeader.vue';
-import PrimaryEditor from '@/components/guests/PrimaryEditor.vue';
 import GroupRow from '@/components/guests/GroupRow.vue';
+import PrimaryEditor from '@/components/guests/PrimaryEditor.vue';
 import Heading from '@/components/Heading.vue';
+import { storeGuest } from '@/composables/admin/useGuest';
 import { useSortOptions } from '@/composables/admin/useSortOptions';
 import { useQueryOptions } from '@/composables/useQueryOptions';
 import AppLayout from '@/layouts/AppLayout.vue';
@@ -14,7 +15,6 @@ import { QueryOptions } from '@/types';
 import { Guest, GuestGroup } from '@/types/guests';
 import { Head, InertiaForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
-import { storeGuest } from '@/composables/admin/useGuest';
 
 const props = defineProps<{
     filters: QueryOptions;
@@ -58,11 +58,7 @@ const addGuest = (form: InertiaForm<Guest>) => storeGuest(form, { onSuccess: () 
 
                 <template #body>
                     <PrimaryEditor v-if="adding" @save="addGuest" @close="adding = false"></PrimaryEditor>
-                    <GroupRow
-                        v-for="group in guestGroups.data"
-                        :key="group.id"
-                        :group
-                        :query="queryOptions.search">
+                    <GroupRow v-for="group in guestGroups.data" :key="group.id" :group :query="queryOptions.search">
                     </GroupRow>
                 </template>
             </Table>

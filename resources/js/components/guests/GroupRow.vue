@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { Guest, GuestGroup } from '@/types/guests';
-import PrimaryRow from '@/components/guests/PrimaryRow.vue';
-import { ref } from 'vue';
 import CompanionEditor from '@/components/guests/CompanionEditor.vue';
-import { InertiaForm } from '@inertiajs/vue3';
-import { storeGuest } from '@/composables/admin/useGuest';
 import CompanionRow from '@/components/guests/CompanionRow.vue';
+import PrimaryRow from '@/components/guests/PrimaryRow.vue';
+import { storeGuest } from '@/composables/admin/useGuest';
+import { Guest, GuestGroup } from '@/types/guests';
+import { InertiaForm } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 defineProps<{
     group: GuestGroup;

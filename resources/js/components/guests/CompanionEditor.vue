@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import IconButton from '@/components/IconButton.vue';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { Select, SelectItem } from '@/components/ui/select';
+import { getInitials } from '@/composables/useInitials';
 import { Guest } from '@/types/guests';
 import { useForm, usePage } from '@inertiajs/vue3';
 import { Check, X } from 'lucide-vue-next';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { computed } from 'vue';
-import { getInitials } from '@/composables/useInitials';
 
 defineEmits(['close', 'save']);
 const props = defineProps<{
@@ -24,7 +24,7 @@ const form = useForm({
     last_name: props.companion?.last_name ?? '',
     lang: props.companion?.lang ?? '',
     mobile: props.companion?.mobile ?? '',
-    group_id : props.groupId
+    group_id: props.groupId,
 });
 </script>
 

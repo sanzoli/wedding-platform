@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import HighlightableText from '@/components/HighlightableText.vue';
-import { Pencil, Trash2, UserPlus } from 'lucide-vue-next';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import PrimaryEditor from '@/components/guests/PrimaryEditor.vue';
+import HighlightableText from '@/components/HighlightableText.vue';
 import IconButton from '@/components/IconButton.vue';
-import { Guest } from '@/types/guests';
-import { ref } from 'vue';
-import { InertiaForm } from '@inertiajs/vue3';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { deleteGuest, updateGuest } from '@/composables/admin/useGuest';
+import { Guest } from '@/types/guests';
+import { InertiaForm } from '@inertiajs/vue3';
+import { Pencil, Trash2, UserPlus } from 'lucide-vue-next';
+import { ref } from 'vue';
 
 defineEmits(['addCompanion']);
 defineProps<{

@@ -59,7 +59,7 @@ test('can create a companion', function () {
     $primary = Guest::factory()->create();
 
     $page = visit(route('guests.index'))
-        ->click('@guest-add-companion-button-'. $primary->id)
+        ->click('@guest-add-companion-button-'.$primary->id)
         ->type('first_name', 'John')
         ->type('last_name', 'Doe')
         ->click('@companion-store-button');
