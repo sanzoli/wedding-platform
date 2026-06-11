@@ -3,16 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Guest\Group\LeaveGuestGroup;
-use App\Http\Requests\LeaveGuestGroupRequest;
+use App\Actions\Guest\Group\SplitGroup;
 use App\Models\Guest;
+use App\Models\GuestGroup;
 
 class GuestGroupController extends Controller
 {
-    public function leave(LeaveGuestGroupRequest $request, Guest $guest, LeaveGuestGroup $action)
+    public function leave(Guest $guest, LeaveGuestGroup $action)
     {
-        $request->validated();
-
         $action->leave($guest);
+
+        return back();
+    }
+
+    public function split(GuestGroup $group, SplitGroup $action)
+    {
+        $action->split($group);
 
         return back();
     }

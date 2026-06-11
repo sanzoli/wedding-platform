@@ -30,10 +30,35 @@ test('cannot leave a group as primary', function () {
 
 test('cannot leave a group as anonymous', function () {
     $primary = Guest::factory()->create();
-    $companion = Guest::factory()->companion($primary)->create(['first_name' => '', 'last_name' => '']);
+    $companion = Guest::factory()->anonymous()->companion($primary)->create();
 
     $this->post(route('guests.group.leave', $companion))
         ->assertRedirectBackWithErrors([
             'guest' => 'Anonymous guest cannot leave a group.',
         ]);
+});
+
+test('can split a group', function () {
+    $primary = Guest::factory()->create();
+    $companion = Guest::factory()->companion($primary)->create();
+    $anotherCompanion = Guest::factory()->companion($primary)->create();
+
+    $this->post(route('guests.group.split', $primary->group))
+        ->assertRedirectBackWithoutErrors();
+
+    $this->assertDatabaseCount('guest_groups', 3);
+    $this->assertNotSame($companion->group, $primary->group);
+    $this->assertNotSame($anotherCompanion->group, $primary->group);
+});
+
+test('split group eliminates anonymous companion', function () {
+    $primary = Guest::factory()->create();
+    Guest::factory()->companion($primary)->create();
+    $anonymousCompanion = Guest::factory()->anonymous()->companion($primary)->create();
+
+    $this->post(route('guests.group.split', $primary->group))
+        ->assertRedirectBackWithoutErrors();
+
+    $this->assertDatabaseCount('guest_groups', 2);
+    $this->assertDatabaseMissing('guests', $anonymousCompanion->toArray());
 });

@@ -3,10 +3,14 @@ import PrimaryEditor from '@/components/guests/PrimaryEditor.vue';
 import HighlightableText from '@/components/HighlightableText.vue';
 import IconButton from '@/components/IconButton.vue';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { deleteGuest, updateGuest } from '@/composables/admin/useGuest';
+import {
+    deleteGuest,
+    splitGroup,
+    updateGuest,
+} from '@/composables/admin/useGuest';
 import { Guest } from '@/types/guests';
 import { InertiaForm } from '@inertiajs/vue3';
-import { Pencil, Trash2, UserPlus } from 'lucide-vue-next';
+import { Pencil, Split, Trash2, UserPlus } from 'lucide-vue-next';
 import { ref } from 'vue';
 
 defineEmits(['addCompanion']);
@@ -68,6 +72,14 @@ const update = (form: InertiaForm<Guest>) =>
                     aria-label="Add Companion"
                 >
                     <UserPlus></UserPlus>
+                </IconButton>
+                <IconButton
+                    v-if="members && members > 1"
+                    @click="splitGroup(guest)"
+                    :data-test="'split-guest-group-button-' + guest.id"
+                    aria-label="Split Guest Group"
+                >
+                    <Split></Split>
                 </IconButton>
                 <IconButton
                     @click="editing = true"

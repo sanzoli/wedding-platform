@@ -23,13 +23,21 @@ class GuestFactory extends Factory
         ];
     }
 
-    public function companion(?Guest $guest = null): Factory
+    public function companion(?Guest $guest = null): self
     {
         $guest ??= Guest::factory()->create();
 
         return $this->state(fn (array $attributes) => [
             'is_primary' => false,
             'group_id' => fn (array $attributes) => $guest->group_id,
+        ]);
+    }
+
+    public function anonymous(): self
+    {
+        return $this->state(fn (array $attributes) => [
+            'first_name' => '',
+            'last_name' => '',
         ]);
     }
 }

@@ -3,7 +3,10 @@ import {
     store,
     update,
 } from '@/actions/App/Http/Controllers/GuestController';
-import { leave } from '@/actions/App/Http/Controllers/GuestGroupController';
+import {
+    leave,
+    split,
+} from '@/actions/App/Http/Controllers/GuestGroupController';
 import { confirmDelete, toastError } from '@/composables/admin/useAlert';
 import { Guest } from '@/types/guests';
 import { InertiaForm, router, useForm } from '@inertiajs/vue3';
@@ -36,7 +39,15 @@ export function updateGuest(form: InertiaForm<Guest>, options?: object) {
 }
 
 export function leaveGroup(guest: Guest, options?: object) {
-    return useForm(guest).submit(leave(guest), {
+    return useForm().submit(leave(guest), {
+        preserveScroll: true,
+        onError: (errors: object) => toastError(Object.values(errors)[0]),
+        ...options,
+    });
+}
+
+export function splitGroup(guest: Guest, options?: object) {
+    return useForm().submit(split(guest.group_id), {
         preserveScroll: true,
         onError: (errors: object) => toastError(Object.values(errors)[0]),
         ...options,
