@@ -3,10 +3,14 @@ import CompanionEditor from '@/components/guests/CompanionEditor.vue';
 import HighlightableText from '@/components/HighlightableText.vue';
 import IconButton from '@/components/IconButton.vue';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { deleteGuest, updateGuest } from '@/composables/admin/useGuest';
+import {
+    deleteGuest,
+    leaveGroup,
+    updateGuest,
+} from '@/composables/admin/useGuest';
 import { Guest } from '@/types/guests';
 import { InertiaForm } from '@inertiajs/vue3';
-import { Pencil, Trash2 } from 'lucide-vue-next';
+import { CornerLeftUp, Pencil, Trash2 } from 'lucide-vue-next';
 import { ref } from 'vue';
 
 defineProps<{
@@ -60,6 +64,15 @@ const update = (form: InertiaForm<Guest>) =>
             <div
                 class="flex items-center justify-center gap-1 opacity-100 transition-opacity sm:opacity-0 sm:group-focus-within/row:opacity-100 sm:group-hover/row:opacity-100"
             >
+                <IconButton
+                    v-if="companion.full_name"
+                    @click="leaveGroup(companion)"
+                    :data-test="'companion-leave-group-button-' + companion.id"
+                    class="hover:bg-muted hover:text-foreground"
+                    aria-label="edit"
+                >
+                    <CornerLeftUp></CornerLeftUp>
+                </IconButton>
                 <IconButton
                     @click="editing = true"
                     :data-test="'companion-edit-button-' + companion.id"

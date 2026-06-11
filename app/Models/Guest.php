@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
- * @property string $name
+ * @property string $fullName
  * @property ?string $first_name
  * @property ?string $last_name
  * @property ?Language $lang
