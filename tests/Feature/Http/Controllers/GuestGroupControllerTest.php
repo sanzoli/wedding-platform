@@ -62,3 +62,18 @@ test('split group eliminates anonymous companion', function () {
     $this->assertDatabaseCount('guest_groups', 2);
     $this->assertDatabaseMissing('guests', $anonymousCompanion->toArray());
 });
+
+test('can change companion group', function () {
+    $primary = Guest::factory()->create();
+    $companion = Guest::factory()->companion($primary)->create();
+
+    $newPrimary = Guest::factory()->create();
+
+    $this->put(route('guests.group.change',[
+        'guest' => $companion->id,
+        'group' => $newPrimary->group_id,
+    ]))->assertRedirectBackWithoutErrors();
+
+    $companion->refresh();
+    $this->assertEquals($companion->group_id, $newPrimary->group_id);
+});

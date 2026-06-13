@@ -16,3 +16,9 @@ export interface GuestGroup {
     primary: Guest;
     companies: Guest[];
 }
+
+export interface SelectableGroup {
+    id: number;
+    full_name: string;
+    initials: string;
+}

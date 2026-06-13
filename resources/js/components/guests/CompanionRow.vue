@@ -10,8 +10,9 @@ import {
 } from '@/composables/admin/useGuest';
 import { Guest } from '@/types/guests';
 import { InertiaForm } from '@inertiajs/vue3';
-import { CornerLeftUp, Pencil, Trash2 } from 'lucide-vue-next';
+import { ArrowUpDown, CornerLeftUp, Pencil, Trash2 } from 'lucide-vue-next';
 import { ref } from 'vue';
+import SelectGuestGroup from '@/components/guests/SelectGuestGroup.vue';
 
 defineProps<{
     companion: Guest;
@@ -73,6 +74,19 @@ const update = (form: InertiaForm<Guest>) =>
                 >
                     <CornerLeftUp></CornerLeftUp>
                 </IconButton>
+                <SelectGuestGroup v-if="companion.full_name" :guest="companion">
+                    <template #trigger>
+                        <IconButton
+                            :data-test="
+                                'companion-change-group-button-' + companion.id
+                            "
+                            class="hover:bg-muted hover:text-foreground"
+                            aria-label="edit"
+                        >
+                            <ArrowUpDown></ArrowUpDown>
+                        </IconButton>
+                    </template>
+                </SelectGuestGroup>
                 <IconButton
                     @click="editing = true"
                     :data-test="'companion-edit-button-' + companion.id"

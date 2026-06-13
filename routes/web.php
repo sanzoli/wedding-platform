@@ -20,6 +20,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::apiResource('guests', GuestController::class)->except('show');
     Route::post('guests/{guest}/group/leave', [GuestGroupController::class, 'leave'])->name('guests.group.leave');
     Route::post('guests/group/{group}/split', [GuestGroupController::class, 'split'])->name('guests.group.split');
+    Route::put('guests/{guest}/group/{group}/change', [GuestGroupController::class, 'change'])->name('guests.group.change');
 });
 
 require __DIR__.'/settings.php';

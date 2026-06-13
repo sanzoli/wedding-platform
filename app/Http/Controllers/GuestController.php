@@ -30,6 +30,15 @@ class GuestController extends Controller
             ),
             'filters' => request()->only('search', 'sort', 'sortBy'),
             'languages' => Language::displayList(),
+            'selectableGroups' => GuestGroup::with('primary')
+                ->get()
+                ->sortBy(fn($group) => $group->primaryGuest()->full_name)
+                ->values()
+                ->map(fn ($group) => [
+                    'id' => $group->id,
+                    'full_name' => $group->primaryGuest()->full_name,
+                    'initials' => $group->primaryGuest()->initials,
+                ])->toArray(),
         ]);
     }
 
