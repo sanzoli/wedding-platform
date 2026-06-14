@@ -10,12 +10,19 @@ import {
 import { confirmDelete, toastError } from '@/composables/admin/useAlert';
 import { Guest } from '@/types/guests';
 import { InertiaForm, router, useForm } from '@inertiajs/vue3';
+import { SweetAlertResult } from 'sweetalert2';
+
+const onError: (errors: object) => Promise<SweetAlertResult<Awaited<any>>> = (
+    errors: object,
+): Promise<SweetAlertResult<Awaited<any>>> =>
+    toastError(Object.values(errors)[0]);
 
 export function deleteGuest(guest: Guest) {
     return confirmDelete(() =>
         router.delete(destroy.url(guest), {
             only: ['guestGroups'],
             preserveScroll: true,
+            onError,
         }),
     );
 }
@@ -24,7 +31,7 @@ export function storeGuest(form: InertiaForm<Guest>, options?: object) {
     form.lang ??= '';
     return form.submit(store(), {
         preserveScroll: true,
-        onError: (errors: object) => toastError(Object.values(errors)[0]),
+        onError,
         ...options,
     });
 }
@@ -33,7 +40,7 @@ export function updateGuest(form: InertiaForm<Guest>, options?: object) {
     form.lang ??= '';
     return form.submit(update(form), {
         preserveScroll: true,
-        onError: (errors: object) => toastError(Object.values(errors)[0]),
+        onError,
         ...options,
     });
 }
@@ -41,7 +48,7 @@ export function updateGuest(form: InertiaForm<Guest>, options?: object) {
 export function leaveGroup(guest: Guest, options?: object) {
     return useForm().submit(leave(guest), {
         preserveScroll: true,
-        onError: (errors: object) => toastError(Object.values(errors)[0]),
+        onError,
         ...options,
     });
 }
@@ -49,7 +56,7 @@ export function leaveGroup(guest: Guest, options?: object) {
 export function splitGroup(guest: Guest, options?: object) {
     return useForm().submit(split(guest.group_id), {
         preserveScroll: true,
-        onError: (errors: object) => toastError(Object.values(errors)[0]),
+        onError,
         ...options,
     });
 }

@@ -92,3 +92,19 @@ test('can delete guest', function () {
     $this->assertDatabaseMissing('guests', $guest->toArray());
     $this->assertDatabaseCount('guests', 3);
 });
+
+test('cannot delete guest with companion', function () {
+    $guest = Guest::factory()->create();
+    Guest::factory()->companion($guest)->create();
+
+    $this->actingAs(User::factory()->create())
+        ->delete(route('guests.destroy', $guest))
+        ->assertRedirectBackWithErrors([
+            'guest' => 'It cannot delete guest with companions.',
+        ]);
+
+    $this->assertDatabaseCount('guests', 2);
+    $this->assertDatabaseHas('guests', [
+        'id' => $guest->id,
+    ]);
+});

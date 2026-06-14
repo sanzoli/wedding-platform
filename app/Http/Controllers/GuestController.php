@@ -6,8 +6,9 @@ use App\Actions\Guest\DeleteGuest;
 use App\Actions\Guest\StoreGuest;
 use App\Actions\Guest\UpdateGuest;
 use App\Enum\Language;
-use App\Http\Requests\StoreGuestRequest;
-use App\Http\Requests\UpdateGuestRequest;
+use App\Http\Requests\Guest\DeleteGuestRequest;
+use App\Http\Requests\Guest\StoreGuestRequest;
+use App\Http\Requests\Guest\UpdateGuestRequest;
 use App\Http\Resources\GuestGroupResource;
 use App\Models\Guest;
 use App\Models\GuestGroup;
@@ -56,8 +57,9 @@ class GuestController extends Controller
         return back();
     }
 
-    public function destroy(Guest $guest, DeleteGuest $action)
+    public function destroy(DeleteGuestRequest $request, Guest $guest, DeleteGuest $action)
     {
+        $request->validated();
         $action->delete($guest);
 
         return back();

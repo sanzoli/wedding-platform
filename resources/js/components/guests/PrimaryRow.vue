@@ -23,8 +23,8 @@ import { ref } from 'vue';
 defineEmits(['addCompanion']);
 defineProps<{
     guest: Guest;
+    members: number;
     query?: string;
-    members?: number;
 }>();
 
 const editing = ref(false);
@@ -59,7 +59,7 @@ const update = (form: InertiaForm<Guest>) =>
             </div>
         </td>
         <td class="admin-type-data px-4 py-3 text-center">
-            {{ members && members > 1 ? members : '' }}
+            {{ members > 1 ? members : '' }}
         </td>
         <td class="admin-type-data px-6 py-3 text-center">
             {{ guest.flag }}
@@ -81,7 +81,7 @@ const update = (form: InertiaForm<Guest>) =>
                     <UserPlus></UserPlus>
                 </IconButton>
                 <IconButton
-                    v-if="members && members > 1"
+                    v-if="members > 1"
                     @click="splitGroup(guest)"
                     :data-test="'split-guest-group-button-' + guest.id"
                     aria-label="Split Guest Group"
@@ -112,6 +112,7 @@ const update = (form: InertiaForm<Guest>) =>
                 </IconButton>
                 <IconButton
                     @click="deleteGuest(guest)"
+                    :disabled="members > 1"
                     class="hover:bg-destructive/10 hover:text-destructive"
                     :data-test="'guest-delete-button-' + guest.id"
                     aria-label="delete"

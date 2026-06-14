@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Guest;
 
 use App\Enum\Language;
 use Illuminate\Foundation\Http\FormRequest;

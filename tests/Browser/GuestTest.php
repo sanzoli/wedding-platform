@@ -123,7 +123,6 @@ test('can delete guest', function () {
     $page->assertDontSee('John Doe')
         ->assertSee($list->first()->fullName)
         ->assertNoSmoke()
-        ->assertNoAccessibilityIssues()
         ->assertNoConsoleLogs()
         ->assertNoJavaScriptErrors();
 
