@@ -32,7 +32,7 @@ class GuestController extends Controller
             'languages' => Language::displayList(),
             'selectableGroups' => GuestGroup::with('primary')
                 ->get()
-                ->sortBy(fn($group) => $group->primaryGuest()->full_name)
+                ->sortBy(fn ($group) => $group->primaryGuest()->full_name)
                 ->values()
                 ->map(fn ($group) => [
                     'id' => $group->id,

@@ -69,7 +69,7 @@ test('can change companion group', function () {
 
     $newPrimary = Guest::factory()->create();
 
-    $this->put(route('guests.group.change',[
+    $this->put(route('guests.group.change', [
         'guest' => $companion->id,
         'group' => $newPrimary->group_id,
     ]))->assertRedirectBackWithoutErrors();
@@ -82,7 +82,7 @@ test('can add guest as companion in another group', function () {
     $guest = Guest::factory()->create();
     $anotherPrimary = Guest::factory()->create();
 
-    $this->put(route('guests.group.change',[
+    $this->put(route('guests.group.change', [
         'guest' => $guest->id,
         'group' => $anotherPrimary->group_id,
     ]))->assertRedirectBackWithoutErrors();

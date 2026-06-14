@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import PrimaryEditor from '@/components/guests/PrimaryEditor.vue';
+import SelectGuestGroup from '@/components/guests/SelectGuestGroup.vue';
 import HighlightableText from '@/components/HighlightableText.vue';
 import IconButton from '@/components/IconButton.vue';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -18,7 +19,6 @@ import {
     UserPlus,
 } from 'lucide-vue-next';
 import { ref } from 'vue';
-import SelectGuestGroup from '@/components/guests/SelectGuestGroup.vue';
 
 defineEmits(['addCompanion']);
 defineProps<{

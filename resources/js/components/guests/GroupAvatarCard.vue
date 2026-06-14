@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { SelectableGroup } from '@/types/guests';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { SelectableGroup } from '@/types/guests';
 import { User } from 'lucide-vue-next';
 
 defineProps<{

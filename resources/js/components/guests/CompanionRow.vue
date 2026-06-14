@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import CompanionEditor from '@/components/guests/CompanionEditor.vue';
+import SelectGuestGroup from '@/components/guests/SelectGuestGroup.vue';
 import HighlightableText from '@/components/HighlightableText.vue';
 import IconButton from '@/components/IconButton.vue';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -12,7 +13,6 @@ import { Guest } from '@/types/guests';
 import { InertiaForm } from '@inertiajs/vue3';
 import { ArrowUpDown, CornerLeftUp, Pencil, Trash2 } from 'lucide-vue-next';
 import { ref } from 'vue';
-import SelectGuestGroup from '@/components/guests/SelectGuestGroup.vue';
 
 defineProps<{
     companion: Guest;
