@@ -75,6 +75,7 @@ const update = (form: InertiaForm<Guest>) =>
                     <CornerLeftUp></CornerLeftUp>
                 </IconButton>
                 <SelectGuestGroup v-if="companion.full_name" :guest="companion">
+                    <template #title>Change group?</template>
                     <template #trigger>
                         <IconButton
                             :data-test="

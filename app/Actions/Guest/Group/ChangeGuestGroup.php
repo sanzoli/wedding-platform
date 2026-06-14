@@ -9,8 +9,19 @@ class ChangeGuestGroup
 {
     public function execute(Guest $guest, GuestGroup $newGroup): void
     {
-        $guest->group()->associate($newGroup);
+        $oldGroup = $guest->group;
+        if ($oldGroup->is($newGroup)) {
+            return;
+        }
 
+        $wasPrimary = $guest->is_primary;
+
+        $guest->is_primary = false;
+        $guest->group()->associate($newGroup);
         $guest->save();
+
+        if ($wasPrimary) {
+            $oldGroup->delete();
+        }
     }
 }

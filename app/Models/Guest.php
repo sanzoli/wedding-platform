@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property ?string $mobile
  * @property int $group_id
  * @property bool $is_primary
+ * @property GuestGroup $group
  */
 class Guest extends Model
 {

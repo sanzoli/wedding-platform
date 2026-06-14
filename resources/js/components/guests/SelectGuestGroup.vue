@@ -51,7 +51,9 @@ const submit = () =>
         </DialogTrigger>
         <DialogContent>
             <DialogHeader class="space-y-3">
-                <DialogTitle>Change group?</DialogTitle>
+                <DialogTitle>
+                    <slot name="title"/>
+                </DialogTitle>
                 <DialogDescription>
                     Pick a destination group from the list and confirm the
                     transfer.

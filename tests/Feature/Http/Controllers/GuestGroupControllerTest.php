@@ -77,3 +77,19 @@ test('can change companion group', function () {
     $companion->refresh();
     $this->assertEquals($companion->group_id, $newPrimary->group_id);
 });
+
+test('can add guest as companion in another group', function () {
+    $guest = Guest::factory()->create();
+    $anotherPrimary = Guest::factory()->create();
+
+    $this->put(route('guests.group.change',[
+        'guest' => $guest->id,
+        'group' => $anotherPrimary->group_id,
+    ]))->assertRedirectBackWithoutErrors();
+
+    $guest->refresh();
+    $this->assertEquals($guest->group_id, $anotherPrimary->group_id);
+    $this->assertFalse($guest->is_primary);
+
+    $this->assertDatabaseCount('guest_groups', 1);
+});

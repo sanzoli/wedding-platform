@@ -10,8 +10,15 @@ import {
 } from '@/composables/admin/useGuest';
 import { Guest } from '@/types/guests';
 import { InertiaForm } from '@inertiajs/vue3';
-import { Pencil, Split, Trash2, UserPlus } from 'lucide-vue-next';
+import {
+    CornerDownRight,
+    Pencil,
+    Split,
+    Trash2,
+    UserPlus,
+} from 'lucide-vue-next';
 import { ref } from 'vue';
+import SelectGuestGroup from '@/components/guests/SelectGuestGroup.vue';
 
 defineEmits(['addCompanion']);
 defineProps<{
@@ -81,6 +88,20 @@ const update = (form: InertiaForm<Guest>) =>
                 >
                     <Split></Split>
                 </IconButton>
+                <SelectGuestGroup v-else :guest="guest">
+                    <template #title>Add to group?</template>
+                    <template #trigger>
+                        <IconButton
+                            :data-test="
+                                'primary-add-to-group-button-' + guest.id
+                            "
+                            class="hover:bg-muted hover:text-foreground"
+                            aria-label="edit"
+                        >
+                            <CornerDownRight></CornerDownRight>
+                        </IconButton>
+                    </template>
+                </SelectGuestGroup>
                 <IconButton
                     @click="editing = true"
                     :data-test="'guest-edit-button-' + guest.id"
