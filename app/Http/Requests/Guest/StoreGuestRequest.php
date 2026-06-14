@@ -8,6 +8,8 @@ use Illuminate\Validation\Rule;
 
 class StoreGuestRequest extends FormRequest
 {
+    protected $stopOnFirstFailure = true;
+
     public function rules(): array
     {
         return [
