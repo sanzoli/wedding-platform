@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Guest\DeleteGuest;
+use App\Actions\Guest\SearchGuests;
 use App\Actions\Guest\StoreGuest;
 use App\Actions\Guest\UpdateGuest;
 use App\Enum\Language;
@@ -17,29 +18,15 @@ use Inertia\Inertia;
 
 class GuestController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, SearchGuests $search)
     {
-        $search = $request->input('search');
-        $sort = $request->input('sort');
-        $sortBy = $request->input('sortBy');
+        $filters = request()->only('search', 'sort', 'sortBy');
 
         return Inertia::render('Guests', [
-            'guestGroups' => GuestGroupResource::collection(
-                GuestGroup::queryFilters($search, $sort, $sortBy)
-                    ->latest('guest_groups.created_at')
-                    ->get()
-            ),
-            'filters' => request()->only('search', 'sort', 'sortBy'),
+            'guestGroups' => GuestGroupResource::collection($search->execute($filters)),
+            'filters' => $filters,
             'languages' => Language::displayList(),
-            'selectableGroups' => GuestGroup::with('primary')
-                ->get()
-                ->sortBy(fn ($group) => $group->primaryGuest()->full_name)
-                ->values()
-                ->map(fn ($group) => [
-                    'id' => $group->id,
-                    'full_name' => $group->primaryGuest()->full_name,
-                    'initials' => $group->primaryGuest()->initials,
-                ])->toArray(),
+            'selectableGroups' => GuestGroup::selectableOptions(),
         ]);
     }
 

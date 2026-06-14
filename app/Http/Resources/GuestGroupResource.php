@@ -11,8 +11,8 @@ class GuestGroupResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'count' => $this->guests()->count(),
-            'primary' => GuestResource::make($this->primaryGuest()),
+            'count' => $this->guests->count(),
+            'primary' => GuestResource::make($this->primary->first() ?? $this->primary()->first()),
             'companies' => GuestResource::collection($this->companies),
         ];
     }

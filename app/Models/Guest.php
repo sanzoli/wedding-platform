@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enum\Language;
 use Database\Factories\GuestFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -19,6 +20,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $group_id
  * @property bool $is_primary
  * @property GuestGroup $group
+ *
+ * @method static Builder when(bool $search, \Closure $param)
  */
 class Guest extends Model
 {
