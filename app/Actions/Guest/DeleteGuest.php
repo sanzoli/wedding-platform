@@ -6,7 +6,7 @@ use App\Models\Guest;
 
 class DeleteGuest
 {
-    public function delete(Guest $guest): void
+    public function execute(Guest $guest): void
     {
         $guest->delete();
 

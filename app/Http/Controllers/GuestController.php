@@ -32,24 +32,24 @@ class GuestController extends Controller
         ]);
     }
 
-    public function store(StoreGuestRequest $request, StoreGuest $action)
+    public function store(StoreGuestRequest $request, StoreGuest $storeGuest)
     {
-        $action->store($request->validated());
+        $storeGuest->execute($request->validated());
 
         return back();
     }
 
-    public function update(UpdateGuestRequest $request, Guest $guest, UpdateGuest $action)
+    public function update(UpdateGuestRequest $request, Guest $guest, UpdateGuest $updateGuest)
     {
-        $action->update($guest, $request->validated());
+        $updateGuest->execute($guest, $request->validated());
 
         return back();
     }
 
-    public function destroy(DeleteGuestRequest $request, Guest $guest, DeleteGuest $action)
+    public function destroy(DeleteGuestRequest $request, Guest $guest, DeleteGuest $deleteGuest)
     {
         $request->validated();
-        $action->delete($guest);
+        $deleteGuest->execute($guest);
 
         return back();
     }

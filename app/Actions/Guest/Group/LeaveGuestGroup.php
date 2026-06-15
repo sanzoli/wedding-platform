@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Validator;
 
 class LeaveGuestGroup
 {
-    public function leave(Guest $guest): void
+    public function execute(Guest $guest): void
     {
         $this->validate($guest);
 

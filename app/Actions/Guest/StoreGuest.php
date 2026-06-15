@@ -7,7 +7,7 @@ use App\Models\GuestGroup;
 
 class StoreGuest
 {
-    public function store(array $params): Guest
+    public function execute(array $params): Guest
     {
         $guest = new Guest;
 

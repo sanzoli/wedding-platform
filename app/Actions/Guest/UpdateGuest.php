@@ -7,7 +7,7 @@ use Illuminate\Support\Arr;
 
 class UpdateGuest
 {
-    public function update(Guest $guest, array $params): Guest
+    public function execute(Guest $guest, array $params): Guest
     {
         $guest->update(Arr::only($params, [
             'first_name',
