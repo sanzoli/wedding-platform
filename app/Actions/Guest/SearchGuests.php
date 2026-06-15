@@ -33,7 +33,7 @@ class SearchGuests
                 $group->companions = $guests->where(fn (Guest $guest) => ! $guest->is_primary);
 
                 if ($primary = $guests->where(fn (Guest $guest) => $guest->is_primary)->first()) {
-                    $group->primary = collect([$primary]);
+                    $group->primary = $primary;
                 }
 
                 return $group;

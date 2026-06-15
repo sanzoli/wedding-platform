@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 
 /**
@@ -15,7 +16,7 @@ use Illuminate\Support\Collection;
  *
  * @property int $id
  * @property Collection<Guest> $guests
- * @property Collection<Guest> $primary
+ * @property Guest $primary
  * @property Collection<Guest> $companions
  */
 class GuestGroup extends Model
@@ -32,9 +33,9 @@ class GuestGroup extends Model
         return $this->hasMany(Guest::class, 'group_id');
     }
 
-    public function primary(): Builder|HasMany
+    public function primary(): HasOne
     {
-        return $this->guests()->withAttributes(['is_primary' => true]);
+        return $this->hasOne(Guest::class, 'group_id_for_unique');
     }
 
     public function companions(): Builder|HasMany
@@ -42,21 +43,16 @@ class GuestGroup extends Model
         return $this->guests()->withAttributes(['is_primary' => false]);
     }
 
-    public function primaryGuest(): Guest
-    {
-        return $this->primary()->first();
-    }
-
     public static function selectableOptions(): array
     {
-        return GuestGroup::with('primary:first_name,last_name')
+        return GuestGroup::with('primary')
             ->get()
-            ->sortBy(fn (self $group) => $group->primaryGuest()->full_name)
+            ->sortBy(fn (self $group) => $group->primary->full_name)
             ->values()
             ->map(fn (self $group) => [
                 'id' => $group->id,
-                'full_name' => $group->primaryGuest()->full_name,
-                'initials' => $group->primaryGuest()->initials,
+                'full_name' => $group->primary->full_name,
+                'initials' => $group->primary->initials,
             ])->toArray();
     }
 }
