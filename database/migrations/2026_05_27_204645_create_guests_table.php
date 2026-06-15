@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('first_name', 80)->nullable();
             $table->string('last_name', 80)->nullable();
             $table->string('mobile', 20)->nullable();
-            $table->enum('lang', array_column(Language::cases(), 'value'))->nullable();
+            $table->enum('lang', Language::values())->nullable();
             $table->foreignIdFor(GuestGroup::class, 'group_id')->constrained()->restrictOnDelete();
             $table->boolean('is_primary')->default(true);
             $table->timestamps();

@@ -27,7 +27,7 @@ class UpdateGuestRequest extends FormRequest
                 'string',
                 Rule::requiredIf(fn () => $this->guest->is_primary && ! request('first_name')),
             ],
-            'lang' => ['nullable', Rule::in(array_column(Language::cases(), 'value'))],
+            'lang' => ['nullable', Rule::in(Language::values())],
             'mobile' => 'nullable|regex:/^\+\d{9,}$/',
         ];
     }

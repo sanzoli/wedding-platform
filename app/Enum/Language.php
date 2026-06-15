@@ -17,14 +17,20 @@ enum Language: string
         };
     }
 
+    public static function values(): array
+    {
+        return array_column(Language::cases(), 'value');
+    }
+
     public static function displayList(): array
     {
-        return collect(self::cases())->mapWithKeys(fn (self $item) => [
-            $item->value => [
-                'label' => $item->name,
-                'value' => $item->value,
-                'flag' => $item->flag(),
-            ],
-        ])->toArray();
+        return collect(self::cases())
+            ->mapWithKeys(fn (self $item) => [
+                $item->value => [
+                    'label' => $item->name,
+                    'value' => $item->value,
+                    'flag' => $item->flag(),
+                ],
+            ])->toArray();
     }
 }

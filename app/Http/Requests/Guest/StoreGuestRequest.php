@@ -23,7 +23,7 @@ class StoreGuestRequest extends FormRequest
                 'string',
                 Rule::requiredIf(fn () => ! request('group_id') && ! request('first_name')),
             ],
-            'lang' => ['nullable', Rule::in(array_column(Language::cases(), 'value'))],
+            'lang' => ['nullable', Rule::in(Language::values())],
             'mobile' => 'nullable|regex:/^\+\d{9,}$/',
             'group_id' => 'nullable|exists:App\Models\GuestGroup,id',
         ];
