@@ -49,7 +49,7 @@ class GuestGroup extends Model
 
     public static function selectableOptions(): array
     {
-        return GuestGroup::with('primary')
+        return GuestGroup::with('primary:first_name,last_name')
             ->get()
             ->sortBy(fn (self $group) => $group->primaryGuest()->full_name)
             ->values()
