@@ -24,9 +24,9 @@ class GuestGroupController extends Controller
         return back();
     }
 
-    public function change(Guest $guest, GuestGroup $group, ChangeGuestGroup $action)
+    public function change(Guest $guest, GuestGroup $group, ChangeGuestGroup $changeGuestGroup)
     {
-        $action->execute($guest, $group);
+        $changeGuestGroup->execute($guest, $group);
 
         return back();
     }
