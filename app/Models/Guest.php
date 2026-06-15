@@ -55,9 +55,11 @@ class Guest extends Model
     protected function initials(): Attribute
     {
         return Attribute::make(
-            get: fn ($value, array $attributes) => strtoupper(
-                substr($attributes['first_name'], 0, 1).substr($attributes['last_name'], 0, 1)
-            ) ?? '?',
+            get: function ($value, array $attributes) {
+                $initials = substr($attributes['first_name'], 0, 1).substr($attributes['last_name'], 0, 1);
+
+                return empty($initials) ? '?' : strtoupper($initials);
+            },
         );
     }
 }

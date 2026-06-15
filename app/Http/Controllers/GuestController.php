@@ -23,6 +23,8 @@ class GuestController extends Controller
         $filters = request()->only('search', 'sort', 'sortBy');
 
         return Inertia::render('Guests', [
+            'totalGuests' => Guest::count(),
+            'totalAnonymous' => Guest::whereNull('first_name')->whereNull('last_name')->count(),
             'guestGroups' => GuestGroupResource::collection($search->execute($filters)),
             'filters' => $filters,
             'languages' => Language::displayList(),
