@@ -27,12 +27,16 @@ class SearchGuests
             ->get()
             ->mapToGroups(fn (Guest $guest) => [$guest->group_id => $guest])
             ->map(function (Collection $guests, int $groupId) {
-                return GuestGroup::make([
-                    'id' => $groupId,
-                    'guests' => $guests,
-                    'primary' => $guests->where(fn (Guest $guest) => $guest->is_primary),
-                    'companions' => $guests->where(fn (Guest $guest) => ! $guest->is_primary),
-                ]);
+                $group = new GuestGroup;
+                $group->id = $groupId;
+                $group->guests = $guests;
+                $group->companions = $guests->where(fn (Guest $guest) => ! $guest->is_primary);
+
+                if ($primary = $guests->where(fn (Guest $guest) => $guest->is_primary)->first()) {
+                    $group->primary = collect([$primary]);
+                }
+
+                return $group;
             });
     }
 }
