@@ -26,7 +26,7 @@ class GuestGroup extends Model
 
     protected $guarded = [];
 
-    protected $with = ['guests'];
+    protected $with = ['primary'];
 
     public function guests(): HasMany
     {
@@ -45,8 +45,7 @@ class GuestGroup extends Model
 
     public static function selectableOptions(): array
     {
-        return GuestGroup::with('primary')
-            ->get()
+        return GuestGroup::all()
             ->sortBy(fn (self $group) => $group->primary->full_name)
             ->values()
             ->map(fn (self $group) => [
