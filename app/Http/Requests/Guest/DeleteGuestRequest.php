@@ -15,7 +15,7 @@ class DeleteGuestRequest extends FormRequest
     {
         return [
             function (Validator $validator) {
-                if ($this->guest->is_primary && $this->guest->group->companies()->exists()) {
+                if ($this->guest->is_primary && $this->guest->group->companions()->exists()) {
                     $validator->errors()->add('guest', 'It cannot delete guest with companions.');
                 }
             },

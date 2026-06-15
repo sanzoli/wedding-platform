@@ -31,7 +31,7 @@ class GuestGroup extends Model
         return $this->guests()->withAttributes(['is_primary' => true]);
     }
 
-    public function companies(): Builder|HasMany
+    public function companions(): Builder|HasMany
     {
         return $this->guests()->withAttributes(['is_primary' => false]);
     }

@@ -14,7 +14,7 @@ export interface GuestGroup {
     id: number;
     count: number;
     primary: Guest;
-    companies: Guest[];
+    companions: Guest[];
 }
 
 export interface SelectableGroup {

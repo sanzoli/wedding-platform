@@ -25,7 +25,7 @@ const storeCompanion = (form: InertiaForm<Guest>) =>
         @addCompanion="adding = true"
     />
     <CompanionRow
-        v-for="(companion, i) in group.companies"
+        v-for="(companion, i) in group.companions"
         :key="i"
         :companion
         :query

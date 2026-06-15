@@ -31,7 +31,7 @@ class SearchGuests
                     'id' => $groupId,
                     'guests' => $guests,
                     'primary' => $guests->where(fn (Guest $guest) => $guest->is_primary),
-                    'companies' => $guests->where(fn (Guest $guest) => ! $guest->is_primary),
+                    'companions' => $guests->where(fn (Guest $guest) => ! $guest->is_primary),
                 ]);
             });
     }

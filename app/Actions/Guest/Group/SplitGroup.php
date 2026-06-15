@@ -14,7 +14,7 @@ class SplitGroup
 
     public function split(GuestGroup $group): void
     {
-        $group->companies()
+        $group->companions()
             ->each(function (Guest $guest) {
                 empty($guest->fullName)
                     ? $this->deleteGuestAction()->delete($guest)
