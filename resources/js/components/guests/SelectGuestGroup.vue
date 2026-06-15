@@ -38,14 +38,16 @@ const selectedGroup = ref(<SelectableGroup>{});
 const groups = computed<SelectableGroup[]>(() => usePage().props.selectableGroups);
 const currentGroup = computed(() => groups.value.find(g => g.id === props.guest.group_id));
 
+const open = ref(false)
 const submit = () =>
     form.submit(change({ guest: props.guest.id, group: selectedGroup.value.id }), {
         preserveScroll: true,
+        onSuccess: () => open.value = false
     });
 </script>
 
 <template>
-    <Dialog>
+    <Dialog v-model:open="open">
         <DialogTrigger as-child>
             <slot name="trigger"></slot>
         </DialogTrigger>
