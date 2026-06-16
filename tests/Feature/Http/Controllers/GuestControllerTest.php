@@ -198,7 +198,9 @@ test('can delete guest', function () {
     $this->delete(route('guests.destroy', $guest))
         ->assertRedirectBackWithoutErrors();
 
-    $this->assertDatabaseMissing('guests', $guest->toArray());
+    $this->assertDatabaseMissing('guests', [
+        'id' => $guest->id,
+    ]);
     $this->assertDatabaseCount('guests', 3);
 });
 

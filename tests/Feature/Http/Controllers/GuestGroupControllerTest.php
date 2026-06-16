@@ -60,7 +60,9 @@ test('split group eliminates anonymous companion', function () {
         ->assertRedirectBackWithoutErrors();
 
     $this->assertDatabaseCount('guest_groups', 2);
-    $this->assertDatabaseMissing('guests', $anonymousCompanion->toArray());
+    $this->assertDatabaseMissing('guests', [
+        'id' => $anonymousCompanion->id,
+    ]);
 });
 
 test('can change companion group', function () {
