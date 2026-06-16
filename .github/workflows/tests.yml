@@ -28,10 +28,20 @@ jobs:
       - name: Check SQLite Version
         run: sqlite3 --version
 
-      - name: Update SQLite3 Package
-        run:
-          sudo apt-get update
-          && sudo apt-get install --only-upgrade sqlite3 libsqlite3-dev
+      - name: Download and Install Latest SQLite Source
+        run: |
+          # Fetch the latest autoconf source from SQLite
+          wget https://sqlite.org
+          tar -xvzf sqlite-autoconf-3510300.tar.gz
+          cd sqlite-autoconf-3510300
+
+          # Compile and install
+          ./configure
+          make
+          sudo make install
+
+          # Force system to recognize the new binary paths
+          sudo ldconfig
 
       - name: Check SQLite Version
         run: sqlite3 --version
