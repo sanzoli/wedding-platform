@@ -9,7 +9,7 @@ import {
 } from '@/actions/App/Http/Controllers/GuestGroupController';
 import { confirmDelete, toastError } from '@/composables/admin/useAlert';
 import { Guest } from '@/types/guests';
-import { InertiaForm, router, useForm } from '@inertiajs/vue3';
+import { InertiaForm, router } from '@inertiajs/vue3';
 import { SweetAlertResult } from 'sweetalert2';
 
 const onError: (errors: object) => Promise<SweetAlertResult<Awaited<any>>> = (
@@ -46,7 +46,7 @@ export function updateGuest(form: InertiaForm<Guest>, options?: object) {
 }
 
 export function leaveGroup(guest: Guest, options?: object) {
-    return useForm().submit(leave(guest), {
+    return router.post(leave(guest), {
         preserveScroll: true,
         onError,
         ...options,
@@ -54,7 +54,7 @@ export function leaveGroup(guest: Guest, options?: object) {
 }
 
 export function splitGroup(guest: Guest, options?: object) {
-    return useForm().submit(split(guest.group_id), {
+    return router.post(split(guest.group_id), {
         preserveScroll: true,
         onError,
         ...options,
