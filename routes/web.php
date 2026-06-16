@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\GuestGroupController;
-use App\Models\Guest;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -14,11 +14,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('Dashboard', [
-            'guestsTotal' => Guest::count(),
-        ]);
-    })->name('dashboard');
+    Route::get('dashboard', DashboardController::class)->name('dashboard');
 
     Route::apiResource('guests', GuestController::class)->except('show');
     Route::post('guests/{guest}/group/leave', [GuestGroupController::class, 'leave'])->name('guests.group.leave');
