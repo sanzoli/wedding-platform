@@ -148,7 +148,7 @@ const submit = () =>
                         Change group
                     </Button>
                 </DialogFooter>
-            </Form>
+            </form>
         </DialogContent>
     </Dialog>
 </template>
