@@ -31,7 +31,7 @@ jobs:
       - name: Update SQLite3 Package
         run:
           sudo apt-get update
-          sudo apt-get install --only-upgrade sqlite3 libsqlite3-dev
+          && sudo apt-get install --only-upgrade sqlite3 libsqlite3-dev
 
       - name: Check SQLite Version
         run: sqlite3 --version
