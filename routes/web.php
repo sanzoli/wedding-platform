@@ -17,9 +17,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', DashboardController::class)->name('dashboard');
 
     Route::apiResource('guests', GuestController::class)->except('show');
-    Route::post('guests/{guest}/group/leave', [GuestGroupController::class, 'leave'])->name('guests.group.leave');
-    Route::post('guests/group/{group}/split', [GuestGroupController::class, 'split'])->name('guests.group.split');
-    Route::put('guests/{guest}/group/{group}/change', [GuestGroupController::class, 'change'])->name('guests.group.change');
+
+    Route::controller(GuestGroupController::class)
+        ->name('guests.group.')
+        ->group(function () {
+            Route::post('guests/{guest}/group/leave', 'leave')->name('leave');
+            Route::post('guests/group/{group}/split', 'split')->name('split');
+            Route::put('guests/{guest}/group/{group}/change', 'change')->name('change');
+        });
 });
 
 require __DIR__.'/settings.php';
