@@ -13,12 +13,11 @@ use App\Http\Requests\Guest\UpdateGuestRequest;
 use App\Http\Resources\GuestGroupResource;
 use App\Models\Guest;
 use App\Models\GuestGroup;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class GuestController extends Controller
 {
-    public function index(Request $request, SearchGuests $search)
+    public function index(SearchGuests $search)
     {
         $filters = request()->only('search', 'sort', 'sortBy');
 
