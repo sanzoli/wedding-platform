@@ -22,6 +22,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property GuestGroup $group
  *
  * @method static Builder when(bool $search, \Closure $param)
+ * @method static Builder whereNull(string $string)
+ * @method static int count()
  */
 class Guest extends Model
 {
