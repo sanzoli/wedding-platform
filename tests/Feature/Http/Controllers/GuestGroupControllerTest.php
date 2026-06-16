@@ -24,7 +24,7 @@ test('cannot leave a group as primary', function () {
 
     $this->post(route('guests.group.leave', $primary))
         ->assertRedirectBackWithErrors([
-            'guest' => 'Primary guest cannot leave their group.',
+            'is_primary' => 'Primary guest cannot leave their group.',
         ]);
 });
 
@@ -34,7 +34,7 @@ test('cannot leave a group as anonymous', function () {
 
     $this->post(route('guests.group.leave', $companion))
         ->assertRedirectBackWithErrors([
-            'guest' => 'Anonymous guest cannot leave a group.',
+            'full_name' => 'Anonymous guest cannot leave a group.',
         ]);
 });
 

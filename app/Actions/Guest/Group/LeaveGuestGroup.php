@@ -20,15 +20,15 @@ class LeaveGuestGroup
 
     public function validate(Guest $guest): void
     {
-        Validator::make([], [])
-            ->after(function ($validator) use ($guest) {
-                if ($guest->is_primary) {
-                    $validator->errors()->add('guest', 'Primary guest cannot leave their group.');
-                }
-
-                if (empty($guest->fullName)) {
-                    $validator->errors()->add('guest', 'Anonymous guest cannot leave a group.');
-                }
-            })->validate();
+        Validator::make([
+            'is_primary' => $guest->is_primary,
+            'full_name' => $guest->fullName,
+        ], [
+            'is_primary' => 'declined',
+            'full_name' => 'required',
+        ], [
+            'is_primary.declined' => 'Primary guest cannot leave their group.',
+            'full_name.required' => 'Anonymous guest cannot leave a group.',
+        ])->validate();
     }
 }
