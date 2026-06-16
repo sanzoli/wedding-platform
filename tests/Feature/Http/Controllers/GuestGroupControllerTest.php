@@ -47,8 +47,8 @@ test('can split a group', function () {
         ->assertRedirectBackWithoutErrors();
 
     $this->assertDatabaseCount('guest_groups', 3);
-    $this->assertNotSame($companion->group, $primary->group);
-    $this->assertNotSame($anotherCompanion->group, $primary->group);
+    $this->assertNotEquals($companion->refresh()->group_id, $primary->group_id);
+    $this->assertNotEquals($anotherCompanion->refresh()->group_id, $primary->group_id);
 });
 
 test('split group eliminates anonymous companion', function () {
