@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -24,6 +24,9 @@ jobs:
           php-version: 8.4
           tools: composer:v2
           coverage: xdebug
+
+      - name: Check SQLite Version
+        run: sqlite3 --version
 
       - name: Setup Node
         uses: actions/setup-node@v4
