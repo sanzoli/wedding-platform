@@ -14,6 +14,16 @@ jobs:
   ci:
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: laravel_test
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -25,26 +35,15 @@ jobs:
           tools: composer:v2
           coverage: xdebug
 
-      - name: Check SQLite Version
-        run: sqlite3 --version
+      - name: Copy Environment File
+        run: cp .env.example .env
 
-      - name: Download and Install Latest SQLite Source
+      - name: Configure Testing Database
         run: |
-          # Fetch the latest autoconf source from SQLite
-          wget https://sqlite.org
-          tar -xvzf sqlite-autoconf-3530200.tar.gz
-          cd sqlite-autoconf-3530200
-
-          # Compile and install
-          ./configure
-          make
-          sudo make install
-
-          # Force system to recognize the new binary paths
-          sudo ldconfig
-
-      - name: Check SQLite Version
-        run: sqlite3 --version
+          sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=mysql/' .env
+          sed -i 's/DB_DATABASE=.*/DB_DATABASE=laravel_test/' .env
+          sed -i 's/DB_USERNAME=.*/DB_USERNAME=root/' .env
+          sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=password/' .env
 
       - name: Setup Node
         uses: actions/setup-node@v4
