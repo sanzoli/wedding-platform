@@ -34,3 +34,15 @@ test('cannot delete guest with companion', function () {
         'id' => $guest->id,
     ]);
 });
+
+test('cannot delete guest when unauthenticated', function () {
+    $guest = Guest::factory()->create();
+
+    $this->actingAsGuest();
+    $this->delete(route('guests.destroy', $guest))
+        ->assertRedirect(route('login'));
+
+    $this->assertDatabaseHas('guests', [
+        'id' => $guest->id,
+    ]);
+});
