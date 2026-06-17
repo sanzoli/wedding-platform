@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @property int $id
  * @property string $fullName
+ * @property string $initials
  * @property ?string $first_name
  * @property ?string $last_name
  * @property ?Language $lang

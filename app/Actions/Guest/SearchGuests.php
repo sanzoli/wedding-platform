@@ -27,12 +27,12 @@ class SearchGuests
             ->get()
             ->mapToGroups(fn (Guest $guest) => [$guest->group_id => $guest])
             ->map(function (Collection $guests, int $groupId) {
-                return GuestGroup::make([
+                return GuestGroup::make(array_filter([
                     'id' => $groupId,
                     'guests' => $guests,
                     'primary' => $guests->firstWhere(fn (Guest $guest) => $guest->is_primary),
                     'companions' => $guests->where(fn (Guest $guest) => ! $guest->is_primary),
-                ]);
+                ]));
             });
     }
 }
