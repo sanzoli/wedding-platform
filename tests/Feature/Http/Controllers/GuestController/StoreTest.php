@@ -28,7 +28,7 @@ test('can create an anonymous companion', function () {
     $this->post(route('guests.store'), [
         'first_name' => '',
         'last_name' => '',
-        'group_id' => $primary->id,
+        'group_id' => $primary->group_id,
     ])->assertRedirectBackWithoutErrors();
 
     $this->assertDatabaseCount('guests', 2);
