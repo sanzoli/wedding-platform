@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Guest;
+use App\Models\GuestGroup;
 use App\Models\User;
 
 beforeEach(function () {
@@ -28,6 +29,21 @@ test('shows guest list', function () {
 test('can search guest list', function () {
     Guest::factory()->count(5)->create();
     Guest::factory()->create(['first_name' => 'John Jake', 'last_name' => 'Doe Dae']);
+
+    $page = visit(route('guests.index'))
+        ->type('input[type="search"]', 'Jake Doe');
+
+    $page->assertSee('John Jake Doe Dae')
+        ->assertSourceHas('John <mark class="rounded-xs bg-accent/30 text-foreground">Jake Doe</mark> Dae')
+        ->assertNoSmoke()
+        ->assertNoAccessibilityIssues()
+        ->assertNoConsoleLogs()
+        ->assertNoJavaScriptErrors();
+});
+
+test('can search a companion', function () {
+    Guest::factory()->count(5)->create();
+    Guest::factory()->companion()->create(['first_name' => 'John Jake', 'last_name' => 'Doe Dae']);
 
     $page = visit(route('guests.index'))
         ->type('input[type="search"]', 'Jake Doe');
@@ -126,4 +142,59 @@ test('can delete guest', function () {
         ->assertNoConsoleLogs()
         ->assertNoJavaScriptErrors();
 
+});
+
+test('can add guest to a group', function () {
+    $group = GuestGroup::factory()
+        ->has(Guest::factory(), 'guests')
+        ->create();
+
+    $guest = Guest::factory()->create(['first_name' => 'John', 'last_name' => 'Doe']);
+
+    visit(route('guests.index'))
+        ->click('@primary-add-to-group-button-'.$guest->id)
+        ->assertSee('Add to group')
+        ->assertSee('Pick a destination group from the list and confirm the transfer.')
+        ->type('group_id', $group->primary->first_name)
+        ->click('[data-reka-popper-content-wrapper]')
+        ->click('Change group')
+        ->assertSourceHas('<span data-slot="avatar-fallback" class="flex size-full items-center justify-center rounded-full admin-type-action bg-muted text-muted-foreground">JD</span>');
+
+    $guest->refresh();
+    $this->assertEquals($group->id, $guest->group_id);
+});
+
+test('can change guest to a group', function () {
+    $group = GuestGroup::factory()
+        ->has(Guest::factory(), 'guests')
+        ->create();
+
+    $guest = Guest::factory()->companion()->create(['first_name' => 'John', 'last_name' => 'Doe']);
+
+    visit(route('guests.index'))
+        ->click('@companion-change-group-button-'.$guest->id)
+        ->assertSee('Change group')
+        ->assertSee('Pick a destination group from the list and confirm the transfer.')
+        ->type('group_id', $group->primary->first_name)
+        ->click('[data-reka-popper-content-wrapper]')
+        ->click('Change group')
+        ->assertSourceHas('<span data-slot="avatar-fallback" class="flex size-full items-center justify-center rounded-full admin-type-action bg-muted text-muted-foreground">JD</span>');
+
+    $guest->refresh();
+    $this->assertEquals($group->id, $guest->group_id);
+});
+
+test('can split a group', function () {
+    $primary = Guest::factory()->create(['first_name' => 'John', 'last_name' => 'Doe']);
+    $companion1 = Guest::factory()->companion($primary)->create(['first_name' => 'Alan', 'last_name' => 'Doe']);
+    $companion2 = Guest::factory()->companion($primary)->create(['first_name' => 'David', 'last_name' => 'Doe']);
+
+    visit(route('guests.index'))
+        ->click('@split-guest-group-button-'.$primary->id)
+        ->assertSourceHas('<span data-slot="avatar-fallback" class="flex size-full items-center justify-center rounded-full admin-type-action bg-secondary text-secondary-foreground">JD</span>')
+        ->assertSourceHas('<span data-slot="avatar-fallback" class="flex size-full items-center justify-center rounded-full admin-type-action bg-secondary text-secondary-foreground">AD</span>')
+        ->assertSourceHas('<span data-slot="avatar-fallback" class="flex size-full items-center justify-center rounded-full admin-type-action bg-secondary text-secondary-foreground">DD</span>');
+
+    $this->assertNotEquals($primary->group_id, $companion1->refresh()->group_id);
+    $this->assertNotEquals($primary->group_id, $companion2->refresh()->group_id);
 });
