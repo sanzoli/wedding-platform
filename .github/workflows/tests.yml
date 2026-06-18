@@ -20,8 +20,6 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: password
           MYSQL_DATABASE: laravel_test
-          MYSQL_CHARSET: utf8mb4
-          MYSQL_COLLATION: utf8mb4_0900_ai_ci
         ports:
           - 3306:3306
         options: >-
