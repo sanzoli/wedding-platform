@@ -22,9 +22,7 @@ const nextDirection = computed(function () {
 </script>
 
 <template>
-    <th
-        class="admin-type-table-header px-6 py-[22px] text-left text-muted-foreground"
-    >
+    <th class="admin-type-table-header px-6 py-5.5 text-muted-foreground">
         <button
             v-if="sortBy"
             type="button"

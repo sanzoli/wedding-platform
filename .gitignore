@@ -31,3 +31,4 @@ yarn-error.log
 /.cursor/
 /boost.json
 /.coverage/
+/tests/Browser/Screenshots

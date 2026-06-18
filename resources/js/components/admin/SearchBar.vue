@@ -29,13 +29,14 @@ defineEmits(['update:searchValue']);
                     ($event.target as HTMLInputElement).value,
                 )
             "
-            class="h-[38px] w-full rounded-[10px] border border-border/60 bg-card pr-8 pl-8 text-[14px] text-foreground shadow-none transition-colors outline-none placeholder:text-muted-foreground focus:border-ring focus:ring-2 focus:ring-ring/20 dark:bg-input/30 [&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden"
+            class="h-9.5 w-full rounded-[10px] border border-border/60 bg-card pr-8 pl-8 text-[14px] text-foreground shadow-none transition-colors outline-none placeholder:text-muted-foreground focus:border-ring focus:ring-2 focus:ring-ring/20 dark:bg-input/30 [&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden"
         />
         <button
             v-show="searchValue"
             class="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer text-muted-foreground transition-colors hover:text-foreground"
             type="button"
-            @click="$emit('update:searchValue', '')"
+            @click="$emit('update:searchValue', undefined)"
+            aria-label="cancel-search"
         >
             <X :size="14" :stroke-width="2" />
         </button>

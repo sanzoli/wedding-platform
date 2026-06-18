@@ -135,7 +135,11 @@
      * ---------------------------- */
     @keyframes admin-flash-edit {
         0% {
-            background-color: color-mix(in oklch, var(--primary) 8%, transparent);
+            background-color: color-mix(
+                in oklch,
+                var(--primary) 8%,
+                transparent
+            );
         }
         100% {
             background-color: transparent;
