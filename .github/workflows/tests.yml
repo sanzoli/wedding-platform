@@ -20,9 +20,18 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: password
           MYSQL_DATABASE: laravel_test
+          MYSQL_CHARSET: utf8mb4
+          MYSQL_COLLATION: utf8mb4_0900_ai_ci
         ports:
           - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+          --character-set-server=utf8mb4
+          --collation-server=utf8mb4_0900_ai_ci
+          --sql-mode="ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION"
 
     steps:
       - name: Checkout
