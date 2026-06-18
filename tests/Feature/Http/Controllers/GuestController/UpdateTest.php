@@ -79,3 +79,19 @@ test('cannot update a guest with invalid data', function ($properties, $key, $er
         'The mobile field format is invalid.',
     ],
 ]);
+
+test('cannot store guest when unauthenticated', function () {
+    $guest = Guest::factory()->create();
+    $data = [
+        'first_name' => 'John',
+        'last_name' => 'Doe',
+        'lang' => 'en',
+        'mobile' => '+573005999999',
+    ];
+
+    $this->actingAsGuest();
+    $this->put(route('guests.update', $guest), $data)
+        ->assertRedirect(route('login'));
+
+    $this->assertDatabaseMissing('guests', $data);
+});

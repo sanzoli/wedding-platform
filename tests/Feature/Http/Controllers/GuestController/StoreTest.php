@@ -78,3 +78,13 @@ test('cannot create a guest with invalid data', function ($properties, $key, $er
         'The mobile field format is invalid.',
     ],
 ]);
+
+test('cannot store guest when unauthenticated', function () {
+    $data = Guest::factory()->make()->toArray();
+
+    $this->actingAsGuest();
+    $this->post(route('guests.store'), $data)
+        ->assertRedirect(route('login'));
+
+    $this->assertDatabaseCount('guests', 0);
+});
