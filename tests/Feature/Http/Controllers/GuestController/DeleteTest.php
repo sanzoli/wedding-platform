@@ -26,7 +26,7 @@ test('cannot delete guest with companion', function () {
 
     $this->delete(route('guests.destroy', $guest))
         ->assertRedirectBackWithErrors([
-            'guest' => 'It cannot delete guest with companions.',
+            'is_primary' => 'It cannot delete guest with companions.',
         ]);
 
     $this->assertDatabaseCount('guests', 2);
