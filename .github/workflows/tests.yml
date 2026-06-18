@@ -60,12 +60,5 @@ jobs:
       - name: Build Assets
         run: npm run build
 
-      - name: Debug MySQL Configuration
-        run: |
-          echo "Checking MySQL configuration..."
-          mysql -h 127.0.0.1 -u root -ppassword -e "SELECT @@sql_mode;"
-          mysql -h 127.0.0.1 -u root -ppassword -e "SHOW VARIABLES LIKE 'character_set%';"
-          mysql -h 127.0.0.1 -u root -ppassword -e "SHOW VARIABLES LIKE 'collation%';"
-
       - name: Tests
         run: ./vendor/bin/pest --configuration phpunit.github.xml
