@@ -35,7 +35,7 @@ test('can create an anonymous companion', function () {
     $this->assertDatabaseHas('guests', [
         'first_name' => null,
         'last_name' => null,
-        'group_id' => $primary->id,
+        'group_id' => $primary->group_id,
     ]);
 });
 
