@@ -3,16 +3,13 @@ import GroupConfirmation from '@/components/guest/GroupConfirmation.vue';
 import Hero from '@/components/guest/Hero.vue';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
-import SaveTheDateLayout from '@/layouts/guest/SaveTheDateLayout.vue';
+import FullPageLayout from '@/layouts/FullPageLayout.vue';
 import type { ResponseOption, SaveTheDateProps } from '@/types/save-the-date';
 import { Form, Head } from '@inertiajs/vue3';
 import { computed, reactive, ref } from 'vue';
 
 const props = defineProps<SaveTheDateProps>();
 
-// Content not yet backed by a contract field.
-// MOCK: the couple names and wedding date/place are hardcoded pending a
-// backend wedding/event source — no such object exists in the contract.
 const coupleNames = 'Lauana & David';
 
 interface Copy {
@@ -33,9 +30,6 @@ interface Copy {
     options: Record<ResponseOption, string>;
 }
 
-// UI copy per language. The per-language `options` localize the response
-// labels for the client-side language switch; the backend-provided
-// `options` prop stays authoritative for the guest's own language.
 const messages: Record<string, Copy> = {
     en: {
         eyebrow: 'Save the Date',
@@ -119,16 +113,12 @@ const messages: Record<string, Copy> = {
 const displayLang = ref(props.lang in messages ? props.lang : 'en');
 const t = computed<Copy>(() => messages[displayLang.value] ?? messages.en);
 
-// Option labels follow the selected language; the guest's own language
-// keeps the backend's authoritative labels.
 const optionLabels = computed<Record<ResponseOption, string>>(() =>
     displayLang.value === props.lang
         ? props.options
         : (messages[displayLang.value]?.options ?? props.options),
 );
 
-// Selected response per member id — seeded from any previous response.
-// Independent of `displayLang`, so switching language never clears it.
 const selected = reactive<Record<number, ResponseOption | null>>(
     Object.fromEntries(props.guestGroup.map((m) => [m.id, m.response])),
 );
@@ -137,12 +127,10 @@ const setResponse = (id: number, response: ResponseOption) => {
     selected[id] = response;
 };
 
-// At least one member must have a response before submitting.
 const hasAnyResponse = computed(() =>
     Object.values(selected).some((value) => value !== null),
 );
 
-// Submission payload: every member with their response (or null).
 const buildPayload = () => ({
     responses: props.guestGroup.map((member) => ({
         id: member.id,
@@ -152,110 +140,137 @@ const buildPayload = () => ({
 </script>
 
 <template>
-    <SaveTheDateLayout>
+    <FullPageLayout>
         <Head :title="`Save the Date — ${coupleNames}`" />
-
-        <div class="flex justify-end px-6 pt-6">
-            <div
-                class="flex items-center gap-3"
-                role="group"
-                aria-label="Language"
-            >
-                <button
-                    v-for="(language, code) in languages"
-                    :key="code"
-                    type="button"
-                    :aria-pressed="displayLang === code"
-                    class="guest-eyebrow text-[0.625rem] transition-colors hover:text-accent"
-                    :class="
-                        displayLang === code
-                            ? 'text-accent'
-                            : 'text-muted-foreground'
-                    "
-                    @click="displayLang = code"
-                >
-                    {{ language.value }}
-                </button>
-            </div>
-        </div>
 
         <Hero
             :eyebrow="t.eyebrow"
             :names="coupleNames"
             :date="t.date"
             :location="t.location"
-            :greeting="t.greeting(guest.first_name)"
-            :intro="t.intro"
-        />
-
-        <Form
-            action="/save-the-date/confirm"
-            method="post"
-            :transform="buildPayload"
-            disable-while-processing
-            class="pb-20"
-            v-slot="{ errors, processing, wasSuccessful }"
         >
-            <div v-if="wasSuccessful" class="px-6 py-16 text-center">
+            <template #nav>
+                <div
+                    class="flex items-center gap-3"
+                    role="group"
+                    aria-label="Language"
+                >
+                    <button
+                        v-for="(language, code) in languages"
+                        :key="code"
+                        type="button"
+                        :aria-pressed="displayLang === code"
+                        class="guest-eyebrow text-[0.625rem] transition-colors hover:text-accent"
+                        :class="
+                            displayLang === code
+                                ? 'text-accent'
+                                : 'text-primary-foreground/55'
+                        "
+                        @click="displayLang = code"
+                    >
+                        {{ language.value }}
+                    </button>
+                </div>
+            </template>
+        </Hero>
+
+        <main >
+            <div class="px-6 pt-16 pb-10 text-center md:pt-20">
                 <div class="mx-auto max-w-md">
                     <p
-                        class="font-display text-2xl text-foreground md:text-3xl"
+                        class="font-display text-3xl text-foreground md:text-4xl"
                     >
-                        {{ t.successTitle }}
+                        {{ t.greeting(currentGuest.first_name) }}
                     </p>
                     <p
-                        class="mt-3 text-base leading-relaxed text-muted-foreground"
+                        class="mt-4 text-base leading-relaxed text-muted-foreground"
                     >
-                        {{ t.successBody }}
+                        {{ t.intro }}
                     </p>
                 </div>
             </div>
 
-            <template v-else>
-                <GroupConfirmation
-                    :title="t.groupTitle"
-                    :hint="t.groupHint"
-                    :members="guestGroup"
-                    :options="optionLabels"
-                    :selected="selected"
-                    :current-guest-id="guest.id"
-                    @select="setResponse"
-                />
-
-                <div class="px-6">
-                    <div class="mx-auto max-w-xl text-center">
+            <Form
+                action="/save-the-date/confirm"
+                method="post"
+                :transform="buildPayload"
+                disable-while-processing
+                class="pb-20"
+                v-slot="{ errors, processing, wasSuccessful }"
+            >
+                <div v-if="wasSuccessful" class="px-6 py-16 text-center">
+                    <div class="mx-auto max-w-md">
                         <p
-                            v-if="Object.keys(errors).length"
-                            class="mb-4 text-sm text-destructive"
+                            class="font-display text-2xl text-foreground md:text-3xl"
                         >
-                            {{ t.errorMessage }}
-                        </p>
-
-                        <Button
-                            type="submit"
-                            size="lg"
-                            class="w-full rounded-full sm:w-auto sm:px-12"
-                            :disabled="!hasAnyResponse || processing"
-                        >
-                            <Spinner v-if="processing" />
-                            {{ processing ? t.submitting : t.submit }}
-                        </Button>
-
-                        <p
-                            v-if="!hasAnyResponse"
-                            class="mt-3 text-sm text-muted-foreground"
-                        >
-                            {{ t.needOne }}
+                            {{ t.successTitle }}
                         </p>
                         <p
-                            v-else
-                            class="mt-4 text-sm leading-relaxed text-muted-foreground"
+                            class="mt-3 text-base leading-relaxed text-muted-foreground"
                         >
-                            {{ t.footerNote }}
+                            {{ t.successBody }}
                         </p>
                     </div>
                 </div>
-            </template>
-        </Form>
-    </SaveTheDateLayout>
+
+                <template v-else>
+                    <GroupConfirmation
+                        :title="t.groupTitle"
+                        :hint="t.groupHint"
+                        :members="guestGroup"
+                        :options="optionLabels"
+                        :selected="selected"
+                        :current-guest-id="currentGuest.id"
+                        @select="setResponse"
+                    />
+
+                    <div class="px-6">
+                        <div class="mx-auto max-w-xl text-center">
+                            <p
+                                v-if="Object.keys(errors).length"
+                                class="mb-4 text-sm text-destructive"
+                            >
+                                {{ t.errorMessage }}
+                            </p>
+
+                            <Button
+                                type="submit"
+                                size="lg"
+                                class="w-full rounded-full sm:w-auto sm:px-12"
+                                :disabled="!hasAnyResponse || processing"
+                            >
+                                <Spinner v-if="processing" />
+                                {{ processing ? t.submitting : t.submit }}
+                            </Button>
+
+                            <p
+                                v-if="!hasAnyResponse"
+                                class="mt-3 text-sm text-muted-foreground"
+                            >
+                                {{ t.needOne }}
+                            </p>
+                            <p
+                                v-else
+                                class="mt-4 text-sm leading-relaxed text-muted-foreground"
+                            >
+                                {{ t.footerNote }}
+                            </p>
+                        </div>
+                    </div>
+                </template>
+            </Form>
+
+            <div class="px-6 pb-14 text-center">
+                <div
+                    class="mx-auto flex max-w-xs items-center justify-center gap-3 text-muted-foreground/60"
+                >
+                    <span class="h-px w-10 bg-border" />
+                    <span class="font-display text-sm tracking-[0.2em]"
+                        >L &amp; D</span
+                    >
+                    <span class="h-px w-10 bg-border" />
+                </div>
+            </div>
+        </main>
+    </FullPageLayout>
 </template>
