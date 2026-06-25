@@ -1,10 +1,9 @@
-/* Guest Surface — skeleton
- * Editorial surface for guest-facing pages (Save the Date, Our Wedding,
- * Landing, etc.). Will be populated when recovering OurWedding/Landing
- * and building Save the Date.
- *
+/* Guest Surface
+ * Tokens and utilities for the guest (editorial / ceremonial) surface —
+ * guest-facing pages like Save the Date, Our Wedding and Landing.
  * Conventions documented in docs/design-system/surfaces.md.
  * Prefix: --guest-* / .guest-*
+ * Theme switching: :root = light, .dark = dark
  */
 
 :root {
@@ -17,4 +16,64 @@
     --guest-font-display: var(--font-display);
     --guest-font-heading: var(--font-heading);
     --guest-font-body: var(--font-body);
+
+    /* ----------------------------
+     * Eyebrow / overline — the editorial label that sits above a title.
+     * Kept as a divergence point: tracking and size are the knobs most
+     * likely to be tuned per campaign without touching the utility.
+     * ---------------------------- */
+    --guest-eyebrow-size: 0.6875rem; /* 11px */
+    --guest-eyebrow-tracking: 0.25em;
+
+    /* ----------------------------
+     * Ceremonial motion — entrance timing for editorial sections.
+     * ---------------------------- */
+    --guest-enter-duration: 700ms;
+    --guest-enter-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer utilities {
+    /* ----------------------------
+     * Eyebrow / overline typography
+     * The editorial counterpart of the (admin) label: an uppercase,
+     * widely-tracked overline. Colour is left to the consumer
+     * (e.g. `text-accent`, `text-muted-foreground`), matching how the
+     * source pages paired `.type-label` with a colour utility.
+     * ---------------------------- */
+    .guest-eyebrow {
+        font-family: var(--guest-font-body);
+        font-size: var(--guest-eyebrow-size);
+        line-height: 1.4;
+        font-weight: 500;
+        letter-spacing: var(--guest-eyebrow-tracking);
+        text-transform: uppercase;
+    }
+
+    /* ----------------------------
+     * Ceremonial entrance motion
+     * A restrained fade-and-rise for section entrances. Stagger with an
+     * arbitrary `[animation-delay:*]` on the consumer. Honours
+     * prefers-reduced-motion by resolving straight to the end state.
+     * ---------------------------- */
+    @keyframes guest-fade-up {
+        from {
+            opacity: 0;
+            transform: translateY(1rem);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .guest-fade-up {
+        animation: guest-fade-up var(--guest-enter-duration)
+            var(--guest-enter-ease) both;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .guest-fade-up {
+            animation: none;
+        }
+    }
 }
