@@ -17,9 +17,9 @@ defineEmits<{
 </script>
 
 <template>
-    <section class="px-6 pb-10">
+    <section class="px-6">
         <div class="mx-auto max-w-xl">
-            <div class="mb-6 text-center">
+            <div class="mb-2 text-center">
                 <h2 class="font-display text-2xl text-foreground md:text-3xl">
                     {{ title }}
                 </h2>
@@ -30,7 +30,7 @@ defineEmits<{
                 </p>
             </div>
 
-            <div class="space-y-4">
+            <div class="divide-y divide-border/60">
                 <ResponseCard
                     v-for="member in members"
                     :key="member.id"
