@@ -30,9 +30,12 @@ interface Copy {
     errorMessage: string;
     successTitle: string;
     successBody: string;
+    options: Record<ResponseOption, string>;
 }
 
-// English base copy. ES/PT coverage lands in the i18n pass.
+// UI copy per language. The per-language `options` localize the response
+// labels for the client-side language switch; the backend-provided
+// `options` prop stays authoritative for the guest's own language.
 const messages: Record<string, Copy> = {
     en: {
         eyebrow: 'Save the Date',
@@ -52,11 +55,77 @@ const messages: Record<string, Copy> = {
             "We couldn't save your responses. Check your connection and try again.",
         successTitle: 'Thank you, we saved your responses.',
         successBody: "We'll share more details about the wedding soon.",
+        options: {
+            yes: 'Yes',
+            probably_yes: 'Probably yes',
+            probably_no: 'Probably no',
+            no: 'No',
+        },
+    },
+    es: {
+        eyebrow: 'Save the Date',
+        date: '08 de abril, 2027',
+        location: 'Maringá, Brasil',
+        greeting: (name) => `Hola, ${name}.`,
+        intro: 'Queremos saber si probablemente podremos contar contigo.',
+        groupTitle: 'Tu grupo',
+        groupHint:
+            'Puedes responder por una o más personas ahora. No es obligatorio confirmar a todos.',
+        submit: 'Enviar respuestas',
+        submitting: 'Guardando…',
+        needOne:
+            'Elige una respuesta para al menos una persona para continuar.',
+        footerNote:
+            'Pronto compartiremos más detalles sobre viaje, hospedaje y agenda.',
+        errorMessage:
+            'No pudimos guardar tus respuestas. Revisa tu conexión e intenta de nuevo.',
+        successTitle: 'Gracias, guardamos tus respuestas.',
+        successBody: 'Pronto compartiremos más detalles de la boda.',
+        options: {
+            yes: 'Sí',
+            probably_yes: 'Probablemente sí',
+            probably_no: 'Probablemente no',
+            no: 'No',
+        },
+    },
+    pt: {
+        eyebrow: 'Save the Date',
+        date: '08 de abril de 2027',
+        location: 'Maringá, Brasil',
+        greeting: (name) => `Olá, ${name}.`,
+        intro: 'Queremos saber se provavelmente poderemos contar com você.',
+        groupTitle: 'Seu grupo',
+        groupHint:
+            'Você pode responder por uma ou mais pessoas agora. Não é obrigatório confirmar todos.',
+        submit: 'Enviar respostas',
+        submitting: 'Salvando…',
+        needOne:
+            'Escolha uma resposta para pelo menos uma pessoa para continuar.',
+        footerNote:
+            'Em breve compartilharemos mais detalhes sobre viagem, hospedagem e programação.',
+        errorMessage:
+            'Não foi possível salvar suas respostas. Verifique sua conexão e tente novamente.',
+        successTitle: 'Obrigado, salvamos suas respostas.',
+        successBody: 'Em breve compartilharemos mais detalhes do casamento.',
+        options: {
+            yes: 'Sim',
+            probably_yes: 'Provavelmente sim',
+            probably_no: 'Provavelmente não',
+            no: 'Não',
+        },
     },
 };
 
 const displayLang = ref(props.lang in messages ? props.lang : 'en');
 const t = computed<Copy>(() => messages[displayLang.value] ?? messages.en);
+
+// Option labels follow the selected language; the guest's own language
+// keeps the backend's authoritative labels.
+const optionLabels = computed<Record<ResponseOption, string>>(() =>
+    displayLang.value === props.lang
+        ? props.options
+        : (messages[displayLang.value]?.options ?? props.options),
+);
 
 // Selected response per member id — seeded from any previous response.
 // Independent of `displayLang`, so switching language never clears it.
@@ -147,7 +216,7 @@ const buildPayload = () => ({
                     :title="t.groupTitle"
                     :hint="t.groupHint"
                     :members="guestGroup"
-                    :options="options"
+                    :options="optionLabels"
                     :selected="selected"
                     :current-guest-id="guest.id"
                     @select="setResponse"
