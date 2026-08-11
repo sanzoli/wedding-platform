@@ -32,3 +32,4 @@ yarn-error.log
 /boost.json
 /.coverage/
 /tests/Browser/Screenshots
+/.serverless/
