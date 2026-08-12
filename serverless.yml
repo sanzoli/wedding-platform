@@ -2,7 +2,7 @@
 org: sanzoli
 # "app" enables Serverless Framework Dashboard features and sharing them with other Services.
 app: wedding-platform
-service: laravel
+service: wedding-platform
 
 # Set your team ID if you are using Bref Cloud (https://bref.sh/cloud)
 #bref:
@@ -28,11 +28,11 @@ provider:
         LOG_STDERR_FORMATTER: Bref\Monolog\CloudWatchFormatter
         # Database configuration: https://bref.sh/docs/environment/database
         DB_CONNECTION: mysql
-        DB_HOST: wedding-platform-db.cwrq6iq268ci.us-east-1.rds.amazonaws.com
+        DB_HOST: ${param:dbHost}
         DB_PORT: 3306
         DB_DATABASE: wedding_platform
         DB_USERNAME: root
-        DB_PASSWORD: ${ssm:/wedding-platform/db-password}
+        DB_PASSWORD: ${param:dbPassword}
         # Queue configuration: https://bref.sh/docs/laravel/queues
         #QUEUE_CONNECTION: sqs
         #SQS_QUEUE: ${construct:jobs.queueUrl}
@@ -94,7 +94,7 @@ constructs:
     # See https://bref.sh/docs/use-cases/websites
     website:
         type: server-side-website
-        #versionedAssets: true # zero-downtime deploys for assets
+        versionedAssets: true # zero-downtime deploys for assets
         assets:
             '/build/*': public/build
             #'/vendor/*': public/vendor # Uncomment if the public/vendor exists
@@ -111,8 +111,13 @@ params:
     prod:
         # Laravel expects "production" for `app()->isProduction()` to work correctly
         appEnv: production
+        dbHost: wedding-platform-db.cwrq6iq268ci.us-east-1.rds.amazonaws.com
+        dbPassword: ${ssm:/wedding-platform/db-password}
     dev:
+        appEnv: staging
         debug: 1 # Enable debug in `dev`
+        dbHost: wedding-platform-db-dev.cwrq6iq268ci.us-east-1.rds.amazonaws.com
+        dbPassword: ${ssm:/wedding-platform/dev/db-password}
 
 package:
     # Files and directories to exclude from deployment
