@@ -44,7 +44,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v6.2.3
         with:
-          role-to-assume: arn:aws:iam::705160055428:oidc-provider/token.actions.githubusercontent.com
+          role-to-assume: arn:aws:iam::705160055428:role/serverless-github-actions
           aws-region: us-east-1
 
       - name: Serverless deploy
