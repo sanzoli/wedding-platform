@@ -48,3 +48,10 @@ export interface QueryOptions extends Record<string, FormDataConvertible> {
     sort?: 'asc' | 'desc';
     sortBy?: string;
 }
+
+export interface BudgetItem {
+    id: string;
+    name: string;
+    expected_amount: number | undefined;
+    importance: 'MustHave' | 'High' | 'Normal' | 'Low' | null;
+}

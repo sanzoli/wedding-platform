@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\BudgetController;
+use App\Http\Controllers\BudgetItemsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\GuestGroupController;
@@ -25,6 +27,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('guests/group/{group}/split', 'split')->name('split');
             Route::put('guests/{guest}/group/{group}/change', 'change')->name('change');
         });
+
+    Route::get('budget', BudgetController::class)->name('budget');
+
+    Route::resource('items', BudgetItemsController::class)
+        ->only(['store', 'update', 'destroy']);
 });
 
 require __DIR__.'/settings.php';
