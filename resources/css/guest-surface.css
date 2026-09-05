@@ -45,6 +45,15 @@
      * purpose: the guest surface never follows the device theme.
      * ---------------------------- */
     --guest-paper: hsl(34 44% 96%);
+
+    /* ----------------------------
+     * Accent ink — the gold as TEXT on the paper ground. The display
+     * gold (--accent) is tuned for the dark hero, where it glows; on
+     * ivory it drops to 2.9:1 and disappears. This darker step reads at
+     * 4.9:1 on --guest-paper. Use --accent for accent surfaces and for
+     * text over the hero; use this for accent text over paper.
+     * ---------------------------- */
+    --guest-accent-ink: var(--p-gold-700);
 }
 
 /* ----------------------------
@@ -104,6 +113,13 @@
      * ---------------------------- */
     .guest-paper {
         background-color: var(--guest-paper);
+    }
+
+    /* ----------------------------
+     * Accent text on the paper ground
+     * ---------------------------- */
+    .guest-accent-ink {
+        color: var(--guest-accent-ink);
     }
 
     /* ----------------------------

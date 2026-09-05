@@ -33,7 +33,7 @@ const displayOrder: ResponseOption[] = [
                 {{ member.full_name }}
                 <span
                     v-if="isYou"
-                    class="ml-1 align-middle text-[0.625rem] tracking-[0.2em] text-accent uppercase"
+                    class="guest-accent-ink ml-1 align-middle text-[0.625rem] tracking-[0.2em] uppercase"
                 >
                     · you
                 </span>
