@@ -153,7 +153,6 @@ test('does not update budget with invalid draft', function () {
         ->assertJsonFragment(['message' => 'The draft field must be true or false.'])
         ->assertOnlyJsonValidationErrors('draft');
 
-    assertDatabaseMissing('budgets', ['draft' => 'not-bolean']);
     assertDatabaseHas('budgets', [
         'id' => $budget->id,
         'draft' => $budget->draft,

@@ -1,17 +1,32 @@
 <script setup lang="ts">
 import type { SelectRootEmits, SelectRootProps } from 'reka-ui'
 import { SelectContent, SelectIcon, SelectPortal, SelectRoot, SelectScrollDownButton, SelectTrigger, SelectValue, SelectViewport, useForwardPropsEmits } from 'reka-ui'
-import { ChevronDown, X } from 'lucide-vue-next';
+import { ChevronDown } from 'lucide-vue-next'
 
 const props = defineProps<SelectRootProps>()
 const emits = defineEmits<SelectRootEmits>()
 
 const forward = useForwardPropsEmits(props, emits)
+const modelValue = defineModel<string | number>()
+
+const clearSelect = (event: Event) => {
+    event.stopPropagation()
+    modelValue.value = undefined
+    emits('update:modelValue', undefined)
+}
+
+const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'Backspace' || event.key === 'Delete') {
+        event.preventDefault()
+        clearSelect(event)
+    }
+}
 </script>
 
 <template>
     <SelectRoot v-bind="forward">
         <SelectTrigger
+            @keydown="handleKeyDown"
             data-placeholder
             class="flex h-9 w-full items-center justify-between gap-2 whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus:border-ring focus:ring-ring/50 focus:ring-[3px] data-[placeholder]:text-muted-foreground"
         >

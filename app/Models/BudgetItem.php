@@ -24,6 +24,7 @@ class BudgetItem extends Model
     protected function casts(): array
     {
         return [
+            'expected_amount' => 'float',
             'importance' => Importance::class,
         ];
     }

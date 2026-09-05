@@ -1,0 +1,63 @@
+name: deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy'
+        type: environment
+        required: true
+        default: dev
+        options:
+          - prod
+          - dev
+
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  id-token: write  # Required for OIDC authentication
+
+jobs:
+  productionDeploy:
+    name: production-deploy
+    runs-on: ubuntu-latest
+    environment:
+      name: prod
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          cache: 'npm'
+
+      - name: Install Node Dependencies
+        run: npm ci
+
+      - name: Install Dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
+
+      - name: Build Assets
+        run: npm run build
+
+      - name: Install Serverless
+        run: npm i -g serverless@4.x
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v6.2.3
+        with:
+          role-to-assume: arn:aws:iam::705160055428:role/serverless-github-actions
+          aws-region: us-east-1
+
+      - name: Serverless deploy
+        run: serverless deploy --stage=${{ inputs.environment || 'prod'  }}
+        env:
+          SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}

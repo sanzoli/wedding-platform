@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { default as GuestCard } from '@/components/guests/DashboardCard.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { dashboard } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
@@ -24,7 +25,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                 <div
                     class="relative aspect-video overflow-hidden rounded-xl border border-border"
                 >
-                    <PlaceholderPattern />
+                    <GuestCard />
                 </div>
                 <div
                     class="relative aspect-video overflow-hidden rounded-xl border border-border"
