@@ -8,7 +8,7 @@ defineProps<{
 }>();
 
 /** How long a guest is left alone with the seal before the hint appears. */
-const HINT_DELAY = 3500;
+const HINT_DELAY = 3200;
 
 /** Flap swing plus the sleeve dissolve — see the guest-* motion tokens. */
 const OPENING_DURATION = 1750;
