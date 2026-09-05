@@ -54,6 +54,30 @@
      * text over the hero; use this for accent text over paper.
      * ---------------------------- */
     --guest-accent-ink: var(--p-gold-700);
+
+    /* ----------------------------
+     * Envelope intro — the parchment sleeve that fronts the invitation.
+     * The parchment ramp itself lives inline in the envelope artwork,
+     * where each gradient stop was tuned; these are the values reused
+     * outside it.
+     * ---------------------------- */
+    --guest-parchment: hsl(41 39% 90%);
+    --guest-parchment-edge: hsl(38 41% 33% / 0.24);
+    --guest-wax-halo: hsl(28 65% 9% / 0.42);
+
+    /* ----------------------------
+     * Envelope motion — the opening sequence, in the order it plays:
+     * the seal breaks, the flap swings back, the sleeve dissolves.
+     * The hint only appears if the guest hesitates.
+     * ---------------------------- */
+    --guest-seal-break-duration: 640ms;
+    --guest-seal-break-ease: cubic-bezier(0.5, 0, 0.2, 1);
+    --guest-flap-duration: 1050ms;
+    --guest-flap-delay: 250ms;
+    --guest-flap-ease: cubic-bezier(0.62, 0.02, 0.28, 1);
+    --guest-dissolve-duration: 800ms;
+    --guest-dissolve-delay: 950ms;
+    --guest-breathe-duration: 3800ms;
 }
 
 /* ----------------------------
@@ -174,6 +198,220 @@
     @media (prefers-reduced-motion: reduce) {
         .guest-sticky-header {
             transition: none;
+        }
+    }
+
+    /* ----------------------------
+     * Envelope intro
+     * A parchment sleeve over the invitation. It is a single-use layer:
+     * once the seal is broken it dissolves and the page underneath is
+     * the real Save the Date, never a copy of it.
+     * ---------------------------- */
+    .guest-envelope-stage {
+        position: fixed;
+        inset: 0;
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+        background: radial-gradient(
+            120% 120% at 50% 38%,
+            var(--p-teal-900) 0%,
+            hsl(184 96% 12%) 58%,
+            hsl(184 92% 9%) 100%
+        );
+        perspective: 1800px;
+        perspective-origin: 50% 42%;
+        transition:
+            opacity var(--guest-dissolve-duration) ease
+                var(--guest-dissolve-delay),
+            visibility 0s linear
+                calc(var(--guest-dissolve-duration) + var(--guest-dissolve-delay));
+    }
+
+    .guest-envelope-stage--opened {
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    .guest-envelope {
+        position: relative;
+        width: min(90vw, 1060px);
+        max-width: 100%;
+        aspect-ratio: 3 / 2;
+        transform-style: preserve-3d;
+        filter: drop-shadow(0 40px 60px hsl(185 100% 3% / 0.55));
+    }
+
+    .guest-envelope-sheet {
+        position: absolute;
+        inset: 0;
+        display: block;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+    }
+
+    .guest-envelope-flap {
+        z-index: 3;
+        transform-origin: 50% 0;
+        transform: rotateX(0deg);
+        transform-style: preserve-3d;
+        transition: transform var(--guest-flap-duration) var(--guest-flap-ease)
+            var(--guest-flap-delay);
+    }
+
+    .guest-envelope-stage--opened .guest-envelope-flap {
+        transform: rotateX(-172deg);
+    }
+
+    .guest-seal {
+        position: absolute;
+        top: 53.7%;
+        left: 50%;
+        z-index: 5;
+        display: block;
+        width: clamp(148px, 20vw, 244px);
+        aspect-ratio: 1;
+        padding: 0;
+        border: 0;
+        background: none;
+        transform: translate(-50%, -50%);
+        cursor: pointer;
+        filter: drop-shadow(0 9px 12px var(--guest-wax-halo));
+        animation: guest-breathe var(--guest-breathe-duration) ease-in-out
+            infinite;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .guest-seal:focus-visible {
+        border-radius: 50%;
+        outline: 2px solid var(--accent);
+        outline-offset: 8px;
+    }
+
+    @keyframes guest-breathe {
+        0%,
+        100% {
+            transform: translate(-50%, -50%) scale(1);
+        }
+        50% {
+            transform: translate(-50%, -50%) scale(1.02);
+        }
+    }
+
+    /* Two clipped copies of the same wax image: together they read as one
+     * seal, and on opening each half falls away from the break line. */
+    .guest-seal-half {
+        position: absolute;
+        inset: 0;
+        background: var(--guest-seal-image) center / contain no-repeat;
+        pointer-events: none;
+        transition:
+            transform var(--guest-seal-break-duration)
+                var(--guest-seal-break-ease),
+            opacity var(--guest-seal-break-duration) ease;
+    }
+
+    .guest-seal-half--left {
+        clip-path: polygon(
+            0 0,
+            50% 0,
+            53% 32%,
+            48% 58%,
+            52% 82%,
+            50% 100%,
+            0 100%
+        );
+    }
+
+    .guest-seal-half--right {
+        clip-path: polygon(
+            50% 0,
+            100% 0,
+            100% 100%,
+            50% 100%,
+            52% 82%,
+            48% 58%,
+            53% 32%
+        );
+    }
+
+    .guest-envelope-stage--opened .guest-seal-half--left {
+        transform: translate(-15%, 7%) rotate(-11deg);
+        opacity: 0;
+    }
+
+    .guest-envelope-stage--opened .guest-seal-half--right {
+        transform: translate(15%, 8%) rotate(10deg);
+        opacity: 0;
+    }
+
+    .guest-envelope-stage--opened .guest-seal,
+    .guest-envelope-stage--opened .guest-envelope-hint {
+        opacity: 0;
+        animation: none;
+        transition: opacity 380ms ease;
+    }
+
+    /* Safety net for a guest who does not read the seal as a button:
+     * hidden at first, faded in only after a pause, then barely pulsing. */
+    .guest-envelope-hint {
+        position: absolute;
+        top: 78%;
+        left: 50%;
+        z-index: 4;
+        margin: 0;
+        color: var(--guest-accent-ink);
+        font-size: clamp(0.6rem, 1vw, 0.7rem);
+        font-weight: 500;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        opacity: 0;
+        transform: translateX(-50%);
+        transition: opacity var(--guest-enter-duration) var(--guest-enter-ease);
+    }
+
+    .guest-envelope-hint--visible {
+        opacity: 0.7;
+        animation: guest-hint-pulse var(--guest-breathe-duration) ease-in-out
+            infinite;
+    }
+
+    @keyframes guest-hint-pulse {
+        0%,
+        100% {
+            opacity: 0.45;
+        }
+        50% {
+            opacity: 0.75;
+        }
+    }
+
+    @media (max-width: 560px) {
+        .guest-envelope {
+            width: 100%;
+            aspect-ratio: 1.35 / 1;
+        }
+
+        .guest-envelope-hint {
+            top: 80%;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .guest-envelope-stage,
+        .guest-envelope-flap,
+        .guest-seal-half,
+        .guest-envelope-hint {
+            transition: none;
+        }
+
+        .guest-seal,
+        .guest-envelope-hint--visible {
+            animation: none;
         }
     }
 }

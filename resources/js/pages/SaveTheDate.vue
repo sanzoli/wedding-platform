@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import EnvelopeIntro from '@/components/guest/EnvelopeIntro.vue';
 import GroupConfirmation from '@/components/guest/GroupConfirmation.vue';
 import Hero from '@/components/guest/Hero.vue';
 import { Button } from '@/components/ui/button';
@@ -13,6 +14,8 @@ const props = defineProps<SaveTheDateProps>();
 const coupleNames = 'Lauana & David';
 
 interface Copy {
+    envelopeHint: string;
+    envelopeOpen: string;
     eyebrow: string;
     date: string;
     location: string;
@@ -32,6 +35,8 @@ interface Copy {
 
 const messages: Record<string, Copy> = {
     en: {
+        envelopeHint: 'Tap the seal to open',
+        envelopeOpen: 'Open the invitation',
         eyebrow: 'Save the Date',
         date: 'April 8, 2027',
         location: 'Maringá, Brazil',
@@ -57,6 +62,8 @@ const messages: Record<string, Copy> = {
         },
     },
     es: {
+        envelopeHint: 'Toca el sello para abrir',
+        envelopeOpen: 'Abrir la invitación',
         eyebrow: 'Save the Date',
         date: '08 de abril, 2027',
         location: 'Maringá, Brasil',
@@ -83,6 +90,8 @@ const messages: Record<string, Copy> = {
         },
     },
     pt: {
+        envelopeHint: 'Toque o selo para abrir',
+        envelopeOpen: 'Abrir o convite',
         eyebrow: 'Save the Date',
         date: '08 de abril de 2027',
         location: 'Maringá, Brasil',
@@ -263,4 +272,6 @@ const buildPayload = () => ({
             </div>
         </main>
     </FullPageLayout>
+
+    <EnvelopeIntro :hint="t.envelopeHint" :open-label="t.envelopeOpen" />
 </template>
