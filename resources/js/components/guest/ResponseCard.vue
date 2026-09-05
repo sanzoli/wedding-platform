@@ -24,8 +24,8 @@ const choices: { value: ResponseOption; icon: Component }[] = [
 </script>
 
 <template>
-    <article class="guest-card">
-        <div class="mb-4 flex items-center gap-3">
+    <article class="guest-card lg:flex lg:items-center lg:gap-5">
+        <div class="mb-4 flex items-center gap-3 lg:mb-0 lg:w-40 lg:shrink-0">
             <span
                 class="flex size-10 shrink-0 items-center justify-center rounded-full border border-accent/30 bg-accent/10 text-xs font-medium tracking-wide text-foreground"
                 aria-hidden="true"
@@ -43,7 +43,7 @@ const choices: { value: ResponseOption; icon: Component }[] = [
             </p>
         </div>
 
-        <fieldset>
+        <fieldset class="lg:min-w-0 lg:flex-1">
             <legend class="sr-only">{{ member.full_name }}</legend>
 
             <div class="grid gap-2 sm:grid-cols-2">
