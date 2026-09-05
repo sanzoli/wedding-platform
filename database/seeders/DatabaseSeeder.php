@@ -2,9 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Budget;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -22,9 +20,6 @@ class DatabaseSeeder extends Seeder
                 'password' => 'password',
             ]);
 
-        Budget::factory()
-            ->create([
-                'name' => 'Wedding Budget',
-            ]);
+        $this->call([PrincipalBudgetSeeder::class]);
     }
 }
