@@ -143,51 +143,47 @@ const buildPayload = () => ({
     <FullPageLayout>
         <Head :title="`Save the Date — ${coupleNames}`" />
 
-        <Hero
-            :eyebrow="t.eyebrow"
-            :names="coupleNames"
-            :date="t.date"
-            :location="t.location"
-        >
-            <template #nav>
-                <div
-                    class="flex items-center gap-3"
-                    role="group"
-                    aria-label="Language"
-                >
-                    <button
-                        v-for="(language, code) in languages"
-                        :key="code"
-                        type="button"
-                        :aria-pressed="displayLang === code"
-                        class="guest-eyebrow text-[0.625rem] transition-colors hover:text-accent"
-                        :class="
-                            displayLang === code
-                                ? 'text-accent'
-                                : 'text-primary-foreground/55'
-                        "
-                        @click="displayLang = code"
+        <template #aside>
+            <Hero
+                :eyebrow="t.eyebrow"
+                :names="coupleNames"
+                :date="t.date"
+                :location="t.location"
+            >
+                <template #nav>
+                    <div
+                        class="flex items-center gap-1"
+                        role="group"
+                        aria-label="Language"
                     >
-                        {{ language.value }}
-                    </button>
-                </div>
-            </template>
-        </Hero>
+                        <button
+                            v-for="(language, code) in languages"
+                            :key="code"
+                            type="button"
+                            :aria-pressed="displayLang === code"
+                            class="guest-eyebrow inline-flex min-h-12 min-w-12 items-center justify-center rounded-full px-2 text-xs transition-colors hover:text-accent focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
+                            :class="
+                                displayLang === code
+                                    ? 'text-accent'
+                                    : 'text-primary-foreground/70'
+                            "
+                            @click="displayLang = code"
+                        >
+                            {{ language.value }}
+                        </button>
+                    </div>
+                </template>
+            </Hero>
+        </template>
 
-        <main >
-            <div class="px-6 pt-16 pb-10 text-center md:pt-20">
-                <div class="mx-auto max-w-md">
-                    <p
-                        class="font-display text-3xl text-foreground md:text-4xl"
-                    >
-                        {{ t.greeting(currentGuest.first_name) }}
-                    </p>
-                    <p
-                        class="mt-4 text-base leading-relaxed text-muted-foreground"
-                    >
-                        {{ t.intro }}
-                    </p>
-                </div>
+        <main class="mx-auto w-full max-w-xl">
+            <div class="px-6 pt-16 pb-10 text-center lg:pt-14">
+                <p class="font-display text-3xl text-foreground md:text-4xl">
+                    {{ t.greeting(currentGuest.first_name) }}
+                </p>
+                <p class="mt-4 text-base leading-relaxed text-muted-foreground">
+                    {{ t.intro }}
+                </p>
             </div>
 
             <Form
@@ -195,22 +191,18 @@ const buildPayload = () => ({
                 method="post"
                 :transform="buildPayload"
                 disable-while-processing
-                class="pb-20"
+                class="pb-16"
                 v-slot="{ errors, processing, wasSuccessful }"
             >
                 <div v-if="wasSuccessful" class="px-6 py-16 text-center">
-                    <div class="mx-auto max-w-md">
-                        <p
-                            class="font-display text-2xl text-foreground md:text-3xl"
-                        >
-                            {{ t.successTitle }}
-                        </p>
-                        <p
-                            class="mt-3 text-base leading-relaxed text-muted-foreground"
-                        >
-                            {{ t.successBody }}
-                        </p>
-                    </div>
+                    <p class="font-display text-2xl text-foreground md:text-3xl">
+                        {{ t.successTitle }}
+                    </p>
+                    <p
+                        class="mt-3 text-base leading-relaxed text-muted-foreground"
+                    >
+                        {{ t.successBody }}
+                    </p>
                 </div>
 
                 <template v-else>
@@ -224,38 +216,36 @@ const buildPayload = () => ({
                         @select="setResponse"
                     />
 
-                    <div class="px-6">
-                        <div class="mx-auto max-w-xl text-center">
-                            <p
-                                v-if="Object.keys(errors).length"
-                                class="mb-4 text-sm text-destructive"
-                            >
-                                {{ t.errorMessage }}
-                            </p>
+                    <div class="px-6 text-center">
+                        <p
+                            v-if="Object.keys(errors).length"
+                            class="mb-4 text-sm text-destructive"
+                        >
+                            {{ t.errorMessage }}
+                        </p>
 
-                            <Button
-                                type="submit"
-                                size="lg"
-                                class="w-full rounded-full sm:w-auto sm:px-12"
-                                :disabled="!hasAnyResponse || processing"
-                            >
-                                <Spinner v-if="processing" />
-                                {{ processing ? t.submitting : t.submit }}
-                            </Button>
+                        <Button
+                            type="submit"
+                            size="lg"
+                            class="min-h-12 w-full rounded-full text-base sm:w-auto sm:px-12"
+                            :disabled="!hasAnyResponse || processing"
+                        >
+                            <Spinner v-if="processing" />
+                            {{ processing ? t.submitting : t.submit }}
+                        </Button>
 
-                            <p
-                                v-if="!hasAnyResponse"
-                                class="mt-3 text-sm text-muted-foreground"
-                            >
-                                {{ t.needOne }}
-                            </p>
-                            <p
-                                v-else
-                                class="mt-4 text-sm leading-relaxed text-muted-foreground"
-                            >
-                                {{ t.footerNote }}
-                            </p>
-                        </div>
+                        <p
+                            v-if="!hasAnyResponse"
+                            class="mt-3 text-base text-muted-foreground"
+                        >
+                            {{ t.needOne }}
+                        </p>
+                        <p
+                            v-else
+                            class="mt-4 text-base leading-relaxed text-muted-foreground"
+                        >
+                            {{ t.footerNote }}
+                        </p>
                     </div>
                 </template>
             </Form>
