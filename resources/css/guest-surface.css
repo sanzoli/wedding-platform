@@ -235,6 +235,10 @@
         visibility: hidden;
     }
 
+    /* The box must keep the artwork's own 3:2 ratio at every size: the flap
+     * hinges on `transform-origin: 50% 0`, the top of the BOX, so any
+     * letterboxing would swing it around a line above its real fold and
+     * tear it off the envelope body. */
     .guest-envelope {
         position: relative;
         width: min(90vw, 1060px);
@@ -393,7 +397,6 @@
     @media (max-width: 560px) {
         .guest-envelope {
             width: 100%;
-            aspect-ratio: 1.35 / 1;
         }
 
         .guest-envelope-hint {
