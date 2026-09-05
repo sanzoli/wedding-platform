@@ -306,7 +306,12 @@
     }
 
     /* Two clipped copies of the same wax image: together they read as one
-     * seal, and on opening each half falls away from the break line. */
+     * seal, and on opening each half falls away from the break line.
+     *
+     * Both polygons trace the SAME jagged diagonal — 31% 0 → 43% 26% →
+     * 50% 50% → 61% 74% → 71% 100% — so they tile seamlessly at rest and
+     * part perpendicular to it, the way wax actually cracks. Edit one
+     * crack point and you must edit the other. */
     .guest-seal-half {
         position: absolute;
         inset: 0;
@@ -320,35 +325,35 @@
 
     .guest-seal-half--left {
         clip-path: polygon(
+            31% 0,
             0 0,
-            50% 0,
-            53% 32%,
-            48% 58%,
-            52% 82%,
-            50% 100%,
-            0 100%
+            0 100%,
+            71% 100%,
+            61% 74%,
+            50% 50%,
+            43% 26%
         );
     }
 
     .guest-seal-half--right {
         clip-path: polygon(
-            50% 0,
-            100% 0,
+            31% 0,
+            43% 26%,
+            50% 50%,
+            61% 74%,
+            71% 100%,
             100% 100%,
-            50% 100%,
-            52% 82%,
-            48% 58%,
-            53% 32%
+            100% 0
         );
     }
 
     .guest-envelope-stage--opened .guest-seal-half--left {
-        transform: translate(-15%, 7%) rotate(-11deg);
+        transform: translate(-13%, 13%) rotate(-9deg);
         opacity: 0;
     }
 
     .guest-envelope-stage--opened .guest-seal-half--right {
-        transform: translate(15%, 8%) rotate(10deg);
+        transform: translate(13%, -10%) rotate(9deg);
         opacity: 0;
     }
 
