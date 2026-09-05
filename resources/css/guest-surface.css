@@ -276,7 +276,7 @@
         left: 50%;
         z-index: 5;
         display: block;
-        width: clamp(148px, 20vw, 244px);
+        width: clamp(88px, 23%, 244px);
         aspect-ratio: 1;
         padding: 0;
         border: 0;
@@ -308,10 +308,12 @@
     /* Two clipped copies of the same wax image: together they read as one
      * seal, and on opening each half falls away from the break line.
      *
-     * Both polygons trace the SAME jagged diagonal — 31% 0 → 43% 26% →
-     * 50% 50% → 61% 74% → 71% 100% — so they tile seamlessly at rest and
-     * part perpendicular to it, the way wax actually cracks. Edit one
-     * crack point and you must edit the other. */
+     * Both polygons trace the SAME jagged crack, so they tile seamlessly
+     * at rest and part perpendicular to it, the way wax actually cracks.
+     * Edit one crack point and you must edit the other.
+     *
+     * The crack runs at 35.75°, matching the 430/600 slope of the top
+     * flap's edge: the seal reads as split along the fold underneath it. */
     .guest-seal-half {
         position: absolute;
         inset: 0;
@@ -325,35 +327,39 @@
 
     .guest-seal-half--left {
         clip-path: polygon(
-            31% 0,
-            0 0,
-            0 100%,
-            71% 100%,
-            61% 74%,
+            0 14%,
+            22% 27.5%,
+            40% 45.5%,
             50% 50%,
-            43% 26%
+            63% 56.5%,
+            82% 75.5%,
+            100% 86%,
+            100% 100%,
+            0 100%
         );
     }
 
     .guest-seal-half--right {
         clip-path: polygon(
-            31% 0,
-            43% 26%,
+            0 14%,
+            0 0,
+            100% 0,
+            100% 86%,
+            82% 75.5%,
+            63% 56.5%,
             50% 50%,
-            61% 74%,
-            71% 100%,
-            100% 100%,
-            100% 0
+            40% 45.5%,
+            22% 27.5%
         );
     }
 
     .guest-envelope-stage--opened .guest-seal-half--left {
-        transform: translate(-13%, 13%) rotate(-9deg);
+        transform: translate(-10%, 14%) rotate(-9deg);
         opacity: 0;
     }
 
     .guest-envelope-stage--opened .guest-seal-half--right {
-        transform: translate(13%, -10%) rotate(9deg);
+        transform: translate(10%, -14%) rotate(9deg);
         opacity: 0;
     }
 
