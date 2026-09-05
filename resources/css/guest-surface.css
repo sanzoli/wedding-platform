@@ -32,6 +32,13 @@
     --guest-enter-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
     /* ----------------------------
+     * Collapsed guest header — the compact bar the hero becomes once the
+     * guest scrolls past it on small screens.
+     * ---------------------------- */
+    --guest-header-height: 4rem;
+    --guest-header-transition: 320ms var(--guest-enter-ease);
+
+    /* ----------------------------
      * Editorial paper — the warm ivory ground for guest light sections,
      * a step warmer than the shared --background, to read as invitation
      * stock rather than an app canvas.
@@ -92,6 +99,33 @@
     @media (prefers-reduced-motion: reduce) {
         .guest-fade-up {
             animation: none;
+        }
+    }
+
+    /* ----------------------------
+     * Collapsed guest header
+     * Hidden and non-interactive until the consumer marks it shown, so the
+     * bar rises into place on scroll instead of appearing abruptly.
+     * ---------------------------- */
+    .guest-sticky-header {
+        height: var(--guest-header-height);
+        opacity: 0;
+        transform: translateY(-100%);
+        pointer-events: none;
+        transition:
+            opacity var(--guest-header-transition),
+            transform var(--guest-header-transition);
+    }
+
+    .guest-sticky-header--shown {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .guest-sticky-header {
+            transition: none;
         }
     }
 }

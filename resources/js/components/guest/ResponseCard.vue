@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { GuestGroupMember, ResponseOption } from '@/types/save-the-date';
 
-const props = defineProps<{
+defineProps<{
     member: GuestGroupMember;
     options: Record<ResponseOption, string>;
     selected: ResponseOption | null;
@@ -12,7 +12,12 @@ defineEmits<{
     select: [response: ResponseOption];
 }>();
 
-const displayOrder: ResponseOption[] = ['yes', 'probably_yes', 'probably_no', 'no'];
+const displayOrder: ResponseOption[] = [
+    'yes',
+    'probably_yes',
+    'probably_no',
+    'no',
+];
 </script>
 
 <template>
@@ -37,7 +42,7 @@ const displayOrder: ResponseOption[] = ['yes', 'probably_yes', 'probably_no', 'n
 
         <fieldset>
             <legend class="sr-only">Response for {{ member.full_name }}</legend>
-            <div class="flex flex-wrap gap-2">
+            <div class="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
                 <label
                     v-for="option in displayOrder"
                     :key="option"
@@ -52,7 +57,7 @@ const displayOrder: ResponseOption[] = ['yes', 'probably_yes', 'probably_no', 'n
                         @change="$emit('select', option)"
                     />
                     <span
-                        class="inline-flex items-center rounded-full border border-border px-4 py-1.5 text-sm text-muted-foreground transition-colors peer-checked:border-accent peer-checked:bg-accent peer-checked:text-accent-foreground peer-focus-visible:ring-2 peer-focus-visible:ring-accent peer-focus-visible:outline-none hover:border-accent/50 hover:text-foreground"
+                        class="inline-flex min-h-12 w-full items-center justify-center rounded-full border border-border px-5 text-base text-foreground/80 transition-colors peer-checked:border-accent peer-checked:bg-accent peer-checked:text-accent-foreground peer-focus-visible:ring-2 peer-focus-visible:ring-accent peer-focus-visible:ring-offset-2 peer-focus-visible:outline-none hover:border-accent/50 hover:text-foreground sm:w-auto"
                     >
                         {{ options[option] }}
                     </span>
