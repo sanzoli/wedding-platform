@@ -201,14 +201,22 @@ const buildPayload = () => ({
             <div
                 class="px-6 pt-[calc(var(--guest-header-height)+2rem)] pb-8 text-center lg:pt-14"
             >
-                <p class="font-display text-3xl text-foreground md:text-4xl">
+                <p class="font-display text-4xl text-foreground md:text-5xl">
                     {{ t.greeting(currentGuest.first_name) }}
                 </p>
-                <p class="mt-4 text-base leading-relaxed text-muted-foreground">
+                <p
+                    class="mx-auto mt-3 max-w-md text-lg leading-relaxed text-foreground/90"
+                >
                     {{ t.intro }}
                 </p>
+
+                <span
+                    class="mx-auto mt-7 block h-px w-10 bg-border"
+                    aria-hidden="true"
+                />
+
                 <p
-                    class="mx-auto mt-4 max-w-md text-base leading-relaxed text-muted-foreground/85"
+                    class="mx-auto mt-5 max-w-sm text-sm leading-relaxed text-muted-foreground"
                 >
                     {{ t.groupHint }}
                 </p>
