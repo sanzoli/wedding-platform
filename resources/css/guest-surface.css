@@ -112,6 +112,17 @@
     --muted: var(--p-neutral-100);
     --muted-foreground: var(--p-neutral-700);
 
+    --secondary: var(--p-sand-200);
+    --secondary-foreground: var(--p-neutral-900);
+
+    --popover: var(--p-neutral-0);
+    --popover-foreground: var(--p-neutral-900);
+
+    --surface: var(--p-neutral-0);
+    --surface-foreground: var(--p-neutral-900);
+    --hover: var(--p-neutral-100);
+    --hover-foreground: var(--p-neutral-900);
+
     --accent: var(--p-gold-500);
     --accent-foreground: var(--p-neutral-900);
 
@@ -470,7 +481,10 @@
         gap: 0.75rem;
         min-height: 3rem;
         padding-inline: 1rem;
-        border-radius: 999px;
+        /* Squarer than the pill of the submit button on purpose: the
+         * primary action keeps the full radius to itself. */
+        border-radius: 0.75rem;
+        border: 1px solid var(--border);
         background-color: var(--muted);
         color: var(--foreground);
         font-size: 1rem;
@@ -478,14 +492,17 @@
         cursor: pointer;
         transition:
             background-color var(--guest-state-transition),
+            border-color var(--guest-state-transition),
             color var(--guest-state-transition);
     }
 
     .guest-option:hover {
+        border-color: var(--accent);
         background-color: var(--hover);
     }
 
     .guest-option:has(input:checked) {
+        border-color: var(--accent);
         background-color: var(--accent);
         color: var(--accent-foreground);
         font-weight: 500;

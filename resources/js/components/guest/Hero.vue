@@ -28,8 +28,12 @@ const startObserving = () => {
         return;
     }
 
+    // Trimming the root by the band's own height hands over exactly as the
+    // hero's foot clears the top: the band takes the hero's place instead
+    // of sliding in over a hero that is still on screen.
     observer = new IntersectionObserver(
         ([entry]) => (collapsed.value = !entry.isIntersecting),
+        { rootMargin: '-60px 0px 0px 0px' },
     );
     observer.observe(sentinel.value);
 };
@@ -104,9 +108,7 @@ onBeforeUnmount(() => {
                 </p>
             </div>
 
-            <div ref="sentinel" class="mt-8 h-px w-full lg:hidden" />
-
-            <div class="mt-4 flex justify-center lg:hidden">
+            <div class="mt-6 flex justify-center lg:hidden">
                 <slot name="nav" />
             </div>
         </div>
@@ -117,6 +119,8 @@ onBeforeUnmount(() => {
             <span class="guest-eyebrow text-[0.5625rem]">{{ scrollCue }}</span>
             <ChevronDown class="size-4" aria-hidden="true" />
         </div>
+
+        <div ref="sentinel" class="h-px w-full lg:hidden" />
     </section>
 
     <header
