@@ -3,12 +3,12 @@ import ResponseCard from '@/components/guest/ResponseCard.vue';
 import type { GuestGroupMember, ResponseOption } from '@/types/save-the-date';
 
 defineProps<{
-    title: string;
     hint: string;
     members: GuestGroupMember[];
     options: Record<ResponseOption, string>;
     selected: Record<number, ResponseOption | null>;
     currentGuestId: number;
+    youLabel: string;
 }>();
 
 defineEmits<{
@@ -18,24 +18,20 @@ defineEmits<{
 
 <template>
     <section class="px-6 pb-4">
-        <div class="mb-2 text-center">
-            <h2 class="font-display text-2xl text-foreground md:text-3xl">
-                {{ title }}
-            </h2>
-            <p
-                class="mx-auto mt-2 max-w-md text-base leading-relaxed text-muted-foreground"
-            >
-                {{ hint }}
-            </p>
-        </div>
+        <p
+            class="mx-auto mb-6 max-w-md text-center text-base leading-relaxed text-muted-foreground"
+        >
+            {{ hint }}
+        </p>
 
-        <div class="divide-y divide-border/60">
+        <div class="space-y-4">
             <ResponseCard
                 v-for="member in members"
                 :key="member.id"
                 :member="member"
                 :options="options"
                 :selected="selected[member.id] ?? null"
+                :you-label="youLabel"
                 :is-you="member.id === currentGuestId"
                 @select="(response) => $emit('select', member.id, response)"
             />

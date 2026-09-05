@@ -35,8 +35,16 @@
      * Collapsed guest header — the compact bar the hero becomes once the
      * guest scrolls past it on small screens.
      * ---------------------------- */
-    --guest-header-height: 4rem;
+    --guest-header-height: 3.5rem;
     --guest-header-transition: 320ms var(--guest-enter-ease);
+
+    /* Hero stops short of the viewport so the greeting below peeks in and
+     * announces that there is more to read. */
+    --guest-hero-mobile-height: 80svh;
+
+    /* State changes a finger drives — quicker than the ceremonial
+     * entrance motion, which would feel laggy under a tap. */
+    --guest-state-transition: 160ms ease;
 
     /* ----------------------------
      * Editorial paper — the warm ivory ground for the guest surface, a
@@ -132,6 +140,15 @@
         text-transform: uppercase;
     }
 
+    /* The eyebrow shrunk for the collapsed header, where it shares a
+     * 56px band with the names, the date and the language toggle. It has
+     * to be a modifier: `.guest-eyebrow` sets font-size from a token, so
+     * a size utility alongside it does not reliably win. */
+    .guest-eyebrow--xs {
+        font-size: 0.5rem;
+        letter-spacing: 0.2em;
+    }
+
     /* ----------------------------
      * Editorial paper ground
      * ---------------------------- */
@@ -180,7 +197,7 @@
      * bar rises into place on scroll instead of appearing abruptly.
      * ---------------------------- */
     .guest-sticky-header {
-        height: var(--guest-header-height);
+        min-height: var(--guest-header-height);
         opacity: 0;
         transform: translateY(-100%);
         pointer-events: none;
@@ -426,6 +443,62 @@
         .guest-seal,
         .guest-envelope-hint--visible {
             animation: none;
+        }
+    }
+
+    /* ----------------------------
+     * Guest card
+     * The editorial counterpart of the admin card: a hairline outline and
+     * generous corners, no shadow — a printed reply slip, not a panel.
+     * ---------------------------- */
+    .guest-card {
+        border: 1px solid var(--border);
+        border-radius: 1.25rem;
+        background-color: var(--card);
+        padding: 1.25rem;
+    }
+
+    /* ----------------------------
+     * Response option
+     * A full-width pill on phones, two-up from `sm`. The resting state is
+     * a soft fill rather than an outline, so the gold selected state is
+     * the only hard edge on the card.
+     * ---------------------------- */
+    .guest-option {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        min-height: 3rem;
+        padding-inline: 1rem;
+        border-radius: 999px;
+        background-color: var(--muted);
+        color: var(--foreground);
+        font-size: 1rem;
+        line-height: 1.2;
+        cursor: pointer;
+        transition:
+            background-color var(--guest-state-transition),
+            color var(--guest-state-transition);
+    }
+
+    .guest-option:hover {
+        background-color: var(--hover);
+    }
+
+    .guest-option:has(input:checked) {
+        background-color: var(--accent);
+        color: var(--accent-foreground);
+        font-weight: 500;
+    }
+
+    .guest-option:has(input:focus-visible) {
+        outline: 2px solid var(--ring);
+        outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .guest-option {
+            transition: none;
         }
     }
 }
