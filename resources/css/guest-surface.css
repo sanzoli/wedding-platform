@@ -47,19 +47,11 @@
     --guest-state-transition: 160ms ease;
 
     /* ----------------------------
-     * Editorial paper — the warm ivory ground for the guest surface, a
-     * step warmer than the shared --background, to read as invitation
-     * stock rather than an app canvas. It has no dark counterpart on
-     * purpose: the guest surface never follows the device theme.
-     * ---------------------------- */
-    --guest-paper: hsl(34 44% 96%);
-
-    /* ----------------------------
-     * Accent ink — the gold as TEXT on the paper ground. The display
-     * gold (--accent) is tuned for the dark hero, where it glows; on
-     * ivory it drops to 2.9:1 and disappears. This darker step reads at
-     * 4.9:1 on --guest-paper. Use --accent for accent surfaces and for
-     * text over the hero; use this for accent text over paper.
+     * Accent ink — the gold as TEXT on the light ground. The display
+     * gold (--accent) is tuned for the dark hero, where it glows; on a
+     * light ground it falls under 3:1 and disappears. This darker step
+     * clears AA there. Use --accent for accent surfaces and for text over
+     * the hero; use this for accent text over the light ground.
      * ---------------------------- */
     --guest-accent-ink: var(--p-gold-700);
 
@@ -93,14 +85,19 @@
  * An invitation is a printed object, not an app: it looks the same for
  * every guest regardless of the theme their device asks for. This pins
  * the semantic tokens the guest pages consume back to the light values,
- * so the surface stays ivory-and-teal even under `.dark`, and grounds it
- * on the editorial paper instead of the app canvas.
+ * so the surface stays white-and-teal even under `.dark`.
  *
  * Values point at the primitive palette, the same source the light
  * `:root` block uses — never at literal colours.
  * ---------------------------- */
+/* The surface lives on an inner element, so the document behind it keeps
+ * the admin theme and shows through on overscroll rebound. */
+:root:has(.guest-surface) body {
+    background-color: var(--p-neutral-0);
+}
+
 .guest-surface {
-    --background: var(--guest-paper);
+    --background: var(--p-neutral-0);
     --foreground: var(--p-neutral-900);
 
     --card: var(--p-neutral-0);
@@ -161,14 +158,7 @@
     }
 
     /* ----------------------------
-     * Editorial paper ground
-     * ---------------------------- */
-    .guest-paper {
-        background-color: var(--guest-paper);
-    }
-
-    /* ----------------------------
-     * Accent text on the paper ground
+     * Accent text on the light ground
      * ---------------------------- */
     .guest-accent-ink {
         color: var(--guest-accent-ink);
@@ -480,7 +470,7 @@
         align-items: center;
         gap: 0.75rem;
         min-height: 3rem;
-        padding-inline: 0.875rem;
+        padding-inline: 1rem;
         /* Squarer than the pill of the submit button on purpose: the
          * primary action keeps the full radius to itself. */
         border-radius: 0.75rem;
