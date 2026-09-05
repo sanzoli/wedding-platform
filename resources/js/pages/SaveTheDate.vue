@@ -140,7 +140,7 @@ const buildPayload = () => ({
 </script>
 
 <template>
-    <FullPageLayout>
+    <FullPageLayout class="guest-surface">
         <Head :title="`Save the Date — ${coupleNames}`" />
 
         <template #aside>

@@ -39,15 +39,47 @@
     --guest-header-transition: 320ms var(--guest-enter-ease);
 
     /* ----------------------------
-     * Editorial paper — the warm ivory ground for guest light sections,
-     * a step warmer than the shared --background, to read as invitation
-     * stock rather than an app canvas.
+     * Editorial paper — the warm ivory ground for the guest surface, a
+     * step warmer than the shared --background, to read as invitation
+     * stock rather than an app canvas. It has no dark counterpart on
+     * purpose: the guest surface never follows the device theme.
      * ---------------------------- */
     --guest-paper: hsl(34 44% 96%);
 }
 
-.dark {
-    --guest-paper: hsl(220 16% 11%);
+/* ----------------------------
+ * Guest surface ground
+ * An invitation is a printed object, not an app: it looks the same for
+ * every guest regardless of the theme their device asks for. This pins
+ * the semantic tokens the guest pages consume back to the light values,
+ * so the surface stays ivory-and-teal even under `.dark`, and grounds it
+ * on the editorial paper instead of the app canvas.
+ *
+ * Values point at the primitive palette, the same source the light
+ * `:root` block uses — never at literal colours.
+ * ---------------------------- */
+.guest-surface {
+    --background: var(--guest-paper);
+    --foreground: var(--p-neutral-900);
+
+    --card: var(--p-neutral-0);
+    --card-foreground: var(--p-neutral-900);
+
+    --primary: var(--p-teal-900);
+    --primary-foreground: var(--p-neutral-0);
+
+    --muted: var(--p-neutral-100);
+    --muted-foreground: var(--p-neutral-700);
+
+    --accent: var(--p-gold-500);
+    --accent-foreground: var(--p-neutral-900);
+
+    --destructive: var(--p-red-600);
+    --destructive-foreground: var(--p-neutral-0);
+
+    --border: var(--p-neutral-200);
+    --input: var(--p-neutral-200);
+    --ring: var(--p-teal-700);
 }
 
 @layer utilities {
