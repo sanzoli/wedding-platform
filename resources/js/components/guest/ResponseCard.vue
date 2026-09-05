@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import type { GuestGroupMember, ResponseOption } from '@/types/save-the-date';
+import { Check, Minus, X } from 'lucide-vue-next';
+import type { Component } from 'vue';
 
 defineProps<{
     member: GuestGroupMember;
     options: Record<ResponseOption, string>;
     selected: ResponseOption | null;
+    youLabel: string;
     isYou?: boolean;
 }>();
 
@@ -12,19 +15,19 @@ defineEmits<{
     select: [response: ResponseOption];
 }>();
 
-const displayOrder: ResponseOption[] = [
-    'yes',
-    'probably_yes',
-    'probably_no',
-    'no',
+const choices: { value: ResponseOption; icon: Component }[] = [
+    { value: 'yes', icon: Check },
+    { value: 'probably_yes', icon: Check },
+    { value: 'probably_no', icon: Minus },
+    { value: 'no', icon: X },
 ];
 </script>
 
 <template>
-    <article class="py-6">
+    <article class="guest-card">
         <div class="mb-4 flex items-center gap-3">
             <span
-                class="flex size-9 shrink-0 items-center justify-center rounded-full border border-accent/30 bg-accent/10 text-xs font-medium tracking-wide text-foreground"
+                class="flex size-10 shrink-0 items-center justify-center rounded-full border border-accent/30 bg-accent/10 text-xs font-medium tracking-wide text-foreground"
                 aria-hidden="true"
             >
                 {{ member.initials }}
@@ -35,32 +38,34 @@ const displayOrder: ResponseOption[] = [
                     v-if="isYou"
                     class="guest-accent-ink ml-1 align-middle text-[0.625rem] tracking-[0.2em] uppercase"
                 >
-                    · you
+                    · {{ youLabel }}
                 </span>
             </p>
         </div>
 
         <fieldset>
-            <legend class="sr-only">Response for {{ member.full_name }}</legend>
-            <div class="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
+            <legend class="sr-only">{{ member.full_name }}</legend>
+
+            <div class="grid gap-2 sm:grid-cols-2">
                 <label
-                    v-for="option in displayOrder"
-                    :key="option"
-                    class="cursor-pointer"
+                    v-for="choice in choices"
+                    :key="choice.value"
+                    class="guest-option"
                 >
                     <input
                         type="radio"
-                        class="peer sr-only"
+                        class="sr-only"
                         :name="`member-${member.id}`"
-                        :value="option"
-                        :checked="selected === option"
-                        @change="$emit('select', option)"
+                        :value="choice.value"
+                        :checked="selected === choice.value"
+                        @change="$emit('select', choice.value)"
                     />
-                    <span
-                        class="inline-flex min-h-12 w-full items-center justify-center rounded-full border border-border px-5 text-base text-foreground/80 transition-colors peer-checked:border-accent peer-checked:bg-accent peer-checked:text-accent-foreground peer-focus-visible:ring-2 peer-focus-visible:ring-accent peer-focus-visible:ring-offset-2 peer-focus-visible:outline-none hover:border-accent/50 hover:text-foreground sm:w-auto"
-                    >
-                        {{ options[option] }}
-                    </span>
+                    <component
+                        :is="choice.icon"
+                        class="size-4 shrink-0"
+                        aria-hidden="true"
+                    />
+                    <span>{{ options[choice.value] }}</span>
                 </label>
             </div>
         </fieldset>

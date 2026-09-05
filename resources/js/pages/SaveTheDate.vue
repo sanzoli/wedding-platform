@@ -7,6 +7,7 @@ import { Spinner } from '@/components/ui/spinner';
 import FullPageLayout from '@/layouts/FullPageLayout.vue';
 import type { ResponseOption, SaveTheDateProps } from '@/types/save-the-date';
 import { Form, Head } from '@inertiajs/vue3';
+import { Check } from 'lucide-vue-next';
 import { computed, reactive, ref } from 'vue';
 
 const props = defineProps<SaveTheDateProps>();
@@ -17,11 +18,12 @@ interface Copy {
     envelopeHint: string;
     envelopeOpen: string;
     eyebrow: string;
+    scrollCue: string;
+    youLabel: string;
     date: string;
     location: string;
     greeting: (name: string) => string;
     intro: string;
-    groupTitle: string;
     groupHint: string;
     submit: string;
     submitting: string;
@@ -30,6 +32,7 @@ interface Copy {
     errorMessage: string;
     successTitle: string;
     successBody: string;
+    editResponses: string;
     options: Record<ResponseOption, string>;
 }
 
@@ -38,13 +41,14 @@ const messages: Record<string, Copy> = {
         envelopeHint: 'Tap the seal to open',
         envelopeOpen: 'Open the invitation',
         eyebrow: 'Save the Date',
+        scrollCue: 'Scroll',
+        youLabel: 'You',
         date: 'April 8, 2027',
         location: 'Maringá, Brazil',
-        greeting: (name) => `Hi, ${name}.`,
+        greeting: (name) => `Hi, ${name}!`,
         intro: "We'd love to know if we can probably count on you.",
-        groupTitle: 'Your group',
         groupHint:
-            'You can respond for one or more people now. You do not have to confirm everyone yet.',
+            'Mark your response and that of anyone with you. You do not have to answer for everyone now.',
         submit: 'Send responses',
         submitting: 'Saving…',
         needOne: 'Choose a response for at least one person to continue.',
@@ -52,8 +56,9 @@ const messages: Record<string, Copy> = {
             "We'll share more details about travel, accommodation, and schedule soon.",
         errorMessage:
             "We couldn't save your responses. Check your connection and try again.",
-        successTitle: 'Thank you, we saved your responses.',
+        successTitle: 'Responses received!',
         successBody: "We'll share more details about the wedding soon.",
+        editResponses: 'Edit responses',
         options: {
             yes: 'Yes',
             probably_yes: 'Probably yes',
@@ -65,13 +70,14 @@ const messages: Record<string, Copy> = {
         envelopeHint: 'Toca el sello para abrir',
         envelopeOpen: 'Abrir la invitación',
         eyebrow: 'Save the Date',
-        date: '08 de abril, 2027',
+        scrollCue: 'Desliza',
+        youLabel: 'Tú',
+        date: '8 de abril de 2027',
         location: 'Maringá, Brasil',
-        greeting: (name) => `Hola, ${name}.`,
+        greeting: (name) => `¡Hola, ${name}!`,
         intro: 'Queremos saber si probablemente podremos contar contigo.',
-        groupTitle: 'Tu grupo',
         groupHint:
-            'Puedes responder por una o más personas ahora. No es obligatorio confirmar a todos.',
+            'Marca tu respuesta y la de quienes te acompañan. No es obligatorio responder por todos ahora.',
         submit: 'Enviar respuestas',
         submitting: 'Guardando…',
         needOne:
@@ -80,8 +86,9 @@ const messages: Record<string, Copy> = {
             'Pronto compartiremos más detalles sobre viaje, hospedaje y agenda.',
         errorMessage:
             'No pudimos guardar tus respuestas. Revisa tu conexión e intenta de nuevo.',
-        successTitle: 'Gracias, guardamos tus respuestas.',
+        successTitle: '¡Respuestas recibidas!',
         successBody: 'Pronto compartiremos más detalles de la boda.',
+        editResponses: 'Editar respuestas',
         options: {
             yes: 'Sí',
             probably_yes: 'Probablemente sí',
@@ -93,13 +100,14 @@ const messages: Record<string, Copy> = {
         envelopeHint: 'Toque o selo para abrir',
         envelopeOpen: 'Abrir o convite',
         eyebrow: 'Save the Date',
-        date: '08 de abril de 2027',
+        scrollCue: 'Deslize',
+        youLabel: 'Você',
+        date: '8 de abril de 2027',
         location: 'Maringá, Brasil',
-        greeting: (name) => `Olá, ${name}.`,
+        greeting: (name) => `Olá, ${name}!`,
         intro: 'Queremos saber se provavelmente poderemos contar com você.',
-        groupTitle: 'Seu grupo',
         groupHint:
-            'Você pode responder por uma ou mais pessoas agora. Não é obrigatório confirmar todos.',
+            'Marque sua resposta e a de quem acompanha você. Não é obrigatório responder por todos agora.',
         submit: 'Enviar respostas',
         submitting: 'Salvando…',
         needOne:
@@ -108,8 +116,9 @@ const messages: Record<string, Copy> = {
             'Em breve compartilharemos mais detalhes sobre viagem, hospedagem e programação.',
         errorMessage:
             'Não foi possível salvar suas respostas. Verifique sua conexão e tente novamente.',
-        successTitle: 'Obrigado, salvamos suas respostas.',
+        successTitle: 'Respostas recebidas!',
         successBody: 'Em breve compartilharemos mais detalhes do casamento.',
+        editResponses: 'Editar respostas',
         options: {
             yes: 'Sim',
             probably_yes: 'Provavelmente sim',
@@ -136,6 +145,8 @@ const setResponse = (id: number, response: ResponseOption) => {
     selected[id] = response;
 };
 
+const editing = ref(false);
+
 const hasAnyResponse = computed(() =>
     Object.values(selected).some((value) => value !== null),
 );
@@ -158,10 +169,11 @@ const buildPayload = () => ({
                 :names="coupleNames"
                 :date="t.date"
                 :location="t.location"
+                :scroll-cue="t.scrollCue"
             >
                 <template #nav>
                     <div
-                        class="flex items-center gap-1"
+                        class="flex items-center gap-0.5"
                         role="group"
                         aria-label="Language"
                     >
@@ -170,11 +182,11 @@ const buildPayload = () => ({
                             :key="code"
                             type="button"
                             :aria-pressed="displayLang === code"
-                            class="guest-eyebrow inline-flex min-h-12 min-w-12 items-center justify-center rounded-full px-2 text-xs transition-colors hover:text-accent focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
+                            class="guest-eyebrow inline-flex min-h-11 min-w-11 items-center justify-center rounded-full text-[0.625rem] transition-colors hover:text-accent focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
                             :class="
                                 displayLang === code
                                     ? 'text-accent'
-                                    : 'text-primary-foreground/70'
+                                    : 'text-primary-foreground/80'
                             "
                             @click="displayLang = code"
                         >
@@ -186,7 +198,7 @@ const buildPayload = () => ({
         </template>
 
         <main class="mx-auto w-full max-w-xl">
-            <div class="px-6 pt-16 pb-10 text-center lg:pt-14">
+            <div class="px-6 pt-14 pb-8 text-center">
                 <p class="font-display text-3xl text-foreground md:text-4xl">
                     {{ t.greeting(currentGuest.first_name) }}
                 </p>
@@ -202,9 +214,21 @@ const buildPayload = () => ({
                 disable-while-processing
                 class="pb-16"
                 v-slot="{ errors, processing, wasSuccessful }"
+                @success="editing = false"
             >
-                <div v-if="wasSuccessful" class="px-6 py-16 text-center">
-                    <p class="font-display text-2xl text-foreground md:text-3xl">
+                <div
+                    v-if="wasSuccessful && !editing"
+                    class="px-6 py-12 text-center"
+                >
+                    <span
+                        class="mx-auto flex size-16 items-center justify-center rounded-full bg-accent text-accent-foreground"
+                    >
+                        <Check class="size-8" aria-hidden="true" />
+                    </span>
+
+                    <p
+                        class="mt-6 font-display text-2xl text-foreground md:text-3xl"
+                    >
                         {{ t.successTitle }}
                     </p>
                     <p
@@ -212,16 +236,24 @@ const buildPayload = () => ({
                     >
                         {{ t.successBody }}
                     </p>
+
+                    <button
+                        type="button"
+                        class="guest-accent-ink mt-6 inline-flex min-h-11 items-center rounded-full px-4 text-base underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
+                        @click="editing = true"
+                    >
+                        {{ t.editResponses }}
+                    </button>
                 </div>
 
                 <template v-else>
                     <GroupConfirmation
-                        :title="t.groupTitle"
                         :hint="t.groupHint"
                         :members="guestGroup"
                         :options="optionLabels"
                         :selected="selected"
                         :current-guest-id="currentGuest.id"
+                        :you-label="t.youLabel"
                         @select="setResponse"
                     />
 

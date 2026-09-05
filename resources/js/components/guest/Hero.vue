@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ChevronDown } from 'lucide-vue-next';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 
 defineProps<{
@@ -6,6 +7,7 @@ defineProps<{
     names: string;
     date: string;
     location: string;
+    scrollCue: string;
 }>();
 
 const DESKTOP_QUERY = '(min-width: 1024px)';
@@ -57,7 +59,7 @@ onBeforeUnmount(() => {
 
 <template>
     <section
-        class="relative flex min-h-svh flex-col bg-primary text-primary-foreground lg:h-full lg:min-h-0"
+        class="relative flex min-h-(--guest-hero-mobile-height) flex-col bg-primary text-primary-foreground lg:h-full lg:min-h-0"
     >
         <div
             class="pointer-events-none absolute inset-0 bg-linear-to-b from-white/5 via-transparent to-black/25"
@@ -68,7 +70,7 @@ onBeforeUnmount(() => {
         </div>
 
         <div
-            class="relative z-10 flex flex-1 flex-col items-center justify-center px-6 pt-6 pb-12 text-center"
+            class="relative z-10 flex flex-1 flex-col items-center justify-center px-6 pt-6 pb-4 text-center"
         >
             <div class="guest-fade-up mb-8 flex items-center gap-3 text-accent">
                 <span class="h-px w-8 bg-accent/40" />
@@ -97,39 +99,52 @@ onBeforeUnmount(() => {
                 <p class="text-lg font-light tracking-wide md:text-xl">
                     {{ date }}
                 </p>
-                <p class="guest-eyebrow text-primary-foreground/60">
+                <p class="guest-eyebrow text-primary-foreground/75">
                     {{ location }}
                 </p>
             </div>
 
-            <div ref="sentinel" class="mt-10 h-px w-full lg:hidden" />
+            <div ref="sentinel" class="mt-8 h-px w-full lg:hidden" />
 
-            <div class="mt-6 flex justify-center lg:hidden">
+            <div class="mt-4 flex justify-center lg:hidden">
                 <slot name="nav" />
             </div>
         </div>
 
         <div
-            class="relative z-10 flex justify-center pb-8 text-primary-foreground/40 lg:hidden"
+            class="relative z-10 flex flex-col items-center gap-1 pb-6 text-primary-foreground/75 lg:hidden"
         >
-            <span class="h-8 w-px bg-primary-foreground/25" />
+            <span class="guest-eyebrow text-[0.5625rem]">{{ scrollCue }}</span>
+            <ChevronDown class="size-4" aria-hidden="true" />
         </div>
     </section>
 
     <header
-        class="guest-sticky-header fixed inset-x-0 top-0 z-30 flex h-16 items-center justify-between gap-4 bg-primary/95 px-4 text-primary-foreground backdrop-blur lg:hidden"
+        class="guest-sticky-header fixed inset-x-0 top-0 z-30 flex items-center gap-1.5 bg-primary px-2.5 py-2 text-primary-foreground lg:hidden"
         :class="collapsed ? 'guest-sticky-header--shown' : ''"
-        :aria-hidden="!collapsed"
         :inert="!collapsed"
     >
-        <div class="min-w-0">
-            <p class="truncate font-display text-base leading-tight">
-                {{ names }}
+        <div class="min-w-0 flex-1">
+            <p class="guest-eyebrow guest-eyebrow--xs truncate text-accent">
+                {{ eyebrow }}
             </p>
             <p
-                class="truncate text-xs leading-tight text-primary-foreground/65"
+                class="truncate font-display text-sm leading-tight font-medium"
             >
+                {{ names }}
+            </p>
+        </div>
+
+        <span class="h-8 w-px shrink-0 bg-primary-foreground/20" />
+
+        <div class="min-w-0 shrink-0 text-right">
+            <p class="truncate font-display text-xs leading-tight">
                 {{ date }}
+            </p>
+            <p
+                class="guest-eyebrow guest-eyebrow--xs truncate text-primary-foreground/75"
+            >
+                {{ location }}
             </p>
         </div>
 
