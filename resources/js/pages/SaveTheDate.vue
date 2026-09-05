@@ -197,13 +197,20 @@ const buildPayload = () => ({
             </Hero>
         </template>
 
-        <main class="mx-auto w-full max-w-xl">
-            <div class="px-6 pt-14 pb-8 text-center">
+        <main class="mx-auto w-full max-w-2xl">
+            <div
+                class="px-6 pt-[calc(var(--guest-header-height)+2rem)] pb-8 text-center lg:pt-14"
+            >
                 <p class="font-display text-3xl text-foreground md:text-4xl">
                     {{ t.greeting(currentGuest.first_name) }}
                 </p>
                 <p class="mt-4 text-base leading-relaxed text-muted-foreground">
                     {{ t.intro }}
+                </p>
+                <p
+                    class="mx-auto mt-4 max-w-md text-base leading-relaxed text-muted-foreground/85"
+                >
+                    {{ t.groupHint }}
                 </p>
             </div>
 
@@ -248,7 +255,6 @@ const buildPayload = () => ({
 
                 <template v-else>
                     <GroupConfirmation
-                        :hint="t.groupHint"
                         :members="guestGroup"
                         :options="optionLabels"
                         :selected="selected"
