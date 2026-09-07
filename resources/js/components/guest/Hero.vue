@@ -69,14 +69,16 @@ onBeforeUnmount(() => {
             class="pointer-events-none absolute inset-0 bg-linear-to-b from-white/5 via-transparent to-black/25"
         />
 
-        <div class="relative z-10 flex justify-end px-6 pt-6">
+        <div class="guest-safe-top relative z-10 flex justify-end px-6">
             <slot name="nav" />
         </div>
 
         <div
             class="relative z-10 flex flex-1 flex-col items-center justify-center px-6 pt-6 pb-4 text-center"
         >
-            <div class="guest-fade-up mb-8 flex items-center gap-3 text-accent">
+            <div
+                class="guest-fade-up guest-hero-monogram mb-8 flex items-center gap-3 text-accent"
+            >
                 <span class="h-px w-8 bg-accent/40" />
                 <span class="font-display text-sm tracking-[0.2em]"
                     >L &amp; D</span
@@ -91,13 +93,13 @@ onBeforeUnmount(() => {
             </p>
 
             <h1
-                class="guest-fade-up mt-7 font-display text-5xl leading-[1.04] font-medium tracking-tight [animation-delay:140ms] md:text-7xl lg:text-6xl xl:text-7xl"
+                class="guest-fade-up guest-hero-title mt-7 font-display text-5xl leading-[1.04] font-medium tracking-tight [animation-delay:140ms] md:text-7xl lg:text-6xl xl:text-7xl"
             >
                 {{ names }}
             </h1>
 
             <div
-                class="guest-fade-up mt-9 flex flex-col items-center gap-3 [animation-delay:240ms]"
+                class="guest-fade-up guest-hero-stack mt-9 flex flex-col items-center gap-3 [animation-delay:240ms]"
             >
                 <span class="h-px w-12 bg-primary-foreground/30" />
                 <p class="text-lg font-light tracking-wide md:text-xl">
@@ -110,7 +112,7 @@ onBeforeUnmount(() => {
         </div>
 
         <div
-            class="relative z-10 flex flex-col items-center gap-1 pb-6 text-primary-foreground/75 lg:hidden"
+            class="guest-safe-bottom relative z-10 flex flex-col items-center gap-1 text-primary-foreground/75 lg:hidden"
         >
             <span class="guest-eyebrow text-[0.5625rem]">{{ scrollCue }}</span>
             <ChevronDown class="size-4" aria-hidden="true" />
@@ -120,7 +122,7 @@ onBeforeUnmount(() => {
     </section>
 
     <header
-        class="guest-sticky-header fixed inset-x-0 top-0 z-30 flex items-center gap-1.5 bg-primary px-2.5 py-2 text-primary-foreground lg:hidden"
+        class="guest-sticky-header fixed inset-x-0 top-0 z-30 flex items-center gap-1.5 bg-primary px-2.5 pb-2 text-primary-foreground lg:hidden"
         :class="collapsed ? 'guest-sticky-header--shown' : ''"
         :inert="!collapsed"
     >

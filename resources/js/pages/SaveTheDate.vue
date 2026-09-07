@@ -305,7 +305,7 @@ const buildPayload = () => ({
                 </template>
             </Form>
 
-            <div class="px-6 pb-14 text-center">
+            <div class="guest-safe-bottom px-6 pb-14 text-center">
                 <div
                     class="mx-auto flex max-w-xs items-center justify-center gap-3 text-muted-foreground/60"
                 >
