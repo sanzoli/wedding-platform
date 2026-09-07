@@ -78,7 +78,6 @@
     --guest-tint: hsl(184 100% 15% / 0.05);
     --guest-tint-hover: hsl(184 100% 15% / 0.09);
     --guest-rule: hsl(184 45% 15% / 0.14);
-    --guest-rule-inner: hsl(184 45% 15% / 0.22);
 
     /* ----------------------------
      * Envelope intro — the parchment sleeve that fronts the invitation.
@@ -498,23 +497,10 @@
      * generous corners, no shadow — a printed reply slip, not a panel.
      * ---------------------------- */
     .guest-card {
-        position: relative;
         border: 1px solid var(--guest-rule);
         border-radius: 1.25rem;
         background-color: var(--card);
         padding: 1.5rem;
-    }
-
-    /* Double rule: the border, then a second line inside it. The oldest
-     * trick of engraved stationery, and what marks these out as the reply
-     * card that travels in the envelope beside the invitation. */
-    .guest-card::before {
-        content: '';
-        position: absolute;
-        inset: 8px;
-        border: 1px solid var(--guest-rule-inner);
-        border-radius: calc(1.25rem - 8px);
-        pointer-events: none;
     }
 
     /* ----------------------------
