@@ -515,6 +515,10 @@
         inset: 0;
         border-radius: 2px;
         background-color: var(--card);
+        /* Paper grain. It rides on the same pseudo-element as the deckle,
+         * so the displacement carries it: the grain stops exactly where
+         * the torn edge does instead of showing a square underneath. */
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.31 0 0 0 0 0.27 0 0 0 0 0.21 0 0 0 0.1 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
         box-shadow: 0 2px 10px hsl(184 45% 15% / 0.1);
         filter: url(#guest-deckle);
     }
