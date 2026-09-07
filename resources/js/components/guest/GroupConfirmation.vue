@@ -16,7 +16,32 @@ defineEmits<{
 </script>
 
 <template>
-    <section class="space-y-4 px-6 pb-6">
+    <section class="space-y-5 px-6 pb-6">
+        <svg class="absolute size-0" aria-hidden="true" focusable="false">
+            <filter
+                id="guest-deckle"
+                x="-10%"
+                y="-10%"
+                width="120%"
+                height="120%"
+            >
+                <feTurbulence
+                    type="fractalNoise"
+                    baseFrequency="0.022 0.022"
+                    numOctaves="3"
+                    seed="11"
+                    result="grain"
+                />
+                <feDisplacementMap
+                    in="SourceGraphic"
+                    in2="grain"
+                    scale="6"
+                    xChannelSelector="R"
+                    yChannelSelector="G"
+                />
+            </filter>
+        </svg>
+
         <ResponseCard
             v-for="member in members"
             :key="member.id"

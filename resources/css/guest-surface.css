@@ -496,11 +496,31 @@
      * The editorial counterpart of the admin card: a hairline outline and
      * generous corners, no shadow — a printed reply slip, not a panel.
      * ---------------------------- */
+    /* Deckle edge: the torn, irregular selvage of handmade paper. The
+     * turbulence is displaced on a pseudo-element that carries only the
+     * ground and its shadow — never the content, which would ripple the
+     * text with it. A soft shadow is what makes the edge legible: white
+     * paper on a white page has no silhouette of its own.
+     *
+     * Where the filter is unavailable the card simply keeps a straight
+     * edge, which is why the radius stays small rather than zero. */
     .guest-card {
-        border: 1px solid var(--guest-rule);
-        border-radius: 1.25rem;
-        background-color: var(--card);
+        position: relative;
         padding: 1.5rem;
+    }
+
+    .guest-card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 2px;
+        background-color: var(--card);
+        box-shadow: 0 2px 10px hsl(184 45% 15% / 0.1);
+        filter: url(#guest-deckle);
+    }
+
+    .guest-card > * {
+        position: relative;
     }
 
     /* ----------------------------
