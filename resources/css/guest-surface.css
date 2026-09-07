@@ -22,7 +22,7 @@
      * Kept as a divergence point: tracking and size are the knobs most
      * likely to be tuned per campaign without touching the utility.
      * ---------------------------- */
-    --guest-eyebrow-size: 0.6875rem; /* 11px */
+    --guest-eyebrow-size: 0.75rem; /* 12px */
     --guest-eyebrow-tracking: 0.25em;
 
     /* ----------------------------
@@ -58,6 +58,14 @@
      * the hero; use this for accent text over the light ground.
      * ---------------------------- */
     --guest-accent-ink: var(--p-gold-700);
+
+    /* ----------------------------
+     * The same problem mirrored: the display gold sits at 3.3:1 on the
+     * teal hero, so it fails as text there too. This lighter step reads
+     * at 5.1:1. Between the two inks, --accent is left for fills, where
+     * contrast is carried by the text on top of it.
+     * ---------------------------- */
+    --guest-accent-on-dark: var(--p-gold-300);
 
     /* ----------------------------
      * Envelope intro — the parchment sleeve that fronts the invitation.
@@ -157,8 +165,8 @@
      * to be a modifier: `.guest-eyebrow` sets font-size from a token, so
      * a size utility alongside it does not reliably win. */
     .guest-eyebrow--xs {
-        font-size: 0.5rem;
-        letter-spacing: 0.2em;
+        font-size: 0.6875rem;
+        letter-spacing: 0.08em;
     }
 
     /* ----------------------------
@@ -177,10 +185,14 @@
     }
 
     /* ----------------------------
-     * Accent text on the light ground
+     * Accent text, one ink per ground
      * ---------------------------- */
     .guest-accent-ink {
         color: var(--guest-accent-ink);
+    }
+
+    .guest-accent-on-dark {
+        color: var(--guest-accent-on-dark);
     }
 
     /* ----------------------------

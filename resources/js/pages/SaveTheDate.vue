@@ -185,7 +185,7 @@ const buildPayload = () => ({
                             class="guest-eyebrow inline-flex min-h-11 min-w-11 items-center justify-center rounded-full text-[0.625rem] transition-colors hover:text-accent focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
                             :class="
                                 displayLang === code
-                                    ? 'text-accent'
+                                    ? 'guest-accent-on-dark'
                                     : 'text-primary-foreground/80'
                             "
                             @click="displayLang = code"
@@ -216,7 +216,7 @@ const buildPayload = () => ({
                 />
 
                 <p
-                    class="mx-auto mt-5 max-w-sm text-sm leading-relaxed text-muted-foreground"
+                    class="mx-auto mt-5 max-w-md text-base leading-relaxed text-muted-foreground"
                 >
                     {{ t.groupHint }}
                 </p>
@@ -307,7 +307,7 @@ const buildPayload = () => ({
 
             <div class="guest-safe-bottom px-6 pb-14 text-center">
                 <div
-                    class="mx-auto flex max-w-xs items-center justify-center gap-3 text-muted-foreground/60"
+                    class="mx-auto flex max-w-xs items-center justify-center gap-3 text-muted-foreground"
                 >
                     <span class="h-px w-10 bg-border" />
                     <span class="font-display text-sm tracking-[0.2em]"
