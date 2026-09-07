@@ -61,8 +61,10 @@
 
     /* ----------------------------
      * The same problem mirrored: the display gold sits at 3.3:1 on the
-     * teal hero, so it fails as text there too. This lighter step reads
-     * at 5.1:1. Between the two inks, --accent is left for fills, where
+     * teal hero, so it fails as text there too. This step reads at 5.3:1
+     * there. It is lighter AND more saturated than the display gold:
+     * lifting lightness alone drains the chroma and the gold turns to
+     * sand. Between the two inks, --accent is left for fills, where
      * contrast is carried by the text on top of it.
      * ---------------------------- */
     --guest-accent-on-dark: var(--p-gold-300);
