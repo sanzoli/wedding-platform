@@ -103,7 +103,7 @@ onBeforeUnmount(() => {
             class="relative z-10 flex flex-1 flex-col items-center justify-center px-6 pt-6 pb-4 text-center"
         >
             <div
-                class="guest-fade-up guest-hero-monogram mb-8 flex items-center gap-3 text-accent"
+                class="guest-accent-on-dark guest-fade-up guest-hero-monogram mb-8 flex items-center gap-3"
             >
                 <span class="h-px w-8 bg-accent/40" />
                 <span class="font-display text-sm tracking-[0.2em]"
@@ -113,7 +113,7 @@ onBeforeUnmount(() => {
             </div>
 
             <p
-                class="guest-eyebrow guest-fade-up text-accent [animation-delay:60ms]"
+                class="guest-eyebrow guest-accent-on-dark guest-fade-up [animation-delay:60ms]"
             >
                 {{ eyebrow }}
             </p>
@@ -140,7 +140,7 @@ onBeforeUnmount(() => {
         <div
             class="guest-safe-bottom relative z-10 flex flex-col items-center gap-1 text-primary-foreground/75 lg:hidden"
         >
-            <span class="guest-eyebrow text-[0.5625rem]">{{ scrollCue }}</span>
+            <span class="text-sm">{{ scrollCue }}</span>
             <ChevronDown
                 class="size-4"
                 :class="{ 'guest-scroll-cue--nudge': nudging }"
@@ -152,31 +152,16 @@ onBeforeUnmount(() => {
     </section>
 
     <header
-        class="guest-sticky-header fixed inset-x-0 top-0 z-30 flex items-center gap-1.5 bg-primary px-2.5 pb-2 text-primary-foreground lg:hidden"
+        class="guest-sticky-header fixed inset-x-0 top-0 z-30 flex items-center gap-2 bg-primary px-3 pb-2 text-primary-foreground lg:hidden"
         :class="collapsed ? 'guest-sticky-header--shown' : ''"
         :inert="!collapsed"
     >
         <div class="min-w-0 flex-1">
-            <p class="guest-eyebrow guest-eyebrow--xs truncate text-accent">
-                {{ eyebrow }}
-            </p>
-            <p
-                class="truncate font-display text-sm leading-tight font-medium"
-            >
+            <p class="truncate font-display text-base leading-tight font-medium">
                 {{ names }}
             </p>
-        </div>
-
-        <span class="h-8 w-px shrink-0 bg-primary-foreground/20" />
-
-        <div class="min-w-0 shrink-0 text-right">
-            <p class="truncate font-display text-xs leading-tight">
+            <p class="truncate text-xs leading-tight text-primary-foreground/75">
                 {{ date }}
-            </p>
-            <p
-                class="guest-eyebrow guest-eyebrow--xs truncate text-primary-foreground/75"
-            >
-                {{ location }}
             </p>
         </div>
 

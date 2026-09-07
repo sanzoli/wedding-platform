@@ -36,7 +36,7 @@ const choices: { value: ResponseOption; icon: Component }[] = [
                 {{ member.full_name }}
                 <span
                     v-if="isYou"
-                    class="guest-accent-ink ml-1 align-middle text-[0.625rem] tracking-[0.2em] uppercase"
+                    class="guest-accent-ink ml-1 align-middle text-xs"
                 >
                     · {{ youLabel }}
                 </span>
