@@ -70,6 +70,16 @@
     --guest-accent-on-dark: var(--p-gold-300);
 
     /* ----------------------------
+     * Brand tints — the teal diluted to the point where it stops being a
+     * colour and becomes a temperature. Cards and options were built out
+     * of plain greys, which read as a generic form rather than as part of
+     * the invitation; these keep the restraint but carry the palette.
+     * ---------------------------- */
+    --guest-tint: hsl(184 100% 15% / 0.05);
+    --guest-tint-hover: hsl(184 100% 15% / 0.09);
+    --guest-rule: hsl(184 45% 15% / 0.14);
+
+    /* ----------------------------
      * Envelope intro — the parchment sleeve that fronts the invitation.
      * The parchment ramp itself lives inline in the envelope artwork,
      * where each gradient stop was tuned; these are the values reused
@@ -487,7 +497,7 @@
      * generous corners, no shadow — a printed reply slip, not a panel.
      * ---------------------------- */
     .guest-card {
-        border: 1px solid var(--border);
+        border: 1px solid var(--guest-rule);
         border-radius: 1.25rem;
         background-color: var(--card);
         padding: 1.25rem;
@@ -508,8 +518,8 @@
         /* Squarer than the pill of the submit button on purpose: the
          * primary action keeps the full radius to itself. */
         border-radius: 0.75rem;
-        border: 1px solid var(--border);
-        background-color: var(--muted);
+        border: 1px solid var(--guest-rule);
+        background-color: var(--guest-tint);
         color: var(--foreground);
         font-size: 1rem;
         line-height: 1.2;
@@ -522,7 +532,17 @@
 
     .guest-option:hover {
         border-color: var(--accent);
-        background-color: var(--hover);
+        background-color: var(--guest-tint-hover);
+    }
+
+    /* The icon is the one place the teal appears at full strength: one
+     * mark per row, repeated, so it reads as a system and not as noise. */
+    .guest-option > svg {
+        color: var(--primary);
+    }
+
+    .guest-option:has(input:checked) > svg {
+        color: inherit;
     }
 
     .guest-option:has(input:checked) {
