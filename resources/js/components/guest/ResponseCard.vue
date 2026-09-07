@@ -25,14 +25,8 @@ const choices: { value: ResponseOption; icon: Component }[] = [
 
 <template>
     <article class="guest-card">
-        <div class="mb-4 flex items-center gap-3">
-            <span
-                class="flex size-10 shrink-0 items-center justify-center rounded-full border border-accent/45 bg-accent/10 text-xs font-medium tracking-wide text-primary"
-                aria-hidden="true"
-            >
-                {{ member.initials }}
-            </span>
-            <p class="font-display text-lg text-primary">
+        <div class="mb-4">
+            <p class="font-display text-xl text-primary">
                 {{ member.full_name }}
                 <span
                     v-if="isYou"
