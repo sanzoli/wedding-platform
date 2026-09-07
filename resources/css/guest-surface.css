@@ -158,6 +158,21 @@
     }
 
     /* ----------------------------
+     * Safe areas
+     * The guest surface runs edge to edge, so anything pinned to the top
+     * or the bottom has to clear the notch and the home indicator. The
+     * insets resolve to zero where there are none, so the base spacing is
+     * what a plain screen gets.
+     * ---------------------------- */
+    .guest-safe-top {
+        padding-top: calc(1.5rem + env(safe-area-inset-top));
+    }
+
+    .guest-safe-bottom {
+        padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+    }
+
+    /* ----------------------------
      * Accent text on the light ground
      * ---------------------------- */
     .guest-accent-ink {
@@ -198,7 +213,8 @@
      * bar rises into place on scroll instead of appearing abruptly.
      * ---------------------------- */
     .guest-sticky-header {
-        min-height: var(--guest-header-height);
+        min-height: calc(var(--guest-header-height) + env(safe-area-inset-top));
+        padding-top: calc(0.5rem + env(safe-area-inset-top));
         opacity: 0;
         transform: translateY(-100%);
         pointer-events: none;
@@ -506,6 +522,26 @@
     @media (prefers-reduced-motion: reduce) {
         .guest-option {
             transition: none;
+        }
+    }
+
+    /* ----------------------------
+     * Short screens
+     * On a small phone the hero's own content is taller than the 80svh it
+     * is allowed, which would push the greeting back off screen. Step the
+     * ceremonial type down so the proportion survives.
+     * ---------------------------- */
+    @media (max-height: 700px) and (max-width: 1023px) {
+        .guest-hero-title {
+            font-size: 2.5rem;
+        }
+
+        .guest-hero-stack {
+            margin-top: 1.5rem;
+        }
+
+        .guest-hero-monogram {
+            margin-bottom: 1rem;
         }
     }
 }
