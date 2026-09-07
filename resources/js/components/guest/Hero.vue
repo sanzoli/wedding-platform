@@ -12,11 +12,25 @@ defineProps<{
 
 const DESKTOP_QUERY = '(min-width: 1024px)';
 
+/** Kept in step with --guest-nudge-delay. */
+const NUDGE_DELAY = 5000;
+
 const sentinel = ref<HTMLElement | null>(null);
 const collapsed = ref(false);
+const nudging = ref(false);
+
+let nudgeTimer: number | undefined;
 
 let observer: IntersectionObserver | null = null;
 let desktop: MediaQueryList | null = null;
+
+const prefersReducedMotion = () =>
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const stopNudging = () => {
+    window.clearTimeout(nudgeTimer);
+    nudging.value = false;
+};
 
 const stopObserving = () => {
     observer?.disconnect();
@@ -53,10 +67,22 @@ onMounted(() => {
     desktop = window.matchMedia(DESKTOP_QUERY);
     desktop.addEventListener('change', syncToViewport);
     syncToViewport();
+
+    if (prefersReducedMotion()) {
+        return;
+    }
+
+    nudgeTimer = window.setTimeout(() => (nudging.value = true), NUDGE_DELAY);
+    window.addEventListener('scroll', stopNudging, {
+        passive: true,
+        once: true,
+    });
 });
 
 onBeforeUnmount(() => {
     desktop?.removeEventListener('change', syncToViewport);
+    window.removeEventListener('scroll', stopNudging);
+    window.clearTimeout(nudgeTimer);
     stopObserving();
 });
 </script>
@@ -115,7 +141,11 @@ onBeforeUnmount(() => {
             class="guest-safe-bottom relative z-10 flex flex-col items-center gap-1 text-primary-foreground/75 lg:hidden"
         >
             <span class="guest-eyebrow text-[0.5625rem]">{{ scrollCue }}</span>
-            <ChevronDown class="size-4" aria-hidden="true" />
+            <ChevronDown
+                class="size-4"
+                :class="{ 'guest-scroll-cue--nudge': nudging }"
+                aria-hidden="true"
+            />
         </div>
 
         <div ref="sentinel" class="h-px w-full lg:hidden" />

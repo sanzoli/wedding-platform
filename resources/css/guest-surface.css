@@ -40,7 +40,11 @@
 
     /* Hero stops short of the viewport so the greeting below peeks in and
      * announces that there is more to read. */
-    --guest-hero-mobile-height: 80svh;
+    --guest-hero-mobile-height: 72svh;
+
+    /* How long the guest is left alone before the scroll cue starts
+     * nudging. Long enough to read the hero without being hurried. */
+    --guest-nudge-delay: 5000ms;
 
     /* State changes a finger drives — quicker than the ceremonial
      * entrance motion, which would feel laggy under a tap. */
@@ -542,6 +546,32 @@
 
         .guest-hero-monogram {
             margin-bottom: 1rem;
+        }
+    }
+
+    /* ----------------------------
+     * Scroll cue
+     * Still until the guest has had time to take the hero in. It only
+     * starts moving if they have not scrolled by then, and stops for
+     * good once they do.
+     * ---------------------------- */
+    .guest-scroll-cue--nudge {
+        animation: guest-nudge 1800ms ease-in-out infinite;
+    }
+
+    @keyframes guest-nudge {
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(0.35rem);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .guest-scroll-cue--nudge {
+            animation: none;
         }
     }
 }
