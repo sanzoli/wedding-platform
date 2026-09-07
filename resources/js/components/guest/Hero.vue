@@ -69,7 +69,7 @@ onBeforeUnmount(() => {
             class="pointer-events-none absolute inset-0 bg-linear-to-b from-white/5 via-transparent to-black/25"
         />
 
-        <div class="relative z-10 hidden justify-end px-6 pt-6 lg:flex">
+        <div class="relative z-10 flex justify-end px-6 pt-6">
             <slot name="nav" />
         </div>
 
@@ -106,10 +106,6 @@ onBeforeUnmount(() => {
                 <p class="guest-eyebrow text-primary-foreground/75">
                     {{ location }}
                 </p>
-            </div>
-
-            <div class="mt-6 flex justify-center lg:hidden">
-                <slot name="nav" />
             </div>
         </div>
 
