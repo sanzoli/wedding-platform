@@ -95,7 +95,7 @@ onBeforeUnmount(() => {
             class="pointer-events-none absolute inset-0 bg-linear-to-b from-white/5 via-transparent to-black/25"
         />
 
-        <div class="guest-safe-top relative z-10 flex justify-end px-6">
+        <div class="guest-safe-top relative z-10 flex justify-end px-6 lg:hidden">
             <slot name="nav" />
         </div>
 
@@ -156,12 +156,27 @@ onBeforeUnmount(() => {
         :class="collapsed ? 'guest-sticky-header--shown' : ''"
         :inert="!collapsed"
     >
-        <div class="min-w-0 flex-1">
-            <p class="truncate font-display text-base leading-tight font-medium">
-                {{ names }}
-            </p>
-            <p class="truncate text-xs leading-tight text-primary-foreground/75">
-                {{ date }}
+        <div class="flex min-w-0 flex-1 items-center gap-3">
+            <div class="min-w-0">
+                <p
+                    class="truncate font-display text-base leading-tight font-medium"
+                >
+                    {{ names }}
+                </p>
+                <p
+                    class="truncate text-xs leading-tight text-primary-foreground/75"
+                >
+                    {{ date }}
+                </p>
+            </div>
+
+            <span
+                class="h-8 w-px shrink-0 bg-primary-foreground/20"
+                aria-hidden="true"
+            />
+
+            <p class="truncate text-xs leading-tight text-primary-foreground/70">
+                {{ location }}
             </p>
         </div>
 
