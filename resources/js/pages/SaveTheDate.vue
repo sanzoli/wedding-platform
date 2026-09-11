@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import EnvelopeIntro from '@/components/guest/EnvelopeIntro.vue';
 import GroupConfirmation from '@/components/guest/GroupConfirmation.vue';
+import GuestSvgDefs from '@/components/guest/GuestSvgDefs.vue';
 import Hero from '@/components/guest/Hero.vue';
 import LanguagePicker from '@/components/guest/LanguagePicker.vue';
 import { Button } from '@/components/ui/button';
@@ -163,6 +164,8 @@ const buildPayload = () => ({
 <template>
     <FullPageLayout class="guest-surface">
         <Head :title="`Save the Date — ${coupleNames}`" />
+
+        <GuestSvgDefs />
 
         <template #aside>
             <Hero
