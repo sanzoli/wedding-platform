@@ -1,13 +1,7 @@
 <script setup lang="ts">
 import { useSlots } from 'vue';
 
-/**
- * Full-page, chrome-less shell that owns the whole viewport.
- *
- * With an `aside` slot it becomes a split view: on desktop the aside is a
- * fixed panel and only the content panel scrolls; below `lg` both stack and
- * the page keeps its single, native scroll.
- */
+/** Chrome-less viewport shell; with an `aside` slot it splits on lg (sticky aside, scrolling content) and stacks below. */
 const hasAside = !!useSlots().aside;
 </script>
 

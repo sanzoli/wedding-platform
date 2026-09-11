@@ -12,7 +12,6 @@ defineProps<{
 
 const DESKTOP_QUERY = '(min-width: 1024px)';
 
-/** Kept in step with --guest-nudge-delay. */
 const NUDGE_DELAY = 5000;
 
 const sentinel = ref<HTMLElement | null>(null);
@@ -42,9 +41,7 @@ const startObserving = () => {
         return;
     }
 
-    // Trimming the root by the band's own height hands over exactly as the
-    // hero's foot clears the top: the band takes the hero's place instead
-    // of sliding in over a hero that is still on screen.
+    // -60px = --guest-header-height: the band takes over exactly as the hero's foot clears the top.
     observer = new IntersectionObserver(
         ([entry]) => (collapsed.value = !entry.isIntersecting),
         { rootMargin: '-60px 0px 0px 0px' },

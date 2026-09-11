@@ -1,99 +1,38 @@
-/* Guest Surface
- * Tokens and utilities for the guest (editorial / ceremonial) surface —
- * guest-facing pages like Save the Date, Our Wedding and Landing.
- * Conventions documented in docs/design-system/surfaces.md.
- * Prefix: --guest-* / .guest-*
- * Theme switching: :root = light, .dark = dark
- */
+/* Guest surface (Save the Date, Our Wedding, Landing): tokens + utilities, prefixed --guest-* / .guest-*. Conventions: docs/design-system/surfaces.md */
 
 :root {
-    /* ----------------------------
-     * Guest typography aliases
-     * Mirror the shared display/heading/body roles, ready to diverge
-     * (e.g. ornamental ceremonial typeface for --guest-font-display)
-     * without touching shared tokens.
-     * ---------------------------- */
-    --guest-font-display: var(--font-display);
-    --guest-font-heading: var(--font-heading);
+    /* Body alias — mirrors the shared role, free to diverge */
     --guest-font-body: var(--font-body);
 
-    /* ----------------------------
-     * Eyebrow / overline — the editorial label that sits above a title.
-     * Kept as a divergence point: tracking and size are the knobs most
-     * likely to be tuned per campaign without touching the utility.
-     * ---------------------------- */
-    --guest-eyebrow-size: 0.75rem; /* 12px */
+    /* Eyebrow / overline */
+    --guest-eyebrow-size: 0.75rem;
     --guest-eyebrow-tracking: 0.25em;
 
-    /* ----------------------------
-     * Ceremonial motion — entrance timing for editorial sections.
-     * ---------------------------- */
+    /* Motion */
     --guest-enter-duration: 700ms;
     --guest-enter-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --guest-state-transition: 160ms ease; /* tap-driven changes: faster than the entrance */
 
-    /* ----------------------------
-     * Collapsed guest header — the compact bar the hero becomes once the
-     * guest scrolls past it on small screens.
-     * ---------------------------- */
+    /* Collapsed header (mobile) */
     --guest-header-height: 3.75rem;
     --guest-header-transition: 320ms var(--guest-enter-ease);
+    --guest-hero-mobile-height: 72svh; /* short of full height so the greeting below peeks in */
 
-    /* Hero stops short of the viewport so the greeting below peeks in and
-     * announces that there is more to read. */
-    --guest-hero-mobile-height: 72svh;
-
-    /* How long the guest is left alone before the scroll cue starts
-     * nudging. Long enough to read the hero without being hurried. */
-    --guest-nudge-delay: 5000ms;
-
-    /* State changes a finger drives — quicker than the ceremonial
-     * entrance motion, which would feel laggy under a tap. */
-    --guest-state-transition: 160ms ease;
-
-    /* ----------------------------
-     * Accent ink — the gold as TEXT on the light ground. The display
-     * gold (--accent) is tuned for the dark hero, where it glows; on a
-     * light ground it falls under 3:1 and disappears. This darker step
-     * clears AA there. Use --accent for accent surfaces and for text over
-     * the hero; use this for accent text over the light ground.
-     * ---------------------------- */
+    /* Accent inks: --accent is for fills; these clear text contrast on light / dark grounds */
     --guest-accent-ink: var(--p-gold-700);
-
-    /* ----------------------------
-     * The same problem mirrored: the display gold sits at 3.3:1 on the
-     * teal hero, so it fails as text there too. This step reads at 5.3:1
-     * there. It is lighter AND more saturated than the display gold:
-     * lifting lightness alone drains the chroma and the gold turns to
-     * sand. Between the two inks, --accent is left for fills, where
-     * contrast is carried by the text on top of it.
-     * ---------------------------- */
     --guest-accent-on-dark: var(--p-gold-300);
 
-    /* ----------------------------
-     * Brand tints — the teal diluted to the point where it stops being a
-     * colour and becomes a temperature. Cards and options were built out
-     * of plain greys, which read as a generic form rather than as part of
-     * the invitation; these keep the restraint but carry the palette.
-     * ---------------------------- */
+    /* Brand tints — teal diluted to a temperature for cards and options */
     --guest-tint: hsl(184 100% 15% / 0.05);
     --guest-tint-hover: hsl(184 100% 15% / 0.09);
     --guest-rule: hsl(184 45% 15% / 0.14);
 
-    /* ----------------------------
-     * Envelope intro — the parchment sleeve that fronts the invitation.
-     * The parchment ramp itself lives inline in the envelope artwork,
-     * where each gradient stop was tuned; these are the values reused
-     * outside it.
-     * ---------------------------- */
-    --guest-parchment: hsl(41 39% 90%);
+    /* Envelope — values reused outside the inline artwork */
     --guest-parchment-edge: hsl(38 41% 33% / 0.24);
     --guest-wax-halo: hsl(28 65% 9% / 0.42);
+    --guest-paper: hsl(40 30% 97%); /* light-section ground: a whisper of old paper, so white cards lift off it */
 
-    /* ----------------------------
-     * Envelope motion — the opening sequence, in the order it plays:
-     * the seal breaks, the flap swings back, the sleeve dissolves.
-     * The hint only appears if the guest hesitates.
-     * ---------------------------- */
+    /* Envelope opening, in play order: seal breaks → flap swings → sleeve dissolves */
     --guest-seal-break-duration: 640ms;
     --guest-seal-break-ease: cubic-bezier(0.5, 0, 0.2, 1);
     --guest-flap-duration: 1050ms;
@@ -104,24 +43,14 @@
     --guest-breathe-duration: 3800ms;
 }
 
-/* ----------------------------
- * Guest surface ground
- * An invitation is a printed object, not an app: it looks the same for
- * every guest regardless of the theme their device asks for. This pins
- * the semantic tokens the guest pages consume back to the light values,
- * so the surface stays white-and-teal even under `.dark`.
- *
- * Values point at the primitive palette, the same source the light
- * `:root` block uses — never at literal colours.
- * ---------------------------- */
-/* The surface lives on an inner element, so the document behind it keeps
- * the admin theme and shows through on overscroll rebound. */
+/* Ground: the invitation ignores the device theme — semantic tokens pinned to light primitives, even under .dark */
+/* Body keeps the app theme (shows on overscroll rebound); the surface is the inner element */
 :root:has(.guest-surface) body {
-    background-color: var(--p-neutral-0);
+    background-color: var(--guest-paper);
 }
 
 .guest-surface {
-    --background: var(--p-neutral-0);
+    --background: var(--guest-paper);
     --foreground: var(--p-neutral-900);
 
     --card: var(--p-neutral-0);
@@ -153,16 +82,16 @@
     --border: var(--p-neutral-200);
     --input: var(--p-neutral-200);
     --ring: var(--p-teal-700);
+
+    /* Parchment on the light ground: the envelope's mottle + fibre, multiplied over the paper colour */
+    background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.024' numOctaves='4' seed='6' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.32 0 0 0 0 0.28 0 0 0 0 0.22 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23m)'/%3E%3C/svg%3E"),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='200'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.006 0.09' numOctaves='2' seed='21' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.30 0 0 0 0 0.27 0 0 0 0 0.22 0 0 0 0.03 0'/%3E%3C/filter%3E%3Crect width='600' height='200' filter='url(%23f)'/%3E%3C/svg%3E");
+    background-blend-mode: multiply;
 }
 
 @layer utilities {
-    /* ----------------------------
-     * Eyebrow / overline typography
-     * The editorial counterpart of the (admin) label: an uppercase,
-     * widely-tracked overline. Colour is left to the consumer
-     * (e.g. `text-accent`, `text-muted-foreground`), matching how the
-     * source pages paired `.type-label` with a colour utility.
-     * ---------------------------- */
+    /* Eyebrow / overline — colour left to the consumer */
     .guest-eyebrow {
         font-family: var(--guest-font-body);
         font-size: var(--guest-eyebrow-size);
@@ -172,22 +101,7 @@
         text-transform: uppercase;
     }
 
-    /* The eyebrow shrunk for the collapsed header, where it shares a
-     * 56px band with the names, the date and the language toggle. It has
-     * to be a modifier: `.guest-eyebrow` sets font-size from a token, so
-     * a size utility alongside it does not reliably win. */
-    .guest-eyebrow--xs {
-        font-size: 0.6875rem;
-        letter-spacing: 0.08em;
-    }
-
-    /* ----------------------------
-     * Safe areas
-     * The guest surface runs edge to edge, so anything pinned to the top
-     * or the bottom has to clear the notch and the home indicator. The
-     * insets resolve to zero where there are none, so the base spacing is
-     * what a plain screen gets.
-     * ---------------------------- */
+    /* Safe areas — clear the notch and home indicator (zero where absent) */
     .guest-safe-top {
         padding-top: calc(1.5rem + env(safe-area-inset-top));
     }
@@ -196,9 +110,7 @@
         padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
     }
 
-    /* ----------------------------
-     * Accent text, one ink per ground
-     * ---------------------------- */
+    /* Accent text, one ink per ground */
     .guest-accent-ink {
         color: var(--guest-accent-ink);
     }
@@ -207,12 +119,7 @@
         color: var(--guest-accent-on-dark);
     }
 
-    /* ----------------------------
-     * Ceremonial entrance motion
-     * A restrained fade-and-rise for section entrances. Stagger with an
-     * arbitrary `[animation-delay:*]` on the consumer. Honours
-     * prefers-reduced-motion by resolving straight to the end state.
-     * ---------------------------- */
+    /* Entrance: fade-and-rise; stagger with [animation-delay:*] */
     @keyframes guest-fade-up {
         from {
             opacity: 0;
@@ -235,24 +142,16 @@
         }
     }
 
-    /* ----------------------------
-     * Collapsed guest header
-     * Hidden and non-interactive until the consumer marks it shown, so the
-     * bar rises into place on scroll instead of appearing abruptly.
-     * ---------------------------- */
+    /* Collapsed header — rises into place once the consumer marks it shown */
     .guest-sticky-header {
         min-height: calc(var(--guest-header-height) + env(safe-area-inset-top));
         padding-top: calc(0.5rem + env(safe-area-inset-top));
-        opacity: 0;
         transform: translateY(-100%);
         pointer-events: none;
-        transition:
-            opacity var(--guest-header-transition),
-            transform var(--guest-header-transition);
+        transition: transform var(--guest-header-transition);
     }
 
     .guest-sticky-header--shown {
-        opacity: 1;
         transform: translateY(0);
         pointer-events: auto;
     }
@@ -263,12 +162,7 @@
         }
     }
 
-    /* ----------------------------
-     * Envelope intro
-     * A parchment sleeve over the invitation. It is a single-use layer:
-     * once the seal is broken it dissolves and the page underneath is
-     * the real Save the Date, never a copy of it.
-     * ---------------------------- */
+    /* Envelope intro — single-use sleeve that dissolves to the real page */
     .guest-envelope-stage {
         position: fixed;
         inset: 0;
@@ -297,10 +191,7 @@
         visibility: hidden;
     }
 
-    /* The box must keep the artwork's own 3:2 ratio at every size: the flap
-     * hinges on `transform-origin: 50% 0`, the top of the BOX, so any
-     * letterboxing would swing it around a line above its real fold and
-     * tear it off the envelope body. */
+    /* Keeps the artwork's 3:2 so the flap hinge (transform-origin 50% 0) sits on the real fold */
     .guest-envelope {
         position: relative;
         width: min(90vw, 1060px);
@@ -367,15 +258,7 @@
         }
     }
 
-    /* Two clipped copies of the same wax image: together they read as one
-     * seal, and on opening each half falls away from the break line.
-     *
-     * Both polygons trace the SAME jagged crack, so they tile seamlessly
-     * at rest and part perpendicular to it, the way wax actually cracks.
-     * Edit one crack point and you must edit the other.
-     *
-     * The crack runs at 35.75°, matching the 430/600 slope of the top
-     * flap's edge: the seal reads as split along the fold underneath it. */
+    /* Two clipped copies of one image; both polygons share the crack line — edit them together */
     .guest-seal-half {
         position: absolute;
         inset: 0;
@@ -432,8 +315,7 @@
         transition: opacity 380ms ease;
     }
 
-    /* Safety net for a guest who does not read the seal as a button:
-     * hidden at first, faded in only after a pause, then barely pulsing. */
+    /* Safety-net hint: hidden, fades in after a pause */
     .guest-envelope-hint {
         position: absolute;
         top: 78%;
@@ -491,19 +373,7 @@
         }
     }
 
-    /* ----------------------------
-     * Guest card
-     * The editorial counterpart of the admin card: a hairline outline and
-     * generous corners, no shadow — a printed reply slip, not a panel.
-     * ---------------------------- */
-    /* Deckle edge: the torn, irregular selvage of handmade paper. The
-     * turbulence is displaced on a pseudo-element that carries only the
-     * ground and its shadow — never the content, which would ripple the
-     * text with it. A soft shadow is what makes the edge legible: white
-     * paper on a white page has no silhouette of its own.
-     *
-     * Where the filter is unavailable the card simply keeps a straight
-     * edge, which is why the radius stays small rather than zero. */
+    /* Card: deckle edge via filter on ::before (ground + shadow only, so text never ripples); straight edge where unsupported */
     .guest-card {
         position: relative;
         padding: 1.5rem;
@@ -515,9 +385,7 @@
         inset: 0;
         border-radius: 2px;
         background-color: var(--card);
-        /* Paper grain. It rides on the same pseudo-element as the deckle,
-         * so the displacement carries it: the grain stops exactly where
-         * the torn edge does instead of showing a square underneath. */
+        /* Grain rides the same pseudo-element so the deckle displaces it too */
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.31 0 0 0 0 0.27 0 0 0 0 0.21 0 0 0 0.1 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
         box-shadow: 0 2px 10px hsl(184 45% 15% / 0.1);
         filter: url(#guest-deckle);
@@ -527,21 +395,14 @@
         position: relative;
     }
 
-    /* ----------------------------
-     * Response option
-     * A full-width pill on phones, two-up from `sm`. The resting state is
-     * a soft fill rather than an outline, so the gold selected state is
-     * the only hard edge on the card.
-     * ---------------------------- */
+    /* Option: soft resting fill so the gold selected state is the only hard edge */
     .guest-option {
         display: flex;
         align-items: center;
         gap: 0.75rem;
         min-height: 3rem;
         padding-inline: 1rem;
-        /* Squarer than the pill of the submit button on purpose: the
-         * primary action keeps the full radius to itself. */
-        border-radius: 0.75rem;
+        border-radius: 0.75rem; /* squarer than the submit pill on purpose */
         border: 1px solid var(--guest-rule);
         background-color: var(--guest-tint);
         color: var(--foreground);
@@ -559,8 +420,7 @@
         background-color: var(--guest-tint-hover);
     }
 
-    /* The icon is the one place the teal appears at full strength: one
-     * mark per row, repeated, so it reads as a system and not as noise. */
+    /* Teal at full strength only on the icon */
     .guest-option > svg {
         color: var(--primary);
     }
@@ -587,12 +447,7 @@
         }
     }
 
-    /* ----------------------------
-     * Short screens
-     * On a small phone the hero's own content is taller than the 80svh it
-     * is allowed, which would push the greeting back off screen. Step the
-     * ceremonial type down so the proportion survives.
-     * ---------------------------- */
+    /* Short phones: step the hero type down so the greeting still peeks in */
     @media (max-height: 700px) and (max-width: 1023px) {
         .guest-hero-title {
             font-size: 2.5rem;
@@ -607,12 +462,7 @@
         }
     }
 
-    /* ----------------------------
-     * Scroll cue
-     * Still until the guest has had time to take the hero in. It only
-     * starts moving if they have not scrolled by then, and stops for
-     * good once they do.
-     * ---------------------------- */
+    /* Scroll cue nudges only after the delay and until the first scroll */
     .guest-scroll-cue--nudge {
         animation: guest-nudge 1800ms ease-in-out infinite;
     }
