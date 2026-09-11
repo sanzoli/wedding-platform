@@ -2,6 +2,7 @@
 import EnvelopeIntro from '@/components/guest/EnvelopeIntro.vue';
 import GroupConfirmation from '@/components/guest/GroupConfirmation.vue';
 import Hero from '@/components/guest/Hero.vue';
+import LanguagePicker from '@/components/guest/LanguagePicker.vue';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import FullPageLayout from '@/layouts/FullPageLayout.vue';
@@ -172,30 +173,19 @@ const buildPayload = () => ({
                 :scroll-cue="t.scrollCue"
             >
                 <template #nav>
-                    <div
-                        class="flex items-center gap-0.5"
-                        role="group"
-                        aria-label="Language"
-                    >
-                        <button
-                            v-for="(language, code) in languages"
-                            :key="code"
-                            type="button"
-                            :aria-pressed="displayLang === code"
-                            class="guest-eyebrow inline-flex min-h-11 min-w-11 items-center justify-center rounded-full text-[0.625rem] transition-colors hover:text-accent focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
-                            :class="
-                                displayLang === code
-                                    ? 'guest-accent-on-dark'
-                                    : 'text-primary-foreground/80'
-                            "
-                            @click="displayLang = code"
-                        >
-                            {{ language.value }}
-                        </button>
-                    </div>
+                    <LanguagePicker
+                        :languages="languages"
+                        v-model="displayLang"
+                    />
                 </template>
             </Hero>
         </template>
+
+        <div
+            class="sticky top-0 z-20 ml-auto hidden w-fit px-6 pt-6 text-foreground lg:block"
+        >
+            <LanguagePicker :languages="languages" v-model="displayLang" />
+        </div>
 
         <main class="mx-auto w-full max-w-2xl">
             <div
