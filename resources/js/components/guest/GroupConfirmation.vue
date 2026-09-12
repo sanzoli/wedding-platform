@@ -41,7 +41,7 @@ const statusLabel = (id: number) => {
             :status-label="statusLabel(member.id)"
             :retry-label="retryLabel"
             :you-label="youLabel"
-            :is-you="member.id === currentGuestId"
+            :is-you="members.length > 1 && member.id === currentGuestId"
             @select="(response) => $emit('select', member.id, response)"
             @retry="$emit('retry', member.id)"
         />
