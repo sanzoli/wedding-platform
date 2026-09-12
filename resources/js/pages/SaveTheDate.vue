@@ -26,8 +26,8 @@ interface Copy {
     date: string;
     location: string;
     greeting: (name: string) => string;
-    intro: string;
-    groupHint: string;
+    intro: (alone: boolean) => string;
+    hint: (alone: boolean) => string;
     footerNote: string;
     progress: (saved: number, total: number) => string;
     saving: string;
@@ -47,11 +47,13 @@ const messages: Record<string, Copy> = {
         date: 'April 8, 2027',
         location: 'Maringá, Brazil',
         greeting: (name) => `Hi, ${name}!`,
-        intro: "We'd love to know if we can probably count on you.",
-        groupHint:
-            'Mark your response and that of anyone with you. You do not have to answer for everyone now.',
+        intro: () => "We'd like to know if you can join us that day.",
+        hint: (alone) =>
+            alone
+                ? 'Mark the option that fits. Your response saves right away, and you can change it later.'
+                : 'Answer for yourself and for whoever is coming with you. Each response saves as you mark it, and you can change it later.',
         footerNote:
-            "We'll share more details about travel, accommodation, and schedule soon.",
+            "We'll soon share more details and tips about the trip and the plan for the day.",
         progress: (saved, total) => `${saved} of ${total} responses saved`,
         saving: 'Saving…',
         saved: 'Saved',
@@ -59,8 +61,8 @@ const messages: Record<string, Copy> = {
         retry: 'Retry',
         options: {
             yes: 'Yes',
-            probably_yes: 'Probably yes',
-            probably_no: 'Probably no',
+            probably_yes: 'Most likely, still confirming',
+            probably_no: "Tough, I'll check if I can",
             no: 'No',
         },
     },
@@ -73,11 +75,16 @@ const messages: Record<string, Copy> = {
         date: '8 de abril de 2027',
         location: 'Maringá, Brasil',
         greeting: (name) => `¡Hola, ${name}!`,
-        intro: 'Queremos saber si probablemente podremos contar contigo.',
-        groupHint:
-            'Marca tu respuesta y la de quienes te acompañan. No es obligatorio responder por todos ahora.',
+        intro: (alone) =>
+            alone
+                ? 'Nos gustaría saber si puedes acompañarnos ese día.'
+                : 'Nos gustaría saber si pueden acompañarnos ese día.',
+        hint: (alone) =>
+            alone
+                ? 'Marca la opción que corresponda. Tu respuesta se guarda enseguida, y puedes cambiarla luego.'
+                : 'Responde por ti y por quienes te acompañarán. Cada respuesta se guarda al marcarla, y puedes cambiarla luego.',
         footerNote:
-            'Pronto compartiremos más detalles sobre viaje, hospedaje y agenda.',
+            'Pronto compartiremos más detalles y sugerencias sobre el viaje y la agenda de ese día.',
         progress: (saved, total) => `${saved} de ${total} respuestas guardadas`,
         saving: 'Guardando…',
         saved: 'Guardado',
@@ -85,8 +92,8 @@ const messages: Record<string, Copy> = {
         retry: 'Reintentar',
         options: {
             yes: 'Sí',
-            probably_yes: 'Probablemente sí',
-            probably_no: 'Probablemente no',
+            probably_yes: 'Casi seguro, por confirmar',
+            probably_no: 'Difícil, revisaré si puedo',
             no: 'No',
         },
     },
@@ -99,11 +106,16 @@ const messages: Record<string, Copy> = {
         date: '8 de abril de 2027',
         location: 'Maringá, Brasil',
         greeting: (name) => `Olá, ${name}!`,
-        intro: 'Queremos saber se provavelmente poderemos contar com você.',
-        groupHint:
-            'Marque sua resposta e a de quem acompanha você. Não é obrigatório responder por todos agora.',
+        intro: (alone) =>
+            alone
+                ? 'Gostaríamos de saber se você pode nos acompanhar nesse dia.'
+                : 'Gostaríamos de saber se vocês podem nos acompanhar nesse dia.',
+        hint: (alone) =>
+            alone
+                ? 'Marque a opção que corresponder. Sua resposta é salva na hora, e você pode mudar depois.'
+                : 'Responda por você e por quem vier com você. Cada resposta é salva ao marcar, e você pode mudar depois.',
         footerNote:
-            'Em breve compartilharemos mais detalhes sobre viagem, hospedagem e programação.',
+            'Em breve compartilharemos mais detalhes e sugestões sobre a viagem e a programação do dia.',
         progress: (saved, total) => `${saved} de ${total} respostas salvas`,
         saving: 'Salvando…',
         saved: 'Salvo',
@@ -111,8 +123,8 @@ const messages: Record<string, Copy> = {
         retry: 'Tentar de novo',
         options: {
             yes: 'Sim',
-            probably_yes: 'Provavelmente sim',
-            probably_no: 'Provavelmente não',
+            probably_yes: 'Quase certo, a confirmar',
+            probably_no: 'Difícil, vou ver se consigo',
             no: 'Não',
         },
     },
@@ -177,6 +189,9 @@ const save = (id: number) => {
         },
     );
 };
+
+/** A lone guest answers only for themselves: no counter, and the copy drops the plural. */
+const alone = computed(() => props.guestGroup.length === 1);
 
 /** On mobile the counter waits for the hero to collapse, in step with the sticky header. */
 const heroCollapsed = ref(false);
@@ -259,7 +274,7 @@ onBeforeUnmount(() => {
                 <p
                     class="mx-auto mt-3 max-w-md text-lg leading-relaxed text-foreground/90"
                 >
-                    {{ t.intro }}
+                    {{ t.intro(alone) }}
                 </p>
 
                 <span
@@ -270,7 +285,7 @@ onBeforeUnmount(() => {
                 <p
                     class="mx-auto mt-5 max-w-md text-base leading-relaxed text-muted-foreground"
                 >
-                    {{ t.groupHint }}
+                    {{ t.hint(alone) }}
                 </p>
             </div>
 
@@ -288,6 +303,7 @@ onBeforeUnmount(() => {
             />
 
             <div
+                v-if="!alone"
                 class="pointer-events-none sticky bottom-4 z-10 flex justify-center px-6"
             >
                 <p
