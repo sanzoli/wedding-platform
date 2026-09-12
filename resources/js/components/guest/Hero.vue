@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ChevronDown } from 'lucide-vue-next';
-import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 
 defineProps<{
     eyebrow: string;
@@ -10,12 +10,16 @@ defineProps<{
     scrollCue: string;
 }>();
 
+const emit = defineEmits<{ collapse: [collapsed: boolean] }>();
+
 const DESKTOP_QUERY = '(min-width: 1024px)';
 
 const NUDGE_DELAY = 5000;
 
 const sentinel = ref<HTMLElement | null>(null);
 const collapsed = ref(false);
+
+watch(collapsed, (value) => emit('collapse', value));
 const nudging = ref(false);
 
 let nudgeTimer: number | undefined;
