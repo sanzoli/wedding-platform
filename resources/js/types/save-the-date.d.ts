@@ -2,6 +2,8 @@ import type { Guest } from './guests';
 
 export type ResponseOption = 'yes' | 'probably_yes' | 'probably_no' | 'no';
 
+export type SaveStatus = 'saving' | 'saved' | 'error';
+
 export interface GuestGroupMember extends Guest {
     response: ResponseOption | null;
 }

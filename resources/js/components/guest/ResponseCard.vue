@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import type { GuestGroupMember, ResponseOption } from '@/types/save-the-date';
+import type {
+    GuestGroupMember,
+    ResponseOption,
+    SaveStatus,
+} from '@/types/save-the-date';
 import { Check, Minus, X } from 'lucide-vue-next';
 import type { Component } from 'vue';
 
@@ -7,12 +11,16 @@ defineProps<{
     member: GuestGroupMember;
     options: Record<ResponseOption, string>;
     selected: ResponseOption | null;
+    status?: SaveStatus;
+    statusLabel: string;
+    retryLabel: string;
     youLabel: string;
     isYou?: boolean;
 }>();
 
 defineEmits<{
     select: [response: ResponseOption];
+    retry: [];
 }>();
 
 const choices: { value: ResponseOption; icon: Component }[] = [
@@ -25,7 +33,7 @@ const choices: { value: ResponseOption; icon: Component }[] = [
 
 <template>
     <article class="guest-card">
-        <div class="mb-4">
+        <div class="mb-4 flex items-baseline justify-between gap-3">
             <p class="font-display text-xl text-primary">
                 {{ member.full_name }}
                 <span
@@ -34,6 +42,30 @@ const choices: { value: ResponseOption; icon: Component }[] = [
                 >
                     · {{ youLabel }}
                 </span>
+            </p>
+
+            <p
+                class="guest-card-status"
+                :class="{
+                    'guest-card-status--saving': status === 'saving',
+                    'guest-accent-ink': status === 'error',
+                    invisible: !status,
+                }"
+            >
+                <Check
+                    v-if="status === 'saved'"
+                    class="size-3 shrink-0"
+                    aria-hidden="true"
+                />
+                {{ statusLabel }}
+                <button
+                    v-if="status === 'error'"
+                    type="button"
+                    class="-my-3 min-h-11 underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
+                    @click="$emit('retry')"
+                >
+                    {{ retryLabel }}
+                </button>
             </p>
         </div>
 

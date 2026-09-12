@@ -27,7 +27,7 @@ const flags: Record<string, Component> = { en: US, es: CO, pt: BR };
         <DropdownMenuTrigger as-child>
             <button
                 type="button"
-                class="inline-flex min-h-11 items-center gap-1.5 px-1 opacity-80 transition hover:text-accent hover:opacity-100 focus-visible:text-accent focus-visible:underline focus-visible:underline-offset-4 focus-visible:outline-none"
+                class="inline-flex min-h-11 items-center gap-1.5 px-1 opacity-80 lg:min-h-9 transition hover:text-accent hover:opacity-100 focus-visible:text-accent focus-visible:underline focus-visible:underline-offset-4 focus-visible:outline-none"
                 aria-label="Idioma"
             >
                 <component :is="flags[modelValue]" class="size-[18px]" />
@@ -38,7 +38,7 @@ const flags: Record<string, Component> = { en: US, es: CO, pt: BR };
             </button>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent align="end" class="min-w-48">
+        <DropdownMenuContent align="end" class="guest-menu min-w-48 rounded-2xl">
             <DropdownMenuItem
                 v-for="(language, code) in languages"
                 :key="code"

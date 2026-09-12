@@ -4,13 +4,14 @@ import GroupConfirmation from '@/components/guest/GroupConfirmation.vue';
 import GuestSvgDefs from '@/components/guest/GuestSvgDefs.vue';
 import Hero from '@/components/guest/Hero.vue';
 import LanguagePicker from '@/components/guest/LanguagePicker.vue';
-import { Button } from '@/components/ui/button';
-import { Spinner } from '@/components/ui/spinner';
 import FullPageLayout from '@/layouts/FullPageLayout.vue';
-import type { ResponseOption, SaveTheDateProps } from '@/types/save-the-date';
-import { Form, Head } from '@inertiajs/vue3';
-import { Check } from 'lucide-vue-next';
-import { computed, reactive, ref } from 'vue';
+import type {
+    ResponseOption,
+    SaveStatus,
+    SaveTheDateProps,
+} from '@/types/save-the-date';
+import { Head, router } from '@inertiajs/vue3';
+import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue';
 
 const props = defineProps<SaveTheDateProps>();
 
@@ -27,14 +28,12 @@ interface Copy {
     greeting: (name: string) => string;
     intro: string;
     groupHint: string;
-    submit: string;
-    submitting: string;
-    needOne: string;
     footerNote: string;
-    errorMessage: string;
-    successTitle: string;
-    successBody: string;
-    editResponses: string;
+    progress: (saved: number, total: number) => string;
+    saving: string;
+    saved: string;
+    saveError: string;
+    retry: string;
     options: Record<ResponseOption, string>;
 }
 
@@ -51,16 +50,13 @@ const messages: Record<string, Copy> = {
         intro: "We'd love to know if we can probably count on you.",
         groupHint:
             'Mark your response and that of anyone with you. You do not have to answer for everyone now.',
-        submit: 'Send responses',
-        submitting: 'Saving…',
-        needOne: 'Choose a response for at least one person to continue.',
         footerNote:
             "We'll share more details about travel, accommodation, and schedule soon.",
-        errorMessage:
-            "We couldn't save your responses. Check your connection and try again.",
-        successTitle: 'Responses received!',
-        successBody: "We'll share more details about the wedding soon.",
-        editResponses: 'Edit responses',
+        progress: (saved, total) => `${saved} of ${total} responses saved`,
+        saving: 'Saving…',
+        saved: 'Saved',
+        saveError: 'Not saved',
+        retry: 'Retry',
         options: {
             yes: 'Yes',
             probably_yes: 'Probably yes',
@@ -80,17 +76,13 @@ const messages: Record<string, Copy> = {
         intro: 'Queremos saber si probablemente podremos contar contigo.',
         groupHint:
             'Marca tu respuesta y la de quienes te acompañan. No es obligatorio responder por todos ahora.',
-        submit: 'Enviar respuestas',
-        submitting: 'Guardando…',
-        needOne:
-            'Elige una respuesta para al menos una persona para continuar.',
         footerNote:
             'Pronto compartiremos más detalles sobre viaje, hospedaje y agenda.',
-        errorMessage:
-            'No pudimos guardar tus respuestas. Revisa tu conexión e intenta de nuevo.',
-        successTitle: '¡Respuestas recibidas!',
-        successBody: 'Pronto compartiremos más detalles de la boda.',
-        editResponses: 'Editar respuestas',
+        progress: (saved, total) => `${saved} de ${total} respuestas guardadas`,
+        saving: 'Guardando…',
+        saved: 'Guardado',
+        saveError: 'No se guardó',
+        retry: 'Reintentar',
         options: {
             yes: 'Sí',
             probably_yes: 'Probablemente sí',
@@ -110,17 +102,13 @@ const messages: Record<string, Copy> = {
         intro: 'Queremos saber se provavelmente poderemos contar com você.',
         groupHint:
             'Marque sua resposta e a de quem acompanha você. Não é obrigatório responder por todos agora.',
-        submit: 'Enviar respostas',
-        submitting: 'Salvando…',
-        needOne:
-            'Escolha uma resposta para pelo menos uma pessoa para continuar.',
         footerNote:
             'Em breve compartilharemos mais detalhes sobre viagem, hospedagem e programação.',
-        errorMessage:
-            'Não foi possível salvar suas respostas. Verifique sua conexão e tente novamente.',
-        successTitle: 'Respostas recebidas!',
-        successBody: 'Em breve compartilharemos mais detalhes do casamento.',
-        editResponses: 'Editar respostas',
+        progress: (saved, total) => `${saved} de ${total} respostas salvas`,
+        saving: 'Salvando…',
+        saved: 'Salvo',
+        saveError: 'Não foi salvo',
+        retry: 'Tentar de novo',
         options: {
             yes: 'Sim',
             probably_yes: 'Provavelmente sim',
@@ -143,21 +131,87 @@ const selected = reactive<Record<number, ResponseOption | null>>(
     Object.fromEntries(props.guestGroup.map((m) => [m.id, m.response])),
 );
 
-const setResponse = (id: number, response: ResponseOption) => {
-    selected[id] = response;
+/** Coalesces a guest changing their mind into a single request. */
+const SAVE_DELAY = 400;
+
+const statuses = reactive<Record<number, SaveStatus | undefined>>({});
+const statusLabels = computed<Record<SaveStatus, string>>(() => ({
+    saving: t.value.saving,
+    saved: t.value.saved,
+    error: t.value.saveError,
+}));
+
+const pendingSaves = new Map<number, number>();
+
+/** Only the newest request for a guest may write their status. */
+const latestSave = new Map<number, number>();
+
+const save = (id: number) => {
+    const ticket = (latestSave.get(id) ?? 0) + 1;
+    latestSave.set(id, ticket);
+    statuses[id] = 'saving';
+
+    router.patch(
+        `/save-the-date/guests/${id}/response`,
+        { response: selected[id] },
+        {
+            preserveScroll: true,
+            preserveState: true,
+            only: ['guestGroup'],
+            onSuccess: () => {
+                if (latestSave.get(id) === ticket) {
+                    statuses[id] = 'saved';
+                }
+            },
+            onError: () => {
+                if (latestSave.get(id) === ticket) {
+                    statuses[id] = 'error';
+                }
+            },
+            // onError only fires for validation; network and server failures land here
+            onFinish: () => {
+                if (latestSave.get(id) === ticket && statuses[id] === 'saving') {
+                    statuses[id] = 'error';
+                }
+            },
+        },
+    );
 };
 
-const editing = ref(false);
+/** On mobile the counter waits for the hero to collapse, in step with the sticky header. */
+const heroCollapsed = ref(false);
 
-const hasAnyResponse = computed(() =>
-    Object.values(selected).some((value) => value !== null),
+/** A response counts once it is on the server: still saving or failed does not. */
+const savedCount = computed(
+    () =>
+        props.guestGroup.filter(
+            (member) =>
+                selected[member.id] !== null &&
+                statuses[member.id] !== 'saving' &&
+                statuses[member.id] !== 'error',
+        ).length,
 );
 
-const buildPayload = () => ({
-    responses: props.guestGroup.map((member) => ({
-        id: member.id,
-        response: selected[member.id] ?? null,
-    })),
+const setResponse = (id: number, response: ResponseOption) => {
+    selected[id] = response;
+
+    window.clearTimeout(pendingSaves.get(id));
+    pendingSaves.set(id, window.setTimeout(() => save(id), SAVE_DELAY));
+};
+
+/** The failing card already says so; a guest must never meet Inertia's error overlay. */
+let stopOverlay: (() => void)[] = [];
+
+onMounted(() => {
+    stopOverlay = [
+        router.on('invalid', (event) => event.preventDefault()),
+        router.on('exception', (event) => event.preventDefault()),
+    ];
+});
+
+onBeforeUnmount(() => {
+    pendingSaves.forEach((timer) => window.clearTimeout(timer));
+    stopOverlay.forEach((stop) => stop());
 });
 </script>
 
@@ -174,6 +228,7 @@ const buildPayload = () => ({
                 :date="t.date"
                 :location="t.location"
                 :scroll-cue="t.scrollCue"
+                @collapse="heroCollapsed = $event"
             >
                 <template #nav>
                     <LanguagePicker
@@ -185,9 +240,13 @@ const buildPayload = () => ({
         </template>
 
         <div
-            class="sticky top-0 z-20 ml-auto hidden w-fit px-6 pt-6 text-foreground lg:block"
+            class="pointer-events-none sticky top-0 z-20 hidden justify-end px-6 py-5 text-foreground lg:flex"
         >
-            <LanguagePicker :languages="languages" v-model="displayLang" />
+            <span
+                class="guest-island pointer-events-auto inline-flex items-center px-2 py-0.5"
+            >
+                <LanguagePicker :languages="languages" v-model="displayLang" />
+            </span>
         </div>
 
         <main class="mx-auto w-full max-w-2xl">
@@ -215,88 +274,36 @@ const buildPayload = () => ({
                 </p>
             </div>
 
-            <Form
-                action="/save-the-date/confirm"
-                method="post"
-                :transform="buildPayload"
-                disable-while-processing
-                class="pb-16"
-                v-slot="{ errors, processing, wasSuccessful }"
-                @success="editing = false"
+            <GroupConfirmation
+                :members="guestGroup"
+                :options="optionLabels"
+                :selected="selected"
+                :statuses="statuses"
+                :status-labels="statusLabels"
+                :retry-label="t.retry"
+                :current-guest-id="currentGuest.id"
+                :you-label="t.youLabel"
+                @select="setResponse"
+                @retry="save"
+            />
+
+            <div
+                class="pointer-events-none sticky bottom-4 z-10 flex justify-center px-6"
             >
-                <div
-                    v-if="wasSuccessful && !editing"
-                    class="px-6 py-12 text-center"
+                <p
+                    class="guest-island guest-island--count pointer-events-auto px-5 py-2.5 text-sm"
+                    :class="{ 'guest-island--waiting': !heroCollapsed }"
+                    aria-live="polite"
                 >
-                    <span
-                        class="mx-auto flex size-16 items-center justify-center rounded-full bg-accent text-accent-foreground"
-                    >
-                        <Check class="size-8" aria-hidden="true" />
-                    </span>
+                    {{ t.progress(savedCount, guestGroup.length) }}
+                </p>
+            </div>
 
-                    <p
-                        class="mt-6 font-display text-2xl text-foreground md:text-3xl"
-                    >
-                        {{ t.successTitle }}
-                    </p>
-                    <p
-                        class="mt-3 text-base leading-relaxed text-muted-foreground"
-                    >
-                        {{ t.successBody }}
-                    </p>
-
-                    <button
-                        type="button"
-                        class="guest-accent-ink mt-6 inline-flex min-h-11 items-center rounded-full px-4 text-base underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
-                        @click="editing = true"
-                    >
-                        {{ t.editResponses }}
-                    </button>
-                </div>
-
-                <template v-else>
-                    <GroupConfirmation
-                        :members="guestGroup"
-                        :options="optionLabels"
-                        :selected="selected"
-                        :current-guest-id="currentGuest.id"
-                        :you-label="t.youLabel"
-                        @select="setResponse"
-                    />
-
-                    <div class="px-6 text-center">
-                        <p
-                            v-if="Object.keys(errors).length"
-                            class="mb-4 text-sm text-destructive"
-                        >
-                            {{ t.errorMessage }}
-                        </p>
-
-                        <Button
-                            type="submit"
-                            size="lg"
-                            class="min-h-12 w-full rounded-full text-base sm:w-auto sm:px-12"
-                            :disabled="!hasAnyResponse || processing"
-                        >
-                            <Spinner v-if="processing" />
-                            {{ processing ? t.submitting : t.submit }}
-                        </Button>
-
-                        <p
-                            v-if="!hasAnyResponse"
-                            class="mt-3 text-base text-muted-foreground"
-                        >
-                            {{ t.needOne }}
-                        </p>
-                        <p
-                            v-else
-                            class="mt-4 text-base leading-relaxed text-muted-foreground"
-                        >
-                            {{ t.footerNote }}
-                        </p>
-                    </div>
-                </template>
-            </Form>
+            <p
+                class="px-6 pt-8 pb-16 text-center text-base leading-relaxed text-muted-foreground"
+            >
+                {{ t.footerNote }}
+            </p>
 
             <div class="guest-safe-bottom px-6 pb-14 text-center">
                 <div
