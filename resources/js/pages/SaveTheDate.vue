@@ -249,11 +249,11 @@ onBeforeUnmount(() => {
             </span>
         </div>
 
-        <main class="mx-auto w-full max-w-2xl">
+        <main class="guest-content mx-auto w-full max-w-2xl">
             <div
                 class="px-6 pt-[calc(var(--guest-header-height)+2rem)] pb-8 text-center lg:pt-14"
             >
-                <p class="font-display text-4xl text-foreground md:text-5xl">
+                <p class="guest-greeting font-display text-foreground">
                     {{ t.greeting(currentGuest.first_name) }}
                 </p>
                 <p
