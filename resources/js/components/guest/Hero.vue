@@ -90,7 +90,7 @@ onBeforeUnmount(() => {
 
 <template>
     <section
-        class="relative flex min-h-(--guest-hero-mobile-height) flex-col bg-primary text-primary-foreground lg:h-full lg:min-h-0"
+        class="guest-hero relative flex min-h-(--guest-hero-mobile-height) flex-col bg-primary text-primary-foreground lg:h-full lg:min-h-0"
     >
         <div
             class="pointer-events-none absolute inset-0 bg-linear-to-b from-white/5 via-transparent to-black/25"
@@ -120,7 +120,7 @@ onBeforeUnmount(() => {
             </p>
 
             <h1
-                class="guest-fade-up guest-hero-title mt-7 font-display text-5xl leading-[1.04] font-medium tracking-tight [animation-delay:140ms] md:text-7xl lg:text-6xl xl:text-7xl"
+                class="guest-fade-up guest-hero-title mt-7 font-display leading-[1.04] font-medium tracking-tight [animation-delay:140ms]"
             >
                 {{ names }}
             </h1>
@@ -129,7 +129,7 @@ onBeforeUnmount(() => {
                 class="guest-fade-up guest-hero-stack mt-9 flex flex-col items-center gap-3 [animation-delay:240ms]"
             >
                 <span class="h-px w-12 bg-primary-foreground/30" />
-                <p class="text-lg font-light tracking-wide md:text-xl">
+                <p class="guest-hero-date font-light tracking-wide">
                     {{ date }}
                 </p>
                 <p class="guest-eyebrow text-primary-foreground/75">

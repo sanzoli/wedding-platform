@@ -542,6 +542,40 @@
         }
     }
 
+    /* Fluid type: sized against their own column, not the viewport — the hero is only 44% of it on desktop */
+    .guest-hero,
+    .guest-content {
+        container-type: inline-size;
+    }
+
+    /* Stacked: the column is the whole viewport */
+    .guest-hero-title {
+        font-size: clamp(3rem, 9.4cqi, 4.5rem);
+    }
+
+    .guest-hero-date {
+        font-size: clamp(1.125rem, 2.6cqi, 1.25rem);
+    }
+
+    .guest-greeting {
+        font-size: clamp(2.25rem, 7.15cqi, 3rem);
+    }
+
+    /* Split: the hero column narrows to 44%, so the same sizes need a steeper ratio */
+    @media (min-width: 1024px) {
+        .guest-hero-title {
+            font-size: clamp(3.25rem, 13.5cqi, 4.5rem);
+        }
+
+        .guest-hero-date {
+            font-size: 1.25rem;
+        }
+
+        .guest-greeting {
+            font-size: 3rem;
+        }
+    }
+
     /* Short phones: step the hero type down so the greeting still peeks in */
     @media (max-height: 700px) and (max-width: 1023px) {
         .guest-hero-title {
