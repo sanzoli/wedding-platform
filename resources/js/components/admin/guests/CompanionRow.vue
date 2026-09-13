@@ -1,29 +1,21 @@
 <script setup lang="ts">
-import PrimaryEditor from '@/components/guests/PrimaryEditor.vue';
-import SelectGuestGroup from '@/components/guests/SelectGuestGroup.vue';
+import CompanionEditor from '@/components/admin/guests/CompanionEditor.vue';
+import SelectGuestGroup from '@/components/admin/guests/SelectGuestGroup.vue';
 import HighlightableText from '@/components/HighlightableText.vue';
 import IconButton from '@/components/IconButton.vue';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
     deleteGuest,
-    splitGroup,
+    leaveGroup,
     updateGuest,
 } from '@/composables/admin/useGuest';
 import { Guest } from '@/types/guests';
 import { InertiaForm } from '@inertiajs/vue3';
-import {
-    CornerDownRight,
-    Pencil,
-    Split,
-    Trash2,
-    UserPlus,
-} from 'lucide-vue-next';
+import { ArrowUpDown, CornerLeftUp, Pencil, Trash2 } from 'lucide-vue-next';
 import { ref } from 'vue';
 
-defineEmits(['addCompanion']);
 defineProps<{
-    guest: Guest;
-    members: number;
+    companion: Guest;
     query?: string;
 }>();
 
@@ -33,88 +25,81 @@ const update = (form: InertiaForm<Guest>) =>
 </script>
 
 <template>
-    <PrimaryEditor
+    <CompanionEditor
         v-if="editing"
-        :guest="guest"
+        :companion
         @save="update"
         @close="editing = false"
-    ></PrimaryEditor>
-
+    />
     <tr v-else class="group/row transition-colors hover:bg-muted/30">
-        <td class="px-4 py-3">
-            <div class="flex min-w-0 flex-1 items-start gap-3">
+        <td class="py-2 pr-4 pl-12">
+            <div class="flex items-center gap-3 border-l border-border/40 pl-4">
                 <Avatar>
                     <AvatarFallback
-                        class="admin-type-action bg-secondary text-secondary-foreground"
+                        class="admin-type-action bg-muted text-muted-foreground"
                     >
-                        {{ guest.initials }}
+                        {{ companion.initials }}
                     </AvatarFallback>
                 </Avatar>
-                <div class="min-w-0 flex-1">
+                <div class="type-body text-foreground">
                     <HighlightableText
-                        :text="guest.full_name"
+                        :text="companion.full_name"
                         :query
                     ></HighlightableText>
                 </div>
             </div>
         </td>
-        <td class="admin-type-data px-4 py-3 text-center">
-            {{ members > 1 ? members : '' }}
-        </td>
-        <td class="admin-type-data px-6 py-3 text-center">
-            {{ guest.flag }}
+        <td class="px-4 py-2"></td>
+        <td class="px-4 py-2 text-center">
+            {{ companion.flag }}
         </td>
         <td
-            class="admin-type-data px-4 py-3 text-center whitespace-nowrap text-muted-foreground"
+            class="admin-type-data px-4 py-2 text-center whitespace-nowrap text-muted-foreground"
         >
-            <HighlightableText :text="guest.mobile" :query></HighlightableText>
+            <HighlightableText
+                :text="companion.mobile"
+                :query
+            ></HighlightableText>
         </td>
         <td class="px-4 py-3">
             <div
                 class="flex items-center justify-center gap-1 opacity-100 transition-opacity sm:opacity-0 sm:group-focus-within/row:opacity-100 sm:group-hover/row:opacity-100"
             >
                 <IconButton
-                    @click="$emit('addCompanion')"
-                    :data-test="'guest-add-companion-button-' + guest.id"
-                    aria-label="Add Companion"
+                    v-if="companion.full_name"
+                    @click="leaveGroup(companion)"
+                    :data-test="'companion-leave-group-button-' + companion.id"
+                    class="hover:bg-muted hover:text-foreground"
+                    aria-label="edit"
                 >
-                    <UserPlus></UserPlus>
+                    <CornerLeftUp></CornerLeftUp>
                 </IconButton>
-                <IconButton
-                    v-if="members > 1"
-                    @click="splitGroup(guest)"
-                    :data-test="'split-guest-group-button-' + guest.id"
-                    aria-label="Split Guest Group"
-                >
-                    <Split></Split>
-                </IconButton>
-                <SelectGuestGroup v-else :guest="guest">
-                    <template #title>Add to group?</template>
+                <SelectGuestGroup v-if="companion.full_name" :guest="companion">
+                    <template #title>Change group?</template>
                     <template #trigger>
                         <IconButton
                             :data-test="
-                                'primary-add-to-group-button-' + guest.id
+                                'companion-change-group-button-' + companion.id
                             "
                             class="hover:bg-muted hover:text-foreground"
                             aria-label="edit"
                         >
-                            <CornerDownRight></CornerDownRight>
+                            <ArrowUpDown></ArrowUpDown>
                         </IconButton>
                     </template>
                 </SelectGuestGroup>
                 <IconButton
                     @click="editing = true"
-                    :data-test="'guest-edit-button-' + guest.id"
+                    :data-test="'companion-edit-button-' + companion.id"
                     class="hover:bg-primary/10 hover:text-primary"
                     aria-label="edit"
                 >
                     <Pencil></Pencil>
                 </IconButton>
                 <IconButton
-                    @click="deleteGuest(guest)"
-                    :disabled="members > 1"
+                    @click="deleteGuest(companion)"
                     class="hover:bg-destructive/10 hover:text-destructive"
-                    :data-test="'guest-delete-button-' + guest.id"
+                    :data-test="'companion-delete-button-' + companion.id"
                     aria-label="delete"
                 >
                     <Trash2></Trash2>

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import EnvelopeIntro from '@/components/guest/EnvelopeIntro.vue';
-import GroupConfirmation from '@/components/guest/GroupConfirmation.vue';
 import GuestSvgDefs from '@/components/guest/GuestSvgDefs.vue';
-import Hero from '@/components/guest/Hero.vue';
-import LanguagePicker from '@/components/guest/LanguagePicker.vue';
+import EnvelopeIntro from '@/components/guest/save-the-date/EnvelopeIntro.vue';
+import GroupConfirmation from '@/components/guest/save-the-date/GroupConfirmation.vue';
+import Hero from '@/components/guest/save-the-date/Hero.vue';
+import LanguagePicker from '@/components/language/LanguagePicker.vue';
 import FullPageLayout from '@/layouts/FullPageLayout.vue';
 import type {
     ResponseOption,
@@ -182,7 +182,10 @@ const save = (id: number) => {
             },
             // onError only fires for validation; network and server failures land here
             onFinish: () => {
-                if (latestSave.get(id) === ticket && statuses[id] === 'saving') {
+                if (
+                    latestSave.get(id) === ticket &&
+                    statuses[id] === 'saving'
+                ) {
                     statuses[id] = 'error';
                 }
             },
@@ -211,7 +214,10 @@ const setResponse = (id: number, response: ResponseOption) => {
     selected[id] = response;
 
     window.clearTimeout(pendingSaves.get(id));
-    pendingSaves.set(id, window.setTimeout(() => save(id), SAVE_DELAY));
+    pendingSaves.set(
+        id,
+        window.setTimeout(() => save(id), SAVE_DELAY),
+    );
 };
 
 /** The failing card already says so; a guest must never meet Inertia's error overlay. */

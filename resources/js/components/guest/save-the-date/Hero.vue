@@ -96,7 +96,9 @@ onBeforeUnmount(() => {
             class="pointer-events-none absolute inset-0 bg-linear-to-b from-white/5 via-transparent to-black/25"
         />
 
-        <div class="guest-safe-top relative z-10 flex justify-end px-6 lg:hidden">
+        <div
+            class="guest-safe-top relative z-10 flex justify-end px-6 lg:hidden"
+        >
             <slot name="nav" />
         </div>
 
@@ -176,7 +178,9 @@ onBeforeUnmount(() => {
                 aria-hidden="true"
             />
 
-            <p class="truncate text-xs leading-tight text-primary-foreground/70">
+            <p
+                class="truncate text-xs leading-tight text-primary-foreground/70"
+            >
                 {{ location }}
             </p>
         </div>

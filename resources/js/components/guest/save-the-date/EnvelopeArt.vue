@@ -20,13 +20,7 @@
                 <stop offset="0" stop-color="hsl(42 36% 95.2%)" />
                 <stop offset="1" stop-color="hsl(42 28% 92.6%)" />
             </linearGradient>
-            <linearGradient
-                id="envelope-flap-left"
-                x1="0"
-                y1="0"
-                x2="1"
-                y2="0"
-            >
+            <linearGradient id="envelope-flap-left" x1="0" y1="0" x2="1" y2="0">
                 <stop offset="0" stop-color="hsl(41 34% 94.7%)" />
                 <stop offset="1" stop-color="hsl(42 27% 92.3%)" />
             </linearGradient>
@@ -102,7 +96,10 @@
             opacity=".5"
         />
 
-        <path d="M0 800 L1200 800 L600 430 Z" fill="url(#envelope-flap-bottom)" />
+        <path
+            d="M0 800 L1200 800 L600 430 Z"
+            fill="url(#envelope-flap-bottom)"
+        />
         <path
             d="M0 800 L600 430 L1200 800"
             fill="none"
@@ -116,7 +113,10 @@
             stroke="rgba(120,92,50,.14)"
             stroke-width="1.5"
         />
-        <path d="M1200 0 L1200 800 L600 430 Z" fill="url(#envelope-flap-right)" />
+        <path
+            d="M1200 0 L1200 800 L600 430 Z"
+            fill="url(#envelope-flap-right)"
+        />
         <path
             d="M1200 0 L600 430 L1200 800"
             fill="none"
@@ -141,7 +141,13 @@
                 filter="url(#envelope-fibre)"
                 style="mix-blend-mode: multiply"
             />
-            <rect x="0" y="0" width="1200" height="800" fill="url(#envelope-age)" />
+            <rect
+                x="0"
+                y="0"
+                width="1200"
+                height="800"
+                fill="url(#envelope-age)"
+            />
         </g>
 
         <rect
@@ -197,7 +203,15 @@
             stroke="rgba(120,92,50,.16)"
             stroke-width="1.5"
         />
-        <path d="M0 0 L600 430" stroke="rgba(255,255,255,.45)" stroke-width="1" />
-        <path d="M1200 0 L600 430" stroke="rgba(255,255,255,.45)" stroke-width="1" />
+        <path
+            d="M0 0 L600 430"
+            stroke="rgba(255,255,255,.45)"
+            stroke-width="1"
+        />
+        <path
+            d="M1200 0 L600 430"
+            stroke="rgba(255,255,255,.45)"
+            stroke-width="1"
+        />
     </svg>
 </template>

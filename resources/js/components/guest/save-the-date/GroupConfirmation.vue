@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ResponseCard from '@/components/guest/ResponseCard.vue';
+import ResponseCard from '@/components/guest/save-the-date/ResponseCard.vue';
 import type {
     GuestGroupMember,
     ResponseOption,
