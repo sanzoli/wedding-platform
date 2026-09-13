@@ -21,8 +21,3 @@ export interface SaveTheDateProps {
     languages: Record<string, Language>;
     options: Record<ResponseOption, string>;
 }
-
-export interface ConfirmationItem {
-    id: number;
-    response: ResponseOption | null;
-}

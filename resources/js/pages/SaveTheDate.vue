@@ -219,8 +219,8 @@ let stopOverlay: (() => void)[] = [];
 
 onMounted(() => {
     stopOverlay = [
-        router.on('invalid', (event) => event.preventDefault()),
-        router.on('exception', (event) => event.preventDefault()),
+        router.on('invalid', (event: Event) => event.preventDefault()),
+        router.on('exception', (event: Event) => event.preventDefault()),
     ];
 });
 
