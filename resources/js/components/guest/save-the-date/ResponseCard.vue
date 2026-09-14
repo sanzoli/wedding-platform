@@ -4,19 +4,27 @@ import type {
     ResponseOption,
     SaveStatus,
 } from '@/types/save-the-date';
+import { usePage } from '@inertiajs/vue3';
 import { Check, Minus, X } from 'lucide-vue-next';
-import type { Component } from 'vue';
+import { computed, type Component } from 'vue';
 
-defineProps<{
+const props = defineProps<{
     member: GuestGroupMember;
-    options: Record<ResponseOption, string>;
     selected: ResponseOption | null;
     status?: SaveStatus;
-    statusLabel: string;
-    retryLabel: string;
-    youLabel: string;
     isYou?: boolean;
 }>();
+
+const trans = usePage().props.trans;
+
+const statusLabel = computed(
+    () =>
+        ({
+            saving: trans.save_the_date.saving,
+            saved: trans.save_the_date.saved,
+            error: trans.save_the_date.save_error,
+        })[props.status ?? 'saved'],
+);
 
 defineEmits<{
     select: [response: ResponseOption];
@@ -40,7 +48,7 @@ const choices: { value: ResponseOption; icon: Component }[] = [
                     v-if="isYou"
                     class="guest-accent-ink ml-1 align-middle text-xs"
                 >
-                    · {{ youLabel }}
+                    · {{ trans.save_the_date.you_label }}
                 </span>
             </p>
 
@@ -64,7 +72,7 @@ const choices: { value: ResponseOption; icon: Component }[] = [
                     class="-my-3 min-h-11 underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
                     @click="$emit('retry')"
                 >
-                    {{ retryLabel }}
+                    {{ trans.save_the_date.retry }}
                 </button>
             </p>
         </div>
@@ -91,7 +99,7 @@ const choices: { value: ResponseOption; icon: Component }[] = [
                         class="size-4 shrink-0"
                         aria-hidden="true"
                     />
-                    <span>{{ options[choice.value] }}</span>
+                    <span>{{ trans.save_the_date.options[choice.value] }}</span>
                 </label>
             </div>
         </fieldset>

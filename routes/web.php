@@ -1,5 +1,6 @@
 <?php
 
+use App\Enum\Language;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\GuestGroupController;
@@ -52,7 +53,7 @@ Route::middleware('web')->group(function () {
             'initials' => $g['first_name'][0].$g['last_name'][0],
             'mobile' => '+34600000000',
             'lang' => $lang,
-            'flag' => \App\Enum\Language::from($lang)->flag(),
+            'flag' => Language::from($lang)->flag(),
             'group_id' => 1,
             'response' => $g['response'],
         ];
@@ -61,13 +62,8 @@ Route::middleware('web')->group(function () {
             'currentGuest' => $toGuest($guests[0]),
             'guestGroup' => array_map($toGuest, $guests),
             'lang' => $lang,
-            'languages' => \App\Enum\Language::displayList(),
-            'options' => [
-                'yes' => 'Sí',
-                'probably_yes' => 'Casi seguro, por confirmar',
-                'probably_no' => 'Difícil, revisaré si puedo',
-                'no' => 'No',
-            ],
+            'languages' => Language::displayList(),
+            'trans' => Inertia::mergeShared('trans', ['save_the_date' => trans('save_the_date')]),
         ]);
     })->name('save-the-date.preview');
 

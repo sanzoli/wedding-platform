@@ -19,5 +19,4 @@ export interface SaveTheDateProps {
     guestGroup: GuestGroupMember[];
     lang: string;
     languages: Record<string, Language>;
-    options: Record<ResponseOption, string>;
 }
