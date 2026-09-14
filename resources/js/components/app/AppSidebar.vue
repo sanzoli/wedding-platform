@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import NavFooter from '@/components/NavFooter.vue';
-import NavMain from '@/components/NavMain.vue';
-import NavUser from '@/components/NavUser.vue';
+import NavFooter from '@/components/app/NavFooter.vue';
+import NavMain from '@/components/app/NavMain.vue';
+import NavUser from '@/components/app/NavUser.vue';
 import {
     Sidebar,
     SidebarContent,

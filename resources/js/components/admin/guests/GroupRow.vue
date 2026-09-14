@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import CompanionEditor from '@/components/guests/CompanionEditor.vue';
-import CompanionRow from '@/components/guests/CompanionRow.vue';
-import PrimaryRow from '@/components/guests/PrimaryRow.vue';
+import CompanionEditor from '@/components/admin/guests/CompanionEditor.vue';
+import CompanionRow from '@/components/admin/guests/CompanionRow.vue';
+import PrimaryRow from '@/components/admin/guests/PrimaryRow.vue';
 import { storeGuest } from '@/composables/admin/useGuest';
 import { Guest, GuestGroup } from '@/types/guests';
 import { InertiaForm } from '@inertiajs/vue3';
