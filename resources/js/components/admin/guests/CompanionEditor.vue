@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import IconButton from '@/components/IconButton.vue';
+import IconButton from '@/components/admin/IconButton.vue';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { Select, SelectItem } from '@/components/ui/select';

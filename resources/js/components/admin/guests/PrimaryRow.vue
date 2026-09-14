@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import PrimaryEditor from '@/components/admin/guests/PrimaryEditor.vue';
 import SelectGuestGroup from '@/components/admin/guests/SelectGuestGroup.vue';
-import HighlightableText from '@/components/HighlightableText.vue';
-import IconButton from '@/components/IconButton.vue';
+import HighlightableText from '@/components/admin/HighlightableText.vue';
+import IconButton from '@/components/admin/IconButton.vue';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
     deleteGuest,
