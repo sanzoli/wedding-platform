@@ -1,8 +1,10 @@
 <?php
 
+use App\Enum\Language;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\GuestGroupController;
+use App\Http\Controllers\SaveTheDateController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -25,6 +27,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('guests/group/{group}/split', 'split')->name('split');
             Route::put('guests/{guest}/group/{group}/change', 'change')->name('change');
         });
+});
+
+Route::controller(SaveTheDateController::class)->group(function () {
+    Route::get('save-the-date/{invitation}', 'view')->name('save-the-date.view');
 });
 
 require __DIR__.'/settings.php';
@@ -52,7 +58,7 @@ Route::middleware('web')->group(function () {
             'initials' => $g['first_name'][0].$g['last_name'][0],
             'mobile' => '+34600000000',
             'lang' => $lang,
-            'flag' => \App\Enum\Language::from($lang)->flag(),
+            'flag' => Language::from($lang)->flag(),
             'group_id' => 1,
             'response' => $g['response'],
         ];
@@ -61,7 +67,7 @@ Route::middleware('web')->group(function () {
             'currentGuest' => $toGuest($guests[0]),
             'guestGroup' => array_map($toGuest, $guests),
             'lang' => $lang,
-            'languages' => \App\Enum\Language::displayList(),
+            'languages' => Language::displayList(),
             'options' => [
                 'yes' => 'Sí',
                 'probably_yes' => 'Casi seguro, por confirmar',
