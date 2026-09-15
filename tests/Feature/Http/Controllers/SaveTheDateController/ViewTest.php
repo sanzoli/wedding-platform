@@ -103,3 +103,8 @@ test('cannot see save the date with wedding invitation', function () {
     $this->get(route('save-the-date.view', $invitation))
         ->assertForbidden();
 });
+
+test('cannot see unknown invitation', function () {
+    $this->get(route('save-the-date.view', 'random-code'))
+        ->assertNotFound();
+});

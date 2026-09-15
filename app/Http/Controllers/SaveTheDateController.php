@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enum\InvitationResponse;
 use App\Enum\InvitationType;
 use App\Enum\Language;
+use App\Http\Requests\SaveInvitationResponseRequest;
 use App\Models\Invitation;
 use Illuminate\Support\Facades\App;
 use Inertia\Inertia;
@@ -27,5 +28,12 @@ class SaveTheDateController extends Controller
             'languages' => Language::displayList(),
             'options' => InvitationResponse::options(),
         ]);
+    }
+
+    public function response(Invitation $invitation, SaveInvitationResponseRequest $request)
+    {
+        $invitation->update(['response' => $request->input('response')]);
+
+        return back();
     }
 }
