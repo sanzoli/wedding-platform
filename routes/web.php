@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\GuestGroupController;
+use App\Http\Controllers\SaveTheDateController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -25,6 +26,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('guests/group/{group}/split', 'split')->name('split');
             Route::put('guests/{guest}/group/{group}/change', 'change')->name('change');
         });
+});
+
+Route::controller(SaveTheDateController::class)->group(function () {
+    Route::get('save-the-date/{invitation}', 'view')->name('save-the-date.view');
+    Route::post('save-the-date/{invitation}/response', 'response')->name('save-the-date.response');
 });
 
 require __DIR__.'/settings.php';

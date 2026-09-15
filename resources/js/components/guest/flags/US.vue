@@ -1,0 +1,49 @@
+<script setup lang="ts">
+import { useId } from 'vue';
+
+const clipId = useId();
+</script>
+
+<template>
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+        <defs>
+            <clipPath :id="clipId"><circle cx="12" cy="12" r="11.5" /></clipPath>
+        </defs>
+        <g :clip-path="`url(#${clipId})`">
+            <rect x="0" y="0" width="24" height="24" fill="#FFFFFF" />
+            <g fill="#B22234">
+                <rect x="0" y="0" width="24" height="1.85" />
+                <rect x="0" y="3.69" width="24" height="1.85" />
+                <rect x="0" y="7.38" width="24" height="1.85" />
+                <rect x="0" y="11.08" width="24" height="1.85" />
+                <rect x="0" y="14.77" width="24" height="1.85" />
+                <rect x="0" y="18.46" width="24" height="1.85" />
+                <rect x="0" y="22.15" width="24" height="1.85" />
+            </g>
+            <rect x="0" y="0" width="9.6" height="12.92" fill="#3C3B6E" />
+            <g fill="#FFFFFF">
+                <circle cx="1.9" cy="2.8" r="0.5" />
+                <circle cx="4.1" cy="2.8" r="0.5" />
+                <circle cx="6.3" cy="2.8" r="0.5" />
+                <circle cx="3.0" cy="5.2" r="0.5" />
+                <circle cx="5.2" cy="5.2" r="0.5" />
+                <circle cx="7.4" cy="5.2" r="0.5" />
+                <circle cx="1.9" cy="7.6" r="0.5" />
+                <circle cx="4.1" cy="7.6" r="0.5" />
+                <circle cx="6.3" cy="7.6" r="0.5" />
+                <circle cx="3.0" cy="10.0" r="0.5" />
+                <circle cx="5.2" cy="10.0" r="0.5" />
+                <circle cx="7.4" cy="10.0" r="0.5" />
+            </g>
+        </g>
+        <circle
+            cx="12"
+            cy="12"
+            r="11.5"
+            fill="none"
+            stroke="currentColor"
+            stroke-opacity="0.25"
+            stroke-width="0.75"
+        />
+    </svg>
+</template>
