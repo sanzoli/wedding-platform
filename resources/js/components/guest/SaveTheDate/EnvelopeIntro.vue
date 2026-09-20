@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue';
-import EnvelopeArt from './EnvelopeArt.vue';
-import sealImage from './img/sello.png';
+import EnvelopeArt from '../svg/EnvelopeArt.vue';
+import sealImage from '../img/sello.png';
 
 defineProps<{
     hint: string;

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enum\InvitationType;
 use Database\Factories\GuestGroupFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -41,6 +42,16 @@ class GuestGroup extends Model
     public function companions(): Builder|HasMany
     {
         return $this->guests()->withAttributes(['is_primary' => false]);
+    }
+
+    public function invitations()
+    {
+        return $this->hasManyThrough(Invitation::class, Guest::class, 'group_id');
+    }
+
+    public function saveTheDates()
+    {
+        return $this->invitations()->where('type', InvitationType::SaveTheDate);
     }
 
     public static function selectableOptions(): array

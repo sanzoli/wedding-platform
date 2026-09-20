@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
+ * @property string $id
  * @property InvitationType $type
  * @property Guest $guest
  * @property Language $default_language

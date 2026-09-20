@@ -11,7 +11,7 @@ return [
     'intro' => "We'd like to know if you can join us that day.|We'd like to know if you can join us that day.",
     'hint' => 'Mark the option that fits. Your response saves right away, and you can change it later.|Answer for yourself and for whoever is coming with you. Each response saves as you mark it, and you can change it later.',
     'footer_note' => "We'll soon share more details and tips about the trip and the plan for the day.",
-    'progress' => ':saved of :total responses saved',
+    'progress' => ':saved of :total responses',
     'saving' => 'Saving…',
     'saved' => 'Saved',
     'save_error' => 'Not saved',

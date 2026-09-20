@@ -6,6 +6,8 @@ use App\Enum\InvitationResponse;
 use App\Enum\InvitationType;
 use App\Enum\Language;
 use App\Http\Requests\SaveInvitationResponseRequest;
+use App\Http\Resources\InvitationCollection;
+use App\Http\Resources\InvitationResource;
 use App\Models\Invitation;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\App;
@@ -25,6 +27,9 @@ class SaveTheDateController extends Controller
 
         return Inertia::render('SaveTheDate', [
             'currentGuest' => $invitation->guest,
+            'invitations' => new InvitationCollection(
+                $invitation->guest->group->saveTheDates()->get()
+            ),
             'guestGroup' => $invitation->guest->group->guests,
             'language' => $lang,
             'languages' => Language::displayList(),
