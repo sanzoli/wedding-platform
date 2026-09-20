@@ -22,6 +22,7 @@ const icons: Record<ResponseOption, Component> = {
 };
 
 const selected = ref(props.invitation.response);
+const retryOption = ref();
 const status = ref();
 
 const save = (option: ResponseOption) => {
@@ -35,7 +36,11 @@ const save = (option: ResponseOption) => {
             preserveState: true,
             only: ['invitations'],
             onSuccess: () => (status.value = 'saved'),
-            onError: () => (status.value = 'save_error'),
+            onError: () => {
+                status.value = 'save_error';
+                retryOption.value = option;
+                selected.value = props.invitation.response;
+            },
         },
     );
 };
@@ -69,10 +74,10 @@ const save = (option: ResponseOption) => {
                 />
                 {{ trans('save_the_date.' + status) }}
                 <button
-                    v-if="status === 'save_error' && selected"
+                    v-if="status === 'save_error' && retryOption"
                     type="button"
                     class="-my-3 min-h-11 underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
-                    @click="save(selected)"
+                    @click="save(retryOption)"
                 >
                     {{ trans('save_the_date.retry') }}
                 </button>
