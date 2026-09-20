@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import EnvelopeIntro from '@/components/guest/EnvelopeIntro.vue';
+import Greeting from '@/components/guest/Greeting.vue';
 import GroupConfirmation from '@/components/guest/GroupConfirmation.vue';
 import GuestSvgDefs from '@/components/guest/GuestSvgDefs.vue';
 import Hero from '@/components/guest/Hero.vue';
@@ -14,7 +15,7 @@ import { lang } from '@erag/lang-sync-inertia/vue';
 import { Head, router } from '@inertiajs/vue3';
 import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue';
 
-const { trans, transChoice } = lang();
+const { trans } = lang();
 const props = defineProps<SaveTheDateProps>();
 const displayLang = ref(props.language);
 const selected = reactive<Record<number, ResponseOption | null>>(
@@ -144,33 +145,7 @@ onBeforeUnmount(() => {
         </div>
 
         <main class="guest-content mx-auto w-full max-w-2xl">
-            <div
-                class="px-6 pt-[calc(var(--guest-header-height)+2rem)] pb-8 text-center lg:pt-14"
-            >
-                <p class="guest-greeting font-display text-foreground">
-                    {{
-                        trans('save_the_date.greeting', {
-                            name: currentGuest.first_name,
-                        })
-                    }}
-                </p>
-                <p
-                    class="mx-auto mt-3 max-w-md text-lg leading-relaxed text-foreground/90"
-                >
-                    {{ transChoice('save_the_date.intro', 1) }}
-                </p>
-
-                <span
-                    class="mx-auto mt-7 block h-px w-10 bg-border"
-                    aria-hidden="true"
-                />
-
-                <p
-                    class="mx-auto mt-5 max-w-md text-base leading-relaxed text-muted-foreground"
-                >
-                    {{ transChoice('save_the_date.hint', 1) }}
-                </p>
-            </div>
+            <Greeting :currentGuest />
 
             <GroupConfirmation
                 :members="guestGroup"
