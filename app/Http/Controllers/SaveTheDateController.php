@@ -20,11 +20,12 @@ class SaveTheDateController extends Controller
             abort(403);
         }
 
-        $lang = request()->query('lang', $invitation->default_language?->value ?? 'es');
+        $lang = request()->query('language', $invitation->default_language?->value ?? 'es');
         App::setLocale($lang);
         syncLangFiles(['app', 'save_the_date']);
 
         return Inertia::render('SaveTheDate', [
+            'id' => $invitation->id,
             'currentGuest' => $invitation->guest,
             'invitations' => new InvitationCollection(
                 $invitation->guest->group->saveTheDates()->get()

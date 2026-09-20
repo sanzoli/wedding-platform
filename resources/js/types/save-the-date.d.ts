@@ -18,6 +18,7 @@ export interface Language {
 }
 
 export interface SaveTheDateProps {
+    id: string;
     currentGuest: Guest;
     invitations: {
         data: Invitation[];

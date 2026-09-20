@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { view } from '@/actions/App/Http/Controllers/SaveTheDateController';
 import LanguagePicker from '@/components/guest/LanguagePicker.vue';
 import EnvelopeIntro from '@/components/guest/SaveTheDate/EnvelopeIntro.vue';
 import Greeting from '@/components/guest/SaveTheDate/Greeting.vue';
@@ -9,13 +10,21 @@ import GuestSvgDefs from '@/components/guest/svg/GuestSvgDefs.vue';
 import FullPageLayout from '@/layouts/FullPageLayout.vue';
 import { SaveTheDateProps } from '@/types/save-the-date';
 import { lang } from '@erag/lang-sync-inertia/vue';
-import { Head } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { Head, router } from '@inertiajs/vue3';
+import { ref, watch } from 'vue';
 
 const { trans } = lang();
 const props = defineProps<SaveTheDateProps>();
 
 const displayLang = ref(props.language);
+
+watch(displayLang, () =>
+    router.get(view(props.id, { query: { language: displayLang.value } }), {
+        preserveScroll: true,
+        preserveState: true,
+        only: ['lang'],
+    }),
+);
 
 /** On mobile the counter waits for the hero to collapse, in step with the sticky header. */
 const heroCollapsed = ref(false);
