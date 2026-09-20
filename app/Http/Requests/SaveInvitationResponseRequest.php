@@ -8,10 +8,6 @@ use Illuminate\Validation\Rule;
 
 class SaveInvitationResponseRequest extends FormRequest
 {
-    public function authorize(): bool
-    {
-        return true;
-    }
 
     public function rules(): array
     {
