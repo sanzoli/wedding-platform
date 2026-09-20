@@ -12,6 +12,7 @@
         "php": "^8.4",
         "bref/bref": "^3.0",
         "bref/laravel-bridge": "^3.0",
+        "erag/laravel-lang-sync-inertia": "^2.4",
         "inertiajs/inertia-laravel": "^2.0",
         "laravel/fortify": "^1.30",
         "laravel/framework": "^12.0",

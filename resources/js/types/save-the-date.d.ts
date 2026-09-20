@@ -17,7 +17,10 @@ export interface Language {
 export interface SaveTheDateProps {
     currentGuest: Guest;
     guestGroup: GuestGroupMember[];
-    lang: string;
+    language: string;
+    coupleNames: string;
+    date: string;
+    location: string;
     languages: Record<string, Language>;
     options: Record<ResponseOption, string>;
 }

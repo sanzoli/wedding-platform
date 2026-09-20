@@ -20,9 +20,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Inertia::macro(
-            'mergeShared',
-            fn (string $key, array $value) => array_merge(Inertia::getShared($key), $value)
-        );
+        //
     }
 }

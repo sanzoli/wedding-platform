@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { ChevronDown } from 'lucide-vue-next';
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { vueLang } from '@erag/lang-sync-inertia/vue';
+
+const { trans } = vueLang();
 
 defineProps<{
-    eyebrow: string;
     names: string;
     date: string;
     location: string;
-    scrollCue: string;
 }>();
 
 const emit = defineEmits<{ collapse: [collapsed: boolean] }>();
@@ -96,7 +97,9 @@ onBeforeUnmount(() => {
             class="pointer-events-none absolute inset-0 bg-linear-to-b from-white/5 via-transparent to-black/25"
         />
 
-        <div class="guest-safe-top relative z-10 flex justify-end px-6 lg:hidden">
+        <div
+            class="guest-safe-top relative z-10 flex justify-end px-6 lg:hidden"
+        >
             <slot name="nav" />
         </div>
 
@@ -116,7 +119,7 @@ onBeforeUnmount(() => {
             <p
                 class="guest-eyebrow guest-accent-on-dark guest-fade-up [animation-delay:60ms]"
             >
-                {{ eyebrow }}
+                {{ trans('save_the_date.eyebrow') }}
             </p>
 
             <h1
@@ -141,7 +144,7 @@ onBeforeUnmount(() => {
         <div
             class="guest-safe-bottom relative z-10 flex flex-col items-center gap-1 text-primary-foreground/75 lg:hidden"
         >
-            <span class="text-sm">{{ scrollCue }}</span>
+            <span class="text-sm">{{ trans('save_the_date.scroll_cue') }}</span>
             <ChevronDown
                 class="size-4"
                 :class="{ 'guest-scroll-cue--nudge': nudging }"
@@ -176,7 +179,9 @@ onBeforeUnmount(() => {
                 aria-hidden="true"
             />
 
-            <p class="truncate text-xs leading-tight text-primary-foreground/70">
+            <p
+                class="truncate text-xs leading-tight text-primary-foreground/70"
+            >
                 {{ location }}
             </p>
         </div>

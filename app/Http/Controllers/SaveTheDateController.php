@@ -7,6 +7,7 @@ use App\Enum\InvitationType;
 use App\Enum\Language;
 use App\Http\Requests\SaveInvitationResponseRequest;
 use App\Models\Invitation;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\App;
 use Inertia\Inertia;
 
@@ -20,13 +21,17 @@ class SaveTheDateController extends Controller
 
         $lang = request()->query('lang', $invitation->default_language?->value ?? 'es');
         App::setLocale($lang);
+        syncLangFiles(['app', 'save_the_date']);
 
         return Inertia::render('SaveTheDate', [
             'currentGuest' => $invitation->guest,
             'guestGroup' => $invitation->guest->group->guests,
-            'lang' => $lang,
+            'language' => $lang,
             'languages' => Language::displayList(),
             'options' => InvitationResponse::options(),
+            'date' => Carbon::make('April 8, 2027')->toFormattedDateString(),
+            'location' => 'Maringá, Brasil',
+            'coupleNames' => 'Lauana & David',
         ]);
     }
 

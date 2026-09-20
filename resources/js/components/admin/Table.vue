@@ -12,6 +12,7 @@ defineProps<{
     search?: string;
 }>();
 
+// TODO: change translation to use erag/laravel-lang-sync-inertia
 const trans = usePage().props.trans.table;
 trans.no_items ??= 'No items yet';
 trans.add_button ??= 'Add your first item';

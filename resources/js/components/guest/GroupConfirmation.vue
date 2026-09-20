@@ -12,9 +12,7 @@ const props = defineProps<{
     selected: Record<number, ResponseOption | null>;
     statuses: Record<number, SaveStatus | undefined>;
     statusLabels: Record<SaveStatus, string>;
-    retryLabel: string;
     currentGuestId: number;
-    youLabel: string;
 }>();
 
 defineEmits<{
@@ -39,8 +37,6 @@ const statusLabel = (id: number) => {
             :selected="selected[member.id] ?? null"
             :status="statuses[member.id]"
             :status-label="statusLabel(member.id)"
-            :retry-label="retryLabel"
-            :you-label="youLabel"
             :is-you="members.length > 1 && member.id === currentGuestId"
             @select="(response) => $emit('select', member.id, response)"
             @retry="$emit('retry', member.id)"

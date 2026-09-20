@@ -33,6 +33,7 @@
         "vue-tsc": "^3.2.6"
     },
     "dependencies": {
+        "@erag/lang-sync-inertia": "^3.0.0",
         "@inertiajs/vue3": "^2.1.0",
         "@vueuse/core": "^12.8.2",
         "class-variance-authority": "^0.7.1",

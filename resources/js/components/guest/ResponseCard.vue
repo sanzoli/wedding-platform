@@ -6,6 +6,9 @@ import type {
 } from '@/types/save-the-date';
 import { Check, Minus, X } from 'lucide-vue-next';
 import type { Component } from 'vue';
+import { vueLang } from '@erag/lang-sync-inertia/vue';
+
+const { trans } = vueLang();
 
 defineProps<{
     member: GuestGroupMember;
@@ -13,8 +16,6 @@ defineProps<{
     selected: ResponseOption | null;
     status?: SaveStatus;
     statusLabel: string;
-    retryLabel: string;
-    youLabel: string;
     isYou?: boolean;
 }>();
 
@@ -40,7 +41,7 @@ const choices: { value: ResponseOption; icon: Component }[] = [
                     v-if="isYou"
                     class="guest-accent-ink ml-1 align-middle text-xs"
                 >
-                    · {{ youLabel }}
+                    · {{ trans('save_the_date.you_label') }}
                 </span>
             </p>
 
@@ -64,7 +65,7 @@ const choices: { value: ResponseOption; icon: Component }[] = [
                     class="-my-3 min-h-11 underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
                     @click="$emit('retry')"
                 >
-                    {{ retryLabel }}
+                    {{ trans('save_the_date.retry_label') }}
                 </button>
             </p>
         </div>
