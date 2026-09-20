@@ -29,7 +29,6 @@ class SaveTheDateController extends Controller
             'invitations' => new InvitationCollection(
                 $invitation->guest->group->saveTheDates()->get()
             ),
-            'guestGroup' => $invitation->guest->group->guests,
             'language' => $lang,
             'languages' => Language::displayList(),
             'options' => InvitationResponse::options(),
