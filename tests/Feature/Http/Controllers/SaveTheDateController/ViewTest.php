@@ -13,14 +13,14 @@ test('guest can view save the date', function () {
 
     $this->get(route('save-the-date.view', $invitation))
         ->assertSuccessful()
-        ->assertInertia(fn(Assert $page) => $page
+        ->assertInertia(fn (Assert $page) => $page
             ->component('SaveTheDate')
-            ->has('currentGuest', fn(Assert $page) => $page
+            ->has('currentGuest', fn (Assert $page) => $page
                 ->where('id', $guest->id)
                 ->etc()
-            )->has('invitations.data', 1, fn(Assert $page) => $page
-                ->where('id', $invitation->id)
-                ->etc()
+            )->has('invitations.data', 1, fn (Assert $page) => $page
+            ->where('id', $invitation->id)
+            ->etc()
             )->where('language', 'es')
             ->has('languages', 3)
             ->where('options', [
@@ -38,14 +38,14 @@ test('guest can view save the date with invitation default language', function (
 
     $this->get(route('save-the-date.view', $invitation))
         ->assertSuccessful()
-        ->assertInertia(fn(Assert $page) => $page
+        ->assertInertia(fn (Assert $page) => $page
             ->component('SaveTheDate')
-            ->has('currentGuest', fn(Assert $page) => $page
+            ->has('currentGuest', fn (Assert $page) => $page
                 ->where('id', $guest->id)
                 ->etc()
-            )->has('invitations.data', 1, fn(Assert $page) => $page
-                ->where('id', $invitation->id)
-                ->etc()
+            )->has('invitations.data', 1, fn (Assert $page) => $page
+            ->where('id', $invitation->id)
+            ->etc()
             )->where('language', $lang)
             ->has('languages', 3)
             ->where('options', [
@@ -69,13 +69,13 @@ test('guest can view group guests', function () {
 
     $this->get(route('save-the-date.view', $invitation))
         ->assertSuccessful()
-        ->assertInertia(fn(Assert $page) => $page
+        ->assertInertia(fn (Assert $page) => $page
             ->component('SaveTheDate')
-            ->has('currentGuest', fn(Assert $page) => $page
+            ->has('currentGuest', fn (Assert $page) => $page
                 ->where('id', $guest->id)
                 ->etc()
             )->has('invitations.data', 2)
-            ->has('invitations.data.0', fn(Assert $page) => $page
+            ->has('invitations.data.0', fn (Assert $page) => $page
                 ->where('id', $invitation->id)
                 ->etc()
             )->etc()
@@ -88,10 +88,10 @@ test('guest cannot see outside group', function () {
 
     $this->get(route('save-the-date.view', $invitation))
         ->assertSuccessful()
-        ->assertInertia(fn(Assert $page) => $page
+        ->assertInertia(fn (Assert $page) => $page
             ->component('SaveTheDate')
             ->has('invitations.data', 1)
-            ->has('invitations.data.0', fn(Assert $page) => $page
+            ->has('invitations.data.0', fn (Assert $page) => $page
                 ->whereNot('id', $anotherGuest->id)
                 ->etc()
             )->etc()
