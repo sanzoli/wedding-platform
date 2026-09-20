@@ -25,7 +25,7 @@ test('can responde a invitation', function (string $response) {
 test('can update a invitation response', function (string $response) {
     $invitation = Invitation::factory()
         ->saveTheDate()
-        ->create(['response' => array_rand(InvitationResponse::options())]);
+        ->create(['response' => Arr::random(InvitationResponse::cases())]);
 
     $this->post(
         route('save-the-date.response', $invitation),

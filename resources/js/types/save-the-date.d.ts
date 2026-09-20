@@ -30,5 +30,4 @@ export interface SaveTheDateProps {
     date: string;
     location: string;
     languages: Record<string, Language>;
-    options: Record<ResponseOption, string>;
 }

@@ -32,7 +32,6 @@ class SaveTheDateController extends Controller
             ),
             'language' => $lang,
             'languages' => Language::displayList(),
-            'options' => InvitationResponse::options(),
             'date' => Carbon::make('April 8, 2027')->toFormattedDateString(),
             'location' => 'Maringá, Brasil',
             'coupleNames' => 'Lauana & David',

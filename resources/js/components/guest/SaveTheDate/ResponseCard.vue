@@ -13,8 +13,7 @@ const props = defineProps<{
     isYou: boolean;
 }>();
 
-const options: Record<ResponseOption, string> = usePage().props.options;
-const icons: Record<ResponseOption, Component> = {
+const options: Record<ResponseOption, Component> = {
     yes: Check,
     probably_yes: Check,
     probably_no: Minus,
@@ -89,23 +88,23 @@ const save = (option: ResponseOption) => {
 
             <div class="grid gap-2 sm:grid-cols-2">
                 <label
-                    v-for="(label, value) in options"
-                    :key="value"
+                    v-for="(icon, option) in options"
+                    :key="option"
                     class="guest-option"
                 >
                     <input
                         type="radio"
                         class="sr-only"
-                        :value="value"
-                        :checked="selected === value"
-                        @click="save(value)"
+                        :value="option"
+                        :checked="selected === option"
+                        @click="save(option)"
                     />
                     <component
-                        :is="icons[value]"
+                        :is="icon"
                         class="size-4 shrink-0"
                         aria-hidden="true"
                     />
-                    <span>{{ label }}</span>
+                    <span>{{ trans('save_the_date.options.' + option) }}</span>
                 </label>
             </div>
         </fieldset>
