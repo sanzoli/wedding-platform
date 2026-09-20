@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import BR from '@/components/guest/svg/flags/BR.vue';
+import CO from '@/components/guest/svg/flags/CO.vue';
+import US from '@/components/guest/svg/flags/US.vue';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -8,9 +11,6 @@ import {
 import type { Language } from '@/types/save-the-date';
 import { Check, ChevronDown } from 'lucide-vue-next';
 import type { Component } from 'vue';
-import BR from '@/components/guest/svg/flags/BR.vue';
-import CO from '@/components/guest/svg/flags/CO.vue';
-import US from '@/components/guest/svg/flags/US.vue';
 
 defineProps<{
     languages: Record<string, Language>;

@@ -6,7 +6,6 @@ defineProps<{
     saved: number;
     total: number;
 }>();
-
 </script>
 
 <template>

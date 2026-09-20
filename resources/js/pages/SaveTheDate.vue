@@ -1,16 +1,16 @@
 <script setup lang="ts">
+import LanguagePicker from '@/components/guest/LanguagePicker.vue';
 import EnvelopeIntro from '@/components/guest/SaveTheDate/EnvelopeIntro.vue';
 import Greeting from '@/components/guest/SaveTheDate/Greeting.vue';
-import GuestSvgDefs from '@/components/guest/svg/GuestSvgDefs.vue';
 import Hero from '@/components/guest/SaveTheDate/Hero.vue';
-import LanguagePicker from '@/components/guest/LanguagePicker.vue';
+import ResponseCard from '@/components/guest/SaveTheDate/ResponseCard.vue';
+import TotalSaved from '@/components/guest/SaveTheDate/TotalSaved.vue';
+import GuestSvgDefs from '@/components/guest/svg/GuestSvgDefs.vue';
 import FullPageLayout from '@/layouts/FullPageLayout.vue';
-import { SaveTheDateProps} from '@/types/save-the-date';
+import { SaveTheDateProps } from '@/types/save-the-date';
 import { lang } from '@erag/lang-sync-inertia/vue';
 import { Head } from '@inertiajs/vue3';
 import { ref } from 'vue';
-import ResponseCard from '@/components/guest/SaveTheDate/ResponseCard.vue';
-import TotalSaved from '@/components/guest/SaveTheDate/TotalSaved.vue';
 
 const { trans } = lang();
 const props = defineProps<SaveTheDateProps>();
@@ -71,7 +71,9 @@ const heroCollapsed = ref(false);
                 :class="{ 'guest-island--waiting': !heroCollapsed }"
             />
 
-            <p class="px-6 pt-8 pb-16 text-center text-base leading-relaxed text-muted-foreground">
+            <p
+                class="px-6 pt-8 pb-16 text-center text-base leading-relaxed text-muted-foreground"
+            >
                 {{ trans('save_the_date.footer_note') }}
             </p>
 

@@ -12,7 +12,7 @@ class InvitationCollection extends ResourceCollection
         return [
             'data' => $this->collection,
             'total' => $this->collection->count(),
-            'answered' => $this->collection->whereNotNull('response')->count()
+            'answered' => $this->collection->whereNotNull('response')->count(),
         ];
     }
 }

@@ -7,8 +7,8 @@ export type SaveStatus = 'saving' | 'saved' | 'error';
 export interface Invitation {
     id: string;
     guest: {
-        id: number,
-        name: string
+        id: number;
+        name: string;
     };
     response: ResponseOption | null;
 }

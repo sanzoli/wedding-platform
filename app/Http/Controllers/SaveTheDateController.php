@@ -7,7 +7,6 @@ use App\Enum\InvitationType;
 use App\Enum\Language;
 use App\Http\Requests\SaveInvitationResponseRequest;
 use App\Http\Resources\InvitationCollection;
-use App\Http\Resources\InvitationResource;
 use App\Models\Invitation;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\App;
