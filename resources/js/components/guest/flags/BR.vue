@@ -7,7 +7,9 @@ const clipId = useId();
 <template>
     <svg viewBox="0 0 24 24" aria-hidden="true">
         <defs>
-            <clipPath :id="clipId"><circle cx="12" cy="12" r="11.5" /></clipPath>
+            <clipPath :id="clipId">
+                <circle cx="12" cy="12" r="11.5" />
+            </clipPath>
         </defs>
         <g :clip-path="`url(#${clipId})`">
             <rect x="0" y="0" width="24" height="24" fill="#009B3A" />

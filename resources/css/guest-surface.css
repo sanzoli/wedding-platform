@@ -30,9 +30,15 @@
     /* Envelope — values reused outside the inline artwork */
     --guest-parchment-edge: hsl(38 41% 33% / 0.24);
     --guest-wax-halo: hsl(28 65% 9% / 0.42);
-    --guest-paper: hsl(40 30% 97%); /* light-section ground: a whisper of old paper, so white cards lift off it */
-    --guest-island: hsl(40 30% 97% / 0.82); /* the same paper, seen through: floating pills keep the page visible under them */
-    --guest-island-count: hsl(184 30% 93% / 0.85); /* the hero's teal, diluted: lifts the progress pill off the paper ones */
+    --guest-paper: hsl(
+        40 30% 97%
+    ); /* light-section ground: a whisper of old paper, so white cards lift off it */
+    --guest-island: hsl(
+        40 30% 97% / 0.82
+    ); /* the same paper, seen through: floating pills keep the page visible under them */
+    --guest-island-count: hsl(
+        184 30% 93% / 0.85
+    ); /* the hero's teal, diluted: lifts the progress pill off the paper ones */
 
     /* Envelope opening, in play order: seal breaks → flap swings → sleeve dissolves */
     --guest-seal-break-duration: 640ms;
@@ -194,7 +200,9 @@
             opacity var(--guest-dissolve-duration) ease
                 var(--guest-dissolve-delay),
             visibility 0s linear
-                calc(var(--guest-dissolve-duration) + var(--guest-dissolve-delay));
+                calc(
+                    var(--guest-dissolve-duration) + var(--guest-dissolve-delay)
+                );
     }
 
     .guest-envelope-stage--opened {

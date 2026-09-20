@@ -4,9 +4,9 @@ import type {
     ResponseOption,
     SaveStatus,
 } from '@/types/save-the-date';
+import { vueLang } from '@erag/lang-sync-inertia/vue';
 import { Check, Minus, X } from 'lucide-vue-next';
 import type { Component } from 'vue';
-import { vueLang } from '@erag/lang-sync-inertia/vue';
 
 const { trans } = vueLang();
 

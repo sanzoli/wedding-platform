@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { vueLang } from '@erag/lang-sync-inertia/vue';
 import { ChevronDown } from 'lucide-vue-next';
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
-import { vueLang } from '@erag/lang-sync-inertia/vue';
 
 const { trans } = vueLang();
 

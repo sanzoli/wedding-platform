@@ -16,7 +16,9 @@ const hasAside = !!useSlots().aside;
             <slot name="aside" />
         </div>
 
-        <div :class="hasAside ? 'flex-1 lg:h-svh lg:overflow-y-auto' : 'flex-1'">
+        <div
+            :class="hasAside ? 'flex-1 lg:h-svh lg:overflow-y-auto' : 'flex-1'"
+        >
             <slot />
         </div>
     </div>

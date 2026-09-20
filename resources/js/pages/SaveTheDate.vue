@@ -10,9 +10,9 @@ import type {
     SaveStatus,
     SaveTheDateProps,
 } from '@/types/save-the-date';
+import { lang } from '@erag/lang-sync-inertia/vue';
 import { Head, router } from '@inertiajs/vue3';
 import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue';
-import { lang } from '@erag/lang-sync-inertia/vue';
 
 const { trans, transChoice } = lang();
 const props = defineProps<SaveTheDateProps>();
