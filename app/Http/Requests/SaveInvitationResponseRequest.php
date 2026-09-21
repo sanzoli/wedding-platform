@@ -8,7 +8,6 @@ use Illuminate\Validation\Rule;
 
 class SaveInvitationResponseRequest extends FormRequest
 {
-
     public function rules(): array
     {
         return [
