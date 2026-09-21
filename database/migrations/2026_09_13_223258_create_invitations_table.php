@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('invitations', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->enum('type', array_column(InvitationType::cases(), 'name'));
-            $table->foreignIdFor(Guest::class)->constrained();
+            $table->foreignIdFor(Guest::class)->constrained()->cascadeOnDelete();
             $table->enum('default_language', Language::values())->nullable();
             $table->enum('response', array_column(InvitationResponse::cases(), 'value'))->nullable();
             $table->timestamps();
