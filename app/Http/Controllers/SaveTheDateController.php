@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Enum\InvitationType;
+use App\Events\StoreInvitationResponseEvent;
+use App\Events\ViewInvitationEvent;
 use App\Http\Requests\SaveInvitationResponseRequest;
 use App\Http\Resources\InvitationCollection;
 use App\Models\Invitation;
@@ -17,6 +19,8 @@ class SaveTheDateController extends Controller
         if ($invitation->type !== InvitationType::SaveTheDate) {
             abort(403);
         }
+
+        ViewInvitationEvent::dispatch($invitation, request());
 
         $language = request()->query('language', $invitation->default_language?->value ?? 'es');
 
@@ -38,6 +42,8 @@ class SaveTheDateController extends Controller
 
     public function response(Invitation $invitation, SaveInvitationResponseRequest $request)
     {
+        StoreInvitationResponseEvent::dispatch($invitation, request());
+
         $invitation->update(['response' => $request->input('response')]);
 
         return back();
