@@ -23,6 +23,11 @@ class StoreInvitationResponseEvent implements UserEventContract
         $this->request = $request;
     }
 
+    public function id(): string
+    {
+        return $this->invitation->id;
+    }
+
     public function type(): string
     {
         return 'invitation.response.'.$this->invitation->type->name;

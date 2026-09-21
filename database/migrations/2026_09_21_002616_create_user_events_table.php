@@ -11,9 +11,12 @@ return new class extends Migration
         Schema::create('user_events', function (Blueprint $table) {
             $table->id();
             $table->morphs('creator');
-            $table->string('event');
+            $table->string('event_type');
+            $table->string('event_id');
             $table->json('settings')->nullable();
             $table->timestamps();
+
+            $table->index('event_id');
         });
     }
 

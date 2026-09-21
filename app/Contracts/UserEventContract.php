@@ -4,6 +4,8 @@ namespace App\Contracts;
 
 interface UserEventContract
 {
+    public function id(): string;
+
     public function type(): string;
 
     public function creatorType(): string;

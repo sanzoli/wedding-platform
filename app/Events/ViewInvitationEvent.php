@@ -23,6 +23,11 @@ class ViewInvitationEvent implements UserEventContract
         $this->request = $request;
     }
 
+    public function id(): string
+    {
+        return $this->invitation->id;
+    }
+
     public function type(): string
     {
         return 'invitation.view.'.$this->invitation->type->name;

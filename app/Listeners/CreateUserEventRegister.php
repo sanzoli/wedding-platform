@@ -10,7 +10,8 @@ class CreateUserEventRegister
     public function handle(UserEventContract $event): void
     {
         UserEvent::create([
-            'event' => $event->type(),
+            'event_type' => $event->type(),
+            'event_id' => $event->id(),
             'creator_type' => $event->creatorType(),
             'creator_id' => $event->creatorId(),
             'settings' => $event->settings(),
