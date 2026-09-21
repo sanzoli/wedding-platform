@@ -20,12 +20,12 @@ test('guest can view save the date', function () {
                 ->where('id', $guest->id)
                 ->etc()
             )->has('invitations', fn (Assert $page) => $page
-            ->where('total', 1)
-            ->where('answered', 0)
-            ->has('data', 1, fn (Assert $page) => $page
-                ->where('id', $invitation->id)
-                ->etc()
-            )
+                ->where('total', 1)
+                ->where('answered', 0)
+                ->has('data', 1, fn (Assert $page) => $page
+                    ->where('id', $invitation->id)
+                    ->etc()
+                )
             )->where('language', 'es')
             ->has('date')
             ->has('location')
