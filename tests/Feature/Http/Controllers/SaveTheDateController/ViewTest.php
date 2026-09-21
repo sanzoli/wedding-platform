@@ -15,20 +15,22 @@ test('guest can view save the date', function () {
         ->assertSuccessful()
         ->assertInertia(fn (Assert $page) => $page
             ->component('SaveTheDate')
+            ->where('id', $invitation->id)
             ->has('currentGuest', fn (Assert $page) => $page
                 ->where('id', $guest->id)
                 ->etc()
-            )->has('invitations.data', 1, fn (Assert $page) => $page
-            ->where('id', $invitation->id)
-            ->etc()
+            )->has('invitations', fn (Assert $page) => $page
+            ->where('total', 1)
+            ->where('answered', 0)
+            ->has('data', 1, fn (Assert $page) => $page
+                ->where('id', $invitation->id)
+                ->etc()
+            )
             )->where('language', 'es')
-            ->has('languages', 3)
-            ->where('options', [
-                'yes' => trans('save_the_date.options.yes'),
-                'probably_yes' => trans('save_the_date.options.probably_yes'),
-                'probably_no' => trans('save_the_date.options.probably_no'),
-                'no' => trans('save_the_date.options.no'),
-            ])
+            ->has('date')
+            ->has('location')
+            ->has('coupleNames')
+            ->has('lang')
         );
 });
 
@@ -40,20 +42,11 @@ test('guest can view save the date with invitation default language', function (
         ->assertSuccessful()
         ->assertInertia(fn (Assert $page) => $page
             ->component('SaveTheDate')
+            ->where('id', $invitation->id)
             ->has('currentGuest', fn (Assert $page) => $page
                 ->where('id', $guest->id)
                 ->etc()
-            )->has('invitations.data', 1, fn (Assert $page) => $page
-            ->where('id', $invitation->id)
-            ->etc()
             )->where('language', $lang)
-            ->has('languages', 3)
-            ->where('options', [
-                'yes' => trans('save_the_date.options.yes', locale: $lang),
-                'probably_yes' => trans('save_the_date.options.probably_yes', locale: $lang),
-                'probably_no' => trans('save_the_date.options.probably_no', locale: $lang),
-                'no' => trans('save_the_date.options.no', locale: $lang),
-            ])
         );
 })->with([
     Language::English->name => ['lang' => Language::English->value],
@@ -71,14 +64,12 @@ test('guest can view group guests', function () {
         ->assertSuccessful()
         ->assertInertia(fn (Assert $page) => $page
             ->component('SaveTheDate')
+            ->where('id', $invitation->id)
             ->has('currentGuest', fn (Assert $page) => $page
                 ->where('id', $guest->id)
                 ->etc()
             )->has('invitations.data', 2)
-            ->has('invitations.data.0', fn (Assert $page) => $page
-                ->where('id', $invitation->id)
-                ->etc()
-            )->etc()
+            ->etc()
         );
 });
 
@@ -90,8 +81,8 @@ test('guest cannot see outside group', function () {
         ->assertSuccessful()
         ->assertInertia(fn (Assert $page) => $page
             ->component('SaveTheDate')
-            ->has('invitations.data', 1)
-            ->has('invitations.data.0', fn (Assert $page) => $page
+            ->where('id', $invitation->id)
+            ->has('invitations.data', 1, fn (Assert $page) => $page
                 ->whereNot('id', $anotherGuest->id)
                 ->etc()
             )->etc()
