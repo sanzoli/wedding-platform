@@ -17,15 +17,6 @@ enum Language: string
         };
     }
 
-    public function nativeName(): string
-    {
-        return match ($this) {
-            self::English => 'English',
-            self::Spanish => 'Español',
-            self::Portuguese => 'Português',
-        };
-    }
-
     public static function values(): array
     {
         return array_column(Language::cases(), 'value');
@@ -36,7 +27,7 @@ enum Language: string
         return collect(self::cases())
             ->mapWithKeys(fn (self $item) => [
                 $item->value => [
-                    'label' => $item->nativeName(),
+                    'label' => $item->name,
                     'value' => $item->value,
                     'flag' => $item->flag(),
                 ],
