@@ -11,11 +11,7 @@ export interface Invitation {
     response: ResponseOption | null;
 }
 
-export interface Language {
-    label: string;
-    value: string;
-    flag: string;
-}
+export type Language = 'en' | 'es' | 'pt';
 
 export interface SaveTheDateProps {
     id: string;
@@ -25,9 +21,8 @@ export interface SaveTheDateProps {
         total: number;
         answered: number;
     };
-    language: string;
+    language: Language;
     coupleNames: string;
     date: string;
     location: string;
-    languages: Record<string, Language>;
 }

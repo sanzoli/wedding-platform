@@ -20,8 +20,9 @@ class SaveTheDateController extends Controller
             abort(403);
         }
 
-        $lang = request()->query('language', $invitation->default_language?->value ?? 'es');
-        App::setLocale($lang);
+        $language = request()->query('language', $invitation->default_language?->value ?? 'es');
+
+        App::setLocale($language);
         syncLangFiles(['app', 'save_the_date']);
 
         return Inertia::render('SaveTheDate', [
@@ -30,8 +31,7 @@ class SaveTheDateController extends Controller
             'invitations' => new InvitationCollection(
                 $invitation->guest->group->saveTheDates()->get()
             ),
-            'language' => $lang,
-            'languages' => Language::displayList(),
+            'language' => $language,
             'date' => Carbon::make('April 8, 2027')->toFormattedDateString(),
             'location' => 'Maringá, Brasil',
             'coupleNames' => 'Lauana & David',

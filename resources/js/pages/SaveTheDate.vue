@@ -16,10 +16,10 @@ import { ref, watch } from 'vue';
 const { trans } = lang();
 const props = defineProps<SaveTheDateProps>();
 
-const displayLang = ref(props.language);
+const currentLanguage = ref(props.language);
 
-watch(displayLang, () =>
-    router.get(view(props.id, { query: { language: displayLang.value } }), {
+watch(currentLanguage, () =>
+    router.get(view(props.id, { query: { language: currentLanguage.value } }), {
         preserveScroll: true,
         preserveState: true,
         only: ['lang'],
@@ -44,10 +44,7 @@ const heroCollapsed = ref(false);
                 @collapse="heroCollapsed = $event"
             >
                 <template #nav>
-                    <LanguagePicker
-                        :languages="languages"
-                        v-model="displayLang"
-                    />
+                    <LanguagePicker v-model="currentLanguage" />
                 </template>
             </Hero>
         </template>
@@ -58,7 +55,7 @@ const heroCollapsed = ref(false);
             <span
                 class="guest-island pointer-events-auto inline-flex items-center px-2 py-0.5"
             >
-                <LanguagePicker :languages="languages" v-model="displayLang" />
+                <LanguagePicker v-model="currentLanguage" />
             </span>
         </div>
 
