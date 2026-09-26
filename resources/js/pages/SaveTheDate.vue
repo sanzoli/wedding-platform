@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { view } from '@/actions/App/Http/Controllers/SaveTheDateController';
-import LanguagePicker from '@/components/guest/LanguagePicker.vue';
-import EnvelopeIntro from '@/components/guest/SaveTheDate/EnvelopeIntro.vue';
+import LanguagePicker from '@/components/LanguagePicker.vue';
+import Envelope from '@/components/guest/SaveTheDate/Envelope.vue';
 import Greeting from '@/components/guest/SaveTheDate/Greeting.vue';
 import Hero from '@/components/guest/SaveTheDate/Hero.vue';
 import ResponseCard from '@/components/guest/SaveTheDate/ResponseCard.vue';
 import TotalSaved from '@/components/guest/SaveTheDate/TotalSaved.vue';
-import GuestSvgDefs from '@/components/guest/svg/GuestSvgDefs.vue';
-import FullPageLayout from '@/layouts/FullPageLayout.vue';
+import GuestStationeryLayout from '@/layouts/GuestStationeryLayout.vue';
 import { SaveTheDateProps } from '@/types/save-the-date';
 import { lang } from '@erag/lang-sync-inertia/vue';
 import { Head, router } from '@inertiajs/vue3';
@@ -31,10 +30,8 @@ const heroCollapsed = ref(false);
 </script>
 
 <template>
-    <FullPageLayout class="guest-surface">
+    <GuestStationeryLayout class="guest-surface">
         <Head :title="`Save the Date — ${props.coupleNames}`" />
-
-        <GuestSvgDefs />
 
         <template #aside>
             <Hero
@@ -95,9 +92,9 @@ const heroCollapsed = ref(false);
                 </div>
             </div>
         </main>
-    </FullPageLayout>
+    </GuestStationeryLayout>
 
-    <EnvelopeIntro
+    <Envelope
         :hint="trans('save_the_date.envelope_hint')"
         :open-label="trans('save_the_date.envelope_open')"
     />

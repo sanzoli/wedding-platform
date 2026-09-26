@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue';
-import sealImage from '../img/sello.png';
-import EnvelopeArt from '../svg/EnvelopeArt.vue';
 
 defineProps<{
     hint: string;
@@ -68,13 +66,24 @@ onBeforeUnmount(() => {
         :inert="opened"
     >
         <div class="guest-envelope">
-            <EnvelopeArt />
+            <img
+                src="/envelop/body.svg"
+                class="guest-envelope-sheet"
+                alt=""
+                aria-hidden="true"
+            />
+            <img
+                src="/envelop/flap.svg"
+                class="guest-envelope-sheet guest-envelope-flap"
+                alt=""
+                aria-hidden="true"
+            />
 
             <button
                 type="button"
                 class="guest-seal"
                 :aria-label="openLabel"
-                :style="{ '--guest-seal-image': `url(${sealImage})` }"
+                :style="{ '--guest-seal-image': `url(/sello.png)` }"
                 @click="open"
             >
                 <span class="guest-seal-half guest-seal-half--left" />
