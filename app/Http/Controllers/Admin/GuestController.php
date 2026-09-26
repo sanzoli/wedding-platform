@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Actions\Guest\DeleteGuest;
 use App\Actions\Guest\SearchGuests;
 use App\Actions\Guest\StoreGuest;
 use App\Actions\Guest\UpdateGuest;
 use App\Enum\Language;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Guest\StoreGuestRequest;
 use App\Http\Requests\Guest\UpdateGuestRequest;
 use App\Http\Resources\GuestGroupResource;

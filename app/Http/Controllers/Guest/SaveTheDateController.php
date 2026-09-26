@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Guest;
 
 use App\Enum\InvitationType;
 use App\Events\StoreInvitationResponseEvent;
 use App\Events\ViewInvitationEvent;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveInvitationResponseRequest;
 use App\Http\Resources\InvitationCollection;
 use App\Models\Invitation;

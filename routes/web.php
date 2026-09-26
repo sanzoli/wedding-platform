@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\GuestController;
-use App\Http\Controllers\GuestGroupController;
-use App\Http\Controllers\SaveTheDateController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\GuestController;
+use App\Http\Controllers\Admin\GuestGroupController;
+use App\Http\Controllers\Guest\SaveTheDateController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
