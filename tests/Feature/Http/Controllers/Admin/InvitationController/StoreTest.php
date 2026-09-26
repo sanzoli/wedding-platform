@@ -3,7 +3,6 @@
 use App\Enum\InvitationType;
 use App\Models\Guest;
 use App\Models\User;
-use Illuminate\Testing\Fluent\AssertableJson;
 
 beforeEach(function () {
     $this->actingAs(User::factory()->create());

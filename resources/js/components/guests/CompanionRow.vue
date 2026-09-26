@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import SaveTheDateButton from '@/components/admin/SaveTheDateButton.vue';
 import CompanionEditor from '@/components/guests/CompanionEditor.vue';
 import SelectGuestGroup from '@/components/guests/SelectGuestGroup.vue';
 import HighlightableText from '@/components/HighlightableText.vue';
@@ -13,7 +14,6 @@ import { Guest } from '@/types/guests';
 import { InertiaForm } from '@inertiajs/vue3';
 import { ArrowUpDown, CornerLeftUp, Pencil, Trash2 } from 'lucide-vue-next';
 import { ref } from 'vue';
-import SaveTheDateButton from '@/components/admin/SaveTheDateButton.vue';
 
 defineProps<{
     companion: Guest;

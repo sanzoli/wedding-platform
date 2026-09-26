@@ -50,5 +50,4 @@ class Invitation extends Model
             }
         );
     }
-
 }

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { Guest } from '@/types/guests';
-import { BookCheck, BookCopy, BookPlus } from 'lucide-vue-next';
 import IconButton from '@/components/IconButton.vue';
-import { ref } from 'vue';
-import { Link } from '@inertiajs/vue3';
 import { store } from '@/routes/invitations';
+import { Guest } from '@/types/guests';
+import { Link } from '@inertiajs/vue3';
+import { BookCheck, BookCopy, BookPlus } from 'lucide-vue-next';
+import { ref } from 'vue';
 
 defineProps<{
     guest: Guest;
@@ -33,7 +33,11 @@ const copySaveTheDate = async (value: string) => {
     <Link
         v-if="!guest.save_the_date"
         :href="store()"
-        :data="{ type: 'SaveTheDate', guest_id: guest.id, default_language: guest.lang }"
+        :data="{
+            type: 'SaveTheDate',
+            guest_id: guest.id,
+            default_language: guest.lang,
+        }"
     >
         <IconButton
             class="hover:bg-primary/10 hover:text-primary"
