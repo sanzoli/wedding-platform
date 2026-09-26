@@ -16,6 +16,6 @@ class InvitationController extends Controller
             'default_language' => $request->default_language,
         ]);
 
-        return back()->with('success', 'Invitation created.');
+        return back();
     }
 }
