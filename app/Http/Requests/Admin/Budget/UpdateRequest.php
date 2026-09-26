@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Requests\Admin;
+namespace App\Http\Requests\Admin\Budget;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreBudgetRequest extends FormRequest
+class UpdateRequest extends FormRequest
 {
     protected $stopOnFirstFailure = true;
 
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:60',
+            'name' => 'string|max:60',
             'draft' => 'boolean',
         ];
     }

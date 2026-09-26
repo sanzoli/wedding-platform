@@ -6,8 +6,8 @@ use App\Actions\Budget\DeleteBudget;
 use App\Actions\Budget\StoreBudget;
 use App\Actions\Budget\UpdateBudget;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\StoreBudgetRequest;
-use App\Http\Requests\Admin\UpdateBudgetRequest;
+use App\Http\Requests\Admin\Budget\StoreRequest;
+use App\Http\Requests\Admin\Budget\UpdateRequest;
 use App\Models\Budget;
 
 class BudgetController extends Controller
@@ -17,7 +17,7 @@ class BudgetController extends Controller
         return Budget::with('items')->paginate()->toResourceCollection();
     }
 
-    public function store(StoreBudgetRequest $request, StoreBudget $action)
+    public function store(StoreRequest $request, StoreBudget $action)
     {
         return $action->store($request->validated())->toResource();
     }
@@ -27,7 +27,7 @@ class BudgetController extends Controller
         return $budget->toResource();
     }
 
-    public function update(UpdateBudgetRequest $request, Budget $budget, UpdateBudget $action)
+    public function update(UpdateRequest $request, Budget $budget, UpdateBudget $action)
     {
         return $action->update($budget, $request->validated())->toResource();
     }

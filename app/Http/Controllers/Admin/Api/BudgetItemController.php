@@ -7,8 +7,8 @@ use App\Actions\Budget\Items\SearchBudgetItems;
 use App\Actions\Budget\Items\StoreBudgetItem;
 use App\Actions\Budget\Items\UpdateBudgetItem;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\StoreBudgetItemRequest;
-use App\Http\Requests\Admin\UpdateBudgetItemRequest;
+use App\Http\Requests\Admin\Budget\StoreItemRequest;
+use App\Http\Requests\Admin\Budget\UpdateItemRequest;
 use App\Models\Budget;
 use App\Models\BudgetItem;
 use Illuminate\Http\Request;
@@ -22,7 +22,7 @@ class BudgetItemController extends Controller
             ->toResourceCollection();
     }
 
-    public function store(StoreBudgetItemRequest $request, Budget $budget, StoreBudgetItem $action)
+    public function store(StoreItemRequest $request, Budget $budget, StoreBudgetItem $action)
     {
         return $action->store($budget, $request->validated())->toResource();
     }
@@ -32,7 +32,7 @@ class BudgetItemController extends Controller
         return $item->toResource();
     }
 
-    public function update(UpdateBudgetItemRequest $request, BudgetItem $item, UpdateBudgetItem $action)
+    public function update(UpdateItemRequest $request, BudgetItem $item, UpdateBudgetItem $action)
     {
         return $action->update($item, $request->validated())->toResource();
     }
