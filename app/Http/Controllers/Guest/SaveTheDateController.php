@@ -28,7 +28,7 @@ class SaveTheDateController extends Controller
         App::setLocale($language);
         syncLangFiles(['app', 'save_the_date']);
 
-        return Inertia::render('SaveTheDate', [
+        return Inertia::render('guest/SaveTheDate', [
             'id' => $invitation->id,
             'currentGuest' => $invitation->guest,
             'invitations' => new InvitationCollection(

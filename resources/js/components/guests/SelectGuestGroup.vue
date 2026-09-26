@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { change } from '@/actions/App/Http/Controllers/GuestGroupController';
+import { change } from '@/actions/App/Http/Controllers/Admin/GuestGroupController';
 import GroupAvatarCard from '@/components/guests/GroupAvatarCard.vue';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';

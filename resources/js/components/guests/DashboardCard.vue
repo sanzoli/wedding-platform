@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { index as guestsList } from '@/actions/App/Http/Controllers/GuestController';
+import { index as guestsList } from '@/actions/App/Http/Controllers/Admin/GuestController';
 import { Card } from '@/components/ui/card';
 import { Link, usePage } from '@inertiajs/vue3';
 import { Users } from 'lucide-vue-next';

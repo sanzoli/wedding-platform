@@ -2,11 +2,11 @@ import {
     destroy,
     store,
     update,
-} from '@/actions/App/Http/Controllers/GuestController';
+} from '@/actions/App/Http/Controllers/Admin/GuestController';
 import {
     leave,
     split,
-} from '@/actions/App/Http/Controllers/GuestGroupController';
+} from '@/actions/App/Http/Controllers/Admin/GuestGroupController';
 import { confirmDelete, toastError } from '@/composables/admin/useAlert';
 import { Guest } from '@/types/guests';
 import { InertiaForm, router } from '@inertiajs/vue3';

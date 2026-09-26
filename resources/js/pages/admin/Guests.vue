@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { index } from '@/actions/App/Http/Controllers/GuestController';
+import { index } from '@/actions/App/Http/Controllers/Admin/GuestController';
 import AddButton from '@/components/admin/AddButton.vue';
 import SearchBar from '@/components/admin/SearchBar.vue';
 import Table from '@/components/admin/Table.vue';
