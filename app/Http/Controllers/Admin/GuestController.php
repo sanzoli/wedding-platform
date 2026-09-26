@@ -19,6 +19,8 @@ class GuestController extends Controller
 {
     public function index(SearchGuests $search)
     {
+        syncLangFiles(['app']);
+
         $filters = request()->only('search', 'sort', 'sortBy');
 
         return Inertia::render('admin/Guests', [
