@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Guest;
+namespace App\Http\Requests\Admin\Guest;
 
 use App\Enum\Language;
 use App\Models\Guest;

@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Admin\Api;
 
 use App\Actions\Budget\Items\DeleteBudgetItem;
 use App\Actions\Budget\Items\SearchBudgetItems;
 use App\Actions\Budget\Items\StoreBudgetItem;
 use App\Actions\Budget\Items\UpdateBudgetItem;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreBudgetItemRequest;
-use App\Http\Requests\UpdateBudgetItemRequest;
+use App\Http\Requests\Admin\StoreBudgetItemRequest;
+use App\Http\Requests\Admin\UpdateBudgetItemRequest;
 use App\Models\Budget;
 use App\Models\BudgetItem;
 use Illuminate\Http\Request;

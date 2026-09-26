@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use App\Enum\Importance;
+use App\Http\Resources\Admin\BudgetItemResource;
 use Database\Factories\BudgetItemFactory;
+use Illuminate\Database\Eloquent\Attributes\UseResource;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,6 +18,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property float $expected_amount
  * @property string $budget_id
  */
+
+#[UseResource(BudgetItemResource::class)]
 class BudgetItem extends Model
 {
     /** @use HasFactory<BudgetItemFactory> */

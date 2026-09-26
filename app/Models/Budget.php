@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Http\Resources\Admin\BudgetResource;
 use Database\Factories\BudgetFactory;
+use Illuminate\Database\Eloquent\Attributes\UseResource;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +15,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $name
  * @property bool $draft
  */
+
+#[UseResource(BudgetResource::class)]
 class Budget extends Model
 {
     /** @use HasFactory<BudgetFactory> */

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Admin\Api;
 
 use App\Actions\Budget\DeleteBudget;
 use App\Actions\Budget\StoreBudget;
 use App\Actions\Budget\UpdateBudget;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreBudgetRequest;
-use App\Http\Requests\UpdateBudgetRequest;
+use App\Http\Requests\Admin\StoreBudgetRequest;
+use App\Http\Requests\Admin\UpdateBudgetRequest;
 use App\Models\Budget;
 
 class BudgetController extends Controller
