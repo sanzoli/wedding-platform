@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import SaveTheDateButton from '@/components/admin/SaveTheDateButton.vue';
 import CompanionEditor from '@/components/guests/CompanionEditor.vue';
 import SelectGuestGroup from '@/components/guests/SelectGuestGroup.vue';
 import HighlightableText from '@/components/HighlightableText.vue';
@@ -104,6 +105,10 @@ const update = (form: InertiaForm<Guest>) =>
                 >
                     <Trash2></Trash2>
                 </IconButton>
+                <SaveTheDateButton
+                    v-if="companion.full_name"
+                    :guest="companion"
+                />
             </div>
         </td>
     </tr>

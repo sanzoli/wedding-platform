@@ -31,6 +31,7 @@ test('can list guests', function () {
                     ->where('mobile', $guest->mobile)
                     ->where('lang', $guest->lang->value)
                     ->where('flag', $guest->lang->flag())
+                    ->whereNull('save_the_date')
                 )
             )
         );

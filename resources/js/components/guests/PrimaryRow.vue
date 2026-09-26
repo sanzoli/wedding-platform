@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import SaveTheDateButton from '@/components/admin/SaveTheDateButton.vue';
 import PrimaryEditor from '@/components/guests/PrimaryEditor.vue';
 import SelectGuestGroup from '@/components/guests/SelectGuestGroup.vue';
 import HighlightableText from '@/components/HighlightableText.vue';
@@ -119,6 +120,7 @@ const update = (form: InertiaForm<Guest>) =>
                 >
                     <Trash2></Trash2>
                 </IconButton>
+                <SaveTheDateButton :guest />
             </div>
         </td>
     </tr>

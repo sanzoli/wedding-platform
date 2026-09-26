@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enum\InvitationType;
 use App\Enum\Language;
 use Database\Factories\GuestFactory;
 use Illuminate\Database\Eloquent\Builder;
@@ -39,6 +40,16 @@ class Guest extends Model
     public function group(): BelongsTo
     {
         return $this->belongsTo(GuestGroup::class, 'group_id');
+    }
+
+    public function invitations()
+    {
+        return $this->hasMany(Invitation::class);
+    }
+
+    public function saveTheDate(): ?Invitation
+    {
+        return $this->invitations()->where('type', InvitationType::SaveTheDate->name)->first();
     }
 
     public function events(): MorphMany
