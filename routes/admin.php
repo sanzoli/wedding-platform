@@ -18,5 +18,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::put('guests/{guest}/group/{group}/change', 'change')->name('change');
         });
 
-    Route::apiResource('invitations', InvitationController::class)->except('index');
+    Route::post('invitations', [InvitationController::class, 'store'])->name('invitations.store');
 });

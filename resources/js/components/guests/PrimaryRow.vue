@@ -19,6 +19,7 @@ import {
     UserPlus,
 } from 'lucide-vue-next';
 import { ref } from 'vue';
+import SaveTheDateButton from '@/components/admin/SaveTheDateButton.vue';
 
 defineEmits(['addCompanion']);
 defineProps<{
@@ -119,6 +120,7 @@ const update = (form: InertiaForm<Guest>) =>
                 >
                     <Trash2></Trash2>
                 </IconButton>
+                <SaveTheDateButton :guest/>
             </div>
         </td>
     </tr>

@@ -13,6 +13,7 @@ import { Guest } from '@/types/guests';
 import { InertiaForm } from '@inertiajs/vue3';
 import { ArrowUpDown, CornerLeftUp, Pencil, Trash2 } from 'lucide-vue-next';
 import { ref } from 'vue';
+import SaveTheDateButton from '@/components/admin/SaveTheDateButton.vue';
 
 defineProps<{
     companion: Guest;
@@ -104,6 +105,10 @@ const update = (form: InertiaForm<Guest>) =>
                 >
                     <Trash2></Trash2>
                 </IconButton>
+                <SaveTheDateButton
+                    v-if="companion.full_name"
+                    :guest="companion"
+                />
             </div>
         </td>
     </tr>

@@ -8,6 +8,7 @@ export interface Guest {
     lang: 'en' | 'es' | 'pt' | '';
     flag: string;
     group_id: number;
+    save_the_date: string | null;
 }
 
 export interface GuestGroup {
