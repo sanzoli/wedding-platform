@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\GuestController;
 use App\Http\Controllers\Admin\GuestGroupController;
@@ -19,4 +20,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
 
     Route::post('invitations', [InvitationController::class, 'store'])->name('invitations.store');
+    Route::post('categories', [CategoryController::class, 'store'])->name('categories.store');
 });
