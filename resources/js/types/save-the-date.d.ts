@@ -1,3 +1,4 @@
+import { Language } from '@/types/index';
 import type { Guest } from './guests';
 
 export type ResponseOption = 'yes' | 'probably_yes' | 'probably_no' | 'no';
@@ -10,8 +11,6 @@ export interface Invitation {
     };
     response: ResponseOption | null;
 }
-
-export type Language = 'en' | 'es' | 'pt';
 
 export interface SaveTheDateProps {
     id: string;
