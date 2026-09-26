@@ -1,20 +1,622 @@
-/* Guest Surface — skeleton
- * Editorial surface for guest-facing pages (Save the Date, Our Wedding,
- * Landing, etc.). Will be populated when recovering OurWedding/Landing
- * and building Save the Date.
- *
- * Conventions documented in docs/design-system/surfaces.md.
- * Prefix: --guest-* / .guest-*
- */
+/* Guest surface (Save the Date, Our Wedding, Landing): tokens + utilities, prefixed --guest-* / .guest-*. Conventions: docs/design-system/surfaces.md */
 
 :root {
-    /* ----------------------------
-     * Guest typography aliases
-     * Mirror the shared display/heading/body roles, ready to diverge
-     * (e.g. ornamental ceremonial typeface for --guest-font-display)
-     * without touching shared tokens.
-     * ---------------------------- */
-    --guest-font-display: var(--font-display);
-    --guest-font-heading: var(--font-heading);
+    /* Body alias — mirrors the shared role, free to diverge */
     --guest-font-body: var(--font-body);
+
+    /* Eyebrow / overline */
+    --guest-eyebrow-size: 0.75rem;
+    --guest-eyebrow-tracking: 0.25em;
+
+    /* Motion */
+    --guest-enter-duration: 700ms;
+    --guest-enter-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --guest-state-transition: 160ms ease; /* tap-driven changes: faster than the entrance */
+
+    /* Collapsed header (mobile) */
+    --guest-header-height: 3.75rem;
+    --guest-header-transition: 320ms var(--guest-enter-ease);
+    --guest-hero-mobile-height: 72svh; /* short of full height so the greeting below peeks in */
+
+    /* Accent inks: --accent is for fills; these clear text contrast on light / dark grounds */
+    --guest-accent-ink: var(--p-gold-700);
+    --guest-accent-on-dark: var(--p-gold-300);
+
+    /* Brand tints — teal diluted to a temperature for cards and options */
+    --guest-tint: hsl(184 100% 15% / 0.05);
+    --guest-tint-hover: hsl(184 100% 15% / 0.09);
+    --guest-rule: hsl(184 45% 15% / 0.14);
+
+    /* Envelope — values reused outside the inline artwork */
+    --guest-parchment-edge: hsl(38 41% 33% / 0.24);
+    --guest-wax-halo: hsl(28 65% 9% / 0.42);
+    --guest-paper: hsl(
+        40 30% 97%
+    ); /* light-section ground: a whisper of old paper, so white cards lift off it */
+    --guest-island: hsl(
+        40 30% 97% / 0.82
+    ); /* the same paper, seen through: floating pills keep the page visible under them */
+    --guest-island-count: hsl(
+        184 30% 93% / 0.85
+    ); /* the hero's teal, diluted: lifts the progress pill off the paper ones */
+
+    /* Envelope opening, in play order: seal breaks → flap swings → sleeve dissolves */
+    --guest-seal-break-duration: 640ms;
+    --guest-seal-break-ease: cubic-bezier(0.5, 0, 0.2, 1);
+    --guest-flap-duration: 1050ms;
+    --guest-flap-delay: 250ms;
+    --guest-flap-ease: cubic-bezier(0.62, 0.02, 0.28, 1);
+    --guest-dissolve-duration: 800ms;
+    --guest-dissolve-delay: 950ms;
+    --guest-breathe-duration: 3800ms;
+}
+
+/* Ground: the invitation ignores the device theme — semantic tokens pinned to light primitives, even under .dark */
+/* Body keeps the app theme (shows on overscroll rebound); the surface is the inner element */
+:root:has(.guest-surface) body {
+    background-color: var(--guest-paper);
+}
+
+/* Shared by the surface and by anything portalled out of it (menus land in <body>, where the app theme rules) */
+.guest-surface,
+.guest-menu {
+    --background: var(--guest-paper);
+    --foreground: var(--p-neutral-900);
+
+    --card: var(--p-neutral-0);
+    --card-foreground: var(--p-neutral-900);
+
+    --primary: var(--p-teal-900);
+    --primary-foreground: var(--p-neutral-0);
+
+    --muted: var(--p-neutral-100);
+    --muted-foreground: var(--p-neutral-700);
+
+    --secondary: var(--p-sand-200);
+    --secondary-foreground: var(--p-neutral-900);
+
+    --popover: var(--p-neutral-0);
+    --popover-foreground: var(--p-neutral-900);
+
+    --surface: var(--p-neutral-0);
+    --surface-foreground: var(--p-neutral-900);
+    --hover: var(--p-neutral-100);
+    --hover-foreground: var(--p-neutral-900);
+
+    --accent: var(--p-gold-500);
+    --accent-foreground: var(--p-neutral-900);
+
+    --destructive: var(--p-red-600);
+    --destructive-foreground: var(--p-neutral-0);
+
+    --border: var(--p-neutral-200);
+    --input: var(--p-neutral-200);
+    --ring: var(--p-teal-700);
+}
+
+.guest-surface {
+    /* Parchment on the light ground: the envelope's mottle + fibre, multiplied over the paper colour */
+    background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.024' numOctaves='4' seed='6' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.32 0 0 0 0 0.28 0 0 0 0 0.22 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23m)'/%3E%3C/svg%3E"),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='200'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.006 0.09' numOctaves='2' seed='21' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.30 0 0 0 0 0.27 0 0 0 0 0.22 0 0 0 0.03 0'/%3E%3C/filter%3E%3Crect width='600' height='200' filter='url(%23f)'/%3E%3C/svg%3E");
+    background-blend-mode: multiply;
+}
+
+/* Portalled menus are islands too, so bg-popover has to paint the translucent paper */
+.guest-menu {
+    --popover: var(--guest-island);
+}
+
+@layer utilities {
+    /* Eyebrow / overline — colour left to the consumer */
+    .guest-eyebrow {
+        font-family: var(--guest-font-body);
+        font-size: var(--guest-eyebrow-size);
+        line-height: 1.4;
+        font-weight: 500;
+        letter-spacing: var(--guest-eyebrow-tracking);
+        text-transform: uppercase;
+    }
+
+    /* Safe areas — clear the notch and home indicator (zero where absent) */
+    .guest-safe-top {
+        padding-top: calc(1.5rem + env(safe-area-inset-top));
+    }
+
+    .guest-safe-bottom {
+        padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+    }
+
+    /* Accent text, one ink per ground */
+    .guest-accent-ink {
+        color: var(--guest-accent-ink);
+    }
+
+    .guest-accent-on-dark {
+        color: var(--guest-accent-on-dark);
+    }
+
+    /* Entrance: fade-and-rise; stagger with [animation-delay:*] */
+    @keyframes guest-fade-up {
+        from {
+            opacity: 0;
+            transform: translateY(1rem);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .guest-fade-up {
+        animation: guest-fade-up var(--guest-enter-duration)
+            var(--guest-enter-ease) both;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .guest-fade-up {
+            animation: none;
+        }
+    }
+
+    /* Collapsed header — rises into place once the consumer marks it shown */
+    .guest-sticky-header {
+        min-height: calc(var(--guest-header-height) + env(safe-area-inset-top));
+        padding-top: calc(0.5rem + env(safe-area-inset-top));
+        transform: translateY(-100%);
+        pointer-events: none;
+        transition: transform var(--guest-header-transition);
+    }
+
+    .guest-sticky-header--shown {
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .guest-sticky-header {
+            transition: none;
+        }
+    }
+
+    /* Envelope intro — single-use sleeve that dissolves to the real page */
+    .guest-envelope-stage {
+        position: fixed;
+        inset: 0;
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+        background: radial-gradient(
+            120% 120% at 50% 38%,
+            var(--p-teal-900) 0%,
+            hsl(184 96% 12%) 58%,
+            hsl(184 92% 9%) 100%
+        );
+        perspective: 1800px;
+        perspective-origin: 50% 42%;
+        transition:
+            opacity var(--guest-dissolve-duration) ease
+                var(--guest-dissolve-delay),
+            visibility 0s linear
+                calc(
+                    var(--guest-dissolve-duration) + var(--guest-dissolve-delay)
+                );
+    }
+
+    .guest-envelope-stage--opened {
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    /* Keeps the artwork's 3:2 so the flap hinge (transform-origin 50% 0) sits on the real fold */
+    .guest-envelope {
+        position: relative;
+        width: min(90vw, 1060px);
+        max-width: 100%;
+        aspect-ratio: 3 / 2;
+        transform-style: preserve-3d;
+        filter: drop-shadow(0 40px 60px hsl(185 100% 3% / 0.55));
+    }
+
+    .guest-envelope-sheet {
+        position: absolute;
+        inset: 0;
+        display: block;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+    }
+
+    .guest-envelope-flap {
+        z-index: 3;
+        transform-origin: 50% 0;
+        transform: rotateX(0deg);
+        transform-style: preserve-3d;
+        transition: transform var(--guest-flap-duration) var(--guest-flap-ease)
+            var(--guest-flap-delay);
+    }
+
+    .guest-envelope-stage--opened .guest-envelope-flap {
+        transform: rotateX(-172deg);
+    }
+
+    .guest-seal {
+        position: absolute;
+        top: 53.7%;
+        left: 50%;
+        z-index: 5;
+        display: block;
+        width: clamp(88px, 23%, 244px);
+        aspect-ratio: 1;
+        padding: 0;
+        border: 0;
+        background: none;
+        transform: translate(-50%, -50%);
+        cursor: pointer;
+        filter: drop-shadow(0 9px 12px var(--guest-wax-halo));
+        animation: guest-breathe var(--guest-breathe-duration) ease-in-out
+            infinite;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .guest-seal:focus-visible {
+        border-radius: 50%;
+        outline: 2px solid var(--accent);
+        outline-offset: 8px;
+    }
+
+    @keyframes guest-breathe {
+        0%,
+        100% {
+            transform: translate(-50%, -50%) scale(1);
+        }
+        50% {
+            transform: translate(-50%, -50%) scale(1.02);
+        }
+    }
+
+    /* Two clipped copies of one image; both polygons share the crack line — edit them together */
+    .guest-seal-half {
+        position: absolute;
+        inset: 0;
+        background: var(--guest-seal-image) center / contain no-repeat;
+        pointer-events: none;
+        transition:
+            transform var(--guest-seal-break-duration)
+                var(--guest-seal-break-ease),
+            opacity var(--guest-seal-break-duration) ease;
+    }
+
+    .guest-seal-half--left {
+        clip-path: polygon(
+            0 14%,
+            22% 27.5%,
+            40% 45.5%,
+            50% 50%,
+            63% 56.5%,
+            82% 75.5%,
+            100% 86%,
+            100% 100%,
+            0 100%
+        );
+    }
+
+    .guest-seal-half--right {
+        clip-path: polygon(
+            0 14%,
+            0 0,
+            100% 0,
+            100% 86%,
+            82% 75.5%,
+            63% 56.5%,
+            50% 50%,
+            40% 45.5%,
+            22% 27.5%
+        );
+    }
+
+    .guest-envelope-stage--opened .guest-seal-half--left {
+        transform: translate(-10%, 14%) rotate(-9deg);
+        opacity: 0;
+    }
+
+    .guest-envelope-stage--opened .guest-seal-half--right {
+        transform: translate(10%, -14%) rotate(9deg);
+        opacity: 0;
+    }
+
+    .guest-envelope-stage--opened .guest-seal,
+    .guest-envelope-stage--opened .guest-envelope-hint {
+        opacity: 0;
+        animation: none;
+        transition: opacity 380ms ease;
+    }
+
+    /* Safety-net hint: hidden, fades in after a pause */
+    .guest-envelope-hint {
+        position: absolute;
+        top: 78%;
+        left: 50%;
+        z-index: 4;
+        margin: 0;
+        color: var(--guest-accent-ink);
+        font-size: clamp(0.6rem, 1vw, 0.7rem);
+        font-weight: 500;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        opacity: 0;
+        transform: translateX(-50%);
+        transition: opacity var(--guest-enter-duration) var(--guest-enter-ease);
+    }
+
+    .guest-envelope-hint--visible {
+        opacity: 0.7;
+        animation: guest-hint-pulse var(--guest-breathe-duration) ease-in-out
+            infinite;
+    }
+
+    @keyframes guest-hint-pulse {
+        0%,
+        100% {
+            opacity: 0.45;
+        }
+        50% {
+            opacity: 0.75;
+        }
+    }
+
+    @media (max-width: 560px) {
+        .guest-envelope {
+            width: 100%;
+        }
+
+        .guest-envelope-hint {
+            top: 80%;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .guest-envelope-stage,
+        .guest-envelope-flap,
+        .guest-seal-half,
+        .guest-envelope-hint {
+            transition: none;
+        }
+
+        .guest-seal,
+        .guest-envelope-hint--visible {
+            animation: none;
+        }
+    }
+
+    /* Card: deckle edge via filter on ::before (ground + shadow only, so text never ripples); straight edge where unsupported */
+    .guest-card {
+        position: relative;
+        padding: 1.5rem;
+    }
+
+    .guest-card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 2px;
+        background-color: var(--card);
+        /* Grain rides the same pseudo-element so the deckle displaces it too */
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.31 0 0 0 0 0.27 0 0 0 0 0.21 0 0 0 0.1 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
+        box-shadow: 0 2px 10px hsl(184 45% 15% / 0.1);
+        filter: url(#guest-deckle);
+    }
+
+    .guest-card > * {
+        position: relative;
+    }
+
+    /* Menus wear the island look: --guest-menu sets --popover outside this layer, so bg-popover comes out translucent */
+    .guest-menu {
+        border-color: var(--guest-rule);
+        box-shadow: 0 1px 10px hsl(184 45% 15% / 0.07);
+        backdrop-filter: blur(10px);
+    }
+
+    /* Pills floating over the scrolling content — translucent and blurred, so the page clearly continues underneath */
+    .guest-island {
+        border: 1px solid var(--guest-rule);
+        border-radius: 9999px;
+        background-color: var(--guest-island);
+        box-shadow: 0 1px 10px hsl(184 45% 15% / 0.07);
+        backdrop-filter: blur(10px);
+    }
+
+    /* Mobile only: the counter arrives with the sticky header, not over the hero */
+    .guest-island--waiting {
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(0.5rem);
+    }
+
+    .guest-island--count {
+        transition:
+            opacity var(--guest-header-transition),
+            transform var(--guest-header-transition);
+    }
+
+    @media (min-width: 1024px) {
+        .guest-island--waiting {
+            opacity: 1;
+            visibility: visible;
+            transform: none;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .guest-island--count {
+            transition: none;
+        }
+    }
+
+    /* The progress pill is the one island that speaks: tinted with the hero's teal */
+    .guest-island--count {
+        border-color: hsl(184 45% 15% / 0.18);
+        background-color: var(--guest-island-count);
+        color: var(--primary);
+    }
+
+    /* Save status: the quietest thing on the card, next to the name. Always mounted — hiding it would reflow the name */
+    .guest-card-status {
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 0.3rem;
+        flex-shrink: 0;
+        min-width: 5.5rem;
+        min-height: 1.25rem;
+        color: var(--muted-foreground);
+        font-size: 0.75rem;
+        line-height: 1.2;
+    }
+
+    @keyframes guest-status-pulse {
+        0%,
+        100% {
+            opacity: 0.5;
+        }
+        50% {
+            opacity: 1;
+        }
+    }
+
+    .guest-card-status--saving {
+        animation: guest-status-pulse 1600ms ease-in-out infinite;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .guest-card-status--saving {
+            animation: none;
+        }
+    }
+
+    /* Option: soft resting fill so the gold selected state is the only hard edge */
+    .guest-option {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        min-height: 3rem;
+        padding-inline: 1rem;
+        border-radius: 0.75rem; /* squarer than the submit pill on purpose */
+        border: 1px solid var(--guest-rule);
+        background-color: var(--guest-tint);
+        color: var(--foreground);
+        font-size: 1rem;
+        line-height: 1.2;
+        cursor: pointer;
+        transition:
+            background-color var(--guest-state-transition),
+            border-color var(--guest-state-transition),
+            color var(--guest-state-transition);
+    }
+
+    .guest-option:hover {
+        border-color: var(--accent);
+        background-color: var(--guest-tint-hover);
+    }
+
+    /* Teal at full strength only on the icon */
+    .guest-option > svg {
+        color: var(--primary);
+    }
+
+    .guest-option:has(input:checked) > svg {
+        color: inherit;
+    }
+
+    .guest-option:has(input:checked) {
+        border-color: var(--accent);
+        background-color: var(--accent);
+        color: var(--accent-foreground);
+        font-weight: 500;
+    }
+
+    .guest-option:has(input:focus-visible) {
+        outline: 2px solid var(--ring);
+        outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .guest-option {
+            transition: none;
+        }
+    }
+
+    /* Fluid type: sized against their own column, not the viewport — the hero is only 44% of it on desktop */
+    .guest-hero,
+    .guest-content {
+        container-type: inline-size;
+    }
+
+    /* Stacked: the column is the whole viewport */
+    .guest-hero-title {
+        font-size: clamp(3rem, 9.4cqi, 4.5rem);
+    }
+
+    .guest-hero-date {
+        font-size: clamp(1.125rem, 2.6cqi, 1.25rem);
+    }
+
+    .guest-greeting {
+        font-size: clamp(2.25rem, 7.15cqi, 3rem);
+    }
+
+    /* Split: the hero column narrows to 44%, so the same sizes need a steeper ratio */
+    @media (min-width: 1024px) {
+        .guest-hero-title {
+            font-size: clamp(3.25rem, 13.5cqi, 4.5rem);
+        }
+
+        .guest-hero-date {
+            font-size: 1.25rem;
+        }
+
+        .guest-greeting {
+            font-size: 3rem;
+        }
+    }
+
+    /* Short phones: step the hero type down so the greeting still peeks in */
+    @media (max-height: 700px) and (max-width: 1023px) {
+        .guest-hero-title {
+            font-size: 2.5rem;
+        }
+
+        .guest-hero-stack {
+            margin-top: 1.5rem;
+        }
+
+        .guest-hero-monogram {
+            margin-bottom: 1rem;
+        }
+    }
+
+    /* Scroll cue nudges only after the delay and until the first scroll */
+    .guest-scroll-cue--nudge {
+        animation: guest-nudge 1800ms ease-in-out infinite;
+    }
+
+    @keyframes guest-nudge {
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(0.35rem);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .guest-scroll-cue--nudge {
+            animation: none;
+        }
+    }
 }

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
  * @property int $id
@@ -38,6 +39,11 @@ class Guest extends Model
     public function group(): BelongsTo
     {
         return $this->belongsTo(GuestGroup::class, 'group_id');
+    }
+
+    public function events(): MorphMany
+    {
+        return $this->morphMany(UserEvent::class, 'creator');
     }
 
     protected function casts(): array

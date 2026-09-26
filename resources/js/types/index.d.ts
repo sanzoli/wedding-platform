@@ -38,6 +38,8 @@ export interface User {
 
 export type BreadcrumbItemType = BreadcrumbItem;
 
+export type Language = 'en' | 'es' | 'pt';
+
 export interface SortOptions {
     type?: string | null;
     direction?: 'asc' | 'desc' | null;
