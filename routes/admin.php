@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\GuestController;
 use App\Http\Controllers\Admin\GuestGroupController;
+use App\Http\Controllers\Admin\InvitationController;
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', DashboardController::class)->name('dashboard');
@@ -16,4 +17,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('guests/group/{group}/split', 'split')->name('split');
             Route::put('guests/{guest}/group/{group}/change', 'change')->name('change');
         });
+
+    Route::apiResource('invitations', InvitationController::class)->except('index');
 });
