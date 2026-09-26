@@ -29,7 +29,6 @@ const trans = {
     ...defaults,
     ...(usePage().props.lang?.[props.module]?.table ?? {}),
 };
-
 </script>
 
 <template>

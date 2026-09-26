@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $name
  * @property bool $draft
  */
-
 #[UseResource(BudgetResource::class)]
 class Budget extends Model
 {

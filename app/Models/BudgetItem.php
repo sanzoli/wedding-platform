@@ -18,7 +18,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property float $expected_amount
  * @property string $budget_id
  */
-
 #[UseResource(BudgetItemResource::class)]
 class BudgetItem extends Model
 {
