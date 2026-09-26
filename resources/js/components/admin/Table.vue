@@ -8,16 +8,27 @@ defineEmits<{
     addItem: [];
 }>();
 
-defineProps<{
-    search?: string;
-}>();
+const props = withDefaults(
+    defineProps<{
+        search?: string;
+        module?: string;
+    }>(),
+    {
+        module: 'app',
+    },
+);
 
-// TODO: change translation to use erag/laravel-lang-sync-inertia
-const trans = usePage().props.trans.table;
-trans.no_items ??= 'No items yet';
-trans.add_button ??= 'Add your first item';
-trans.empty_search ??= 'No items match your search';
-trans.empty_search_desc ??= 'Try adjusting your search terms';
+const defaults = {
+    no_items: 'No items yet',
+    add_button: 'Add your first item',
+    empty_search: 'No items match your search',
+    empty_search_desc: 'Try adjusting your search terms',
+};
+
+const trans = {
+    ...defaults,
+    ...(usePage().props.lang?.[props.module]?.table ?? {}),
+};
 </script>
 
 <template>

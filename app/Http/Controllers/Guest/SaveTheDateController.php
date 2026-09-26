@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Guest;
 
 use App\Enum\InvitationType;
 use App\Events\StoreInvitationResponseEvent;
 use App\Events\ViewInvitationEvent;
-use App\Http\Requests\SaveInvitationResponseRequest;
-use App\Http\Resources\InvitationCollection;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Guest\SaveInvitationResponseRequest;
+use App\Http\Resources\Guest\InvitationCollection;
 use App\Models\Invitation;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\App;
@@ -27,7 +28,7 @@ class SaveTheDateController extends Controller
         App::setLocale($language);
         syncLangFiles(['app', 'save_the_date']);
 
-        return Inertia::render('SaveTheDate', [
+        return Inertia::render('guest/SaveTheDate', [
             'id' => $invitation->id,
             'currentGuest' => $invitation->guest,
             'invitations' => new InvitationCollection(

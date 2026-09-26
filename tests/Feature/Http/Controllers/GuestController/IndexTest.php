@@ -16,7 +16,7 @@ test('can list guests', function () {
     $this->get(route('guests.index'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->component('Guests')
+            ->component('admin/Guests')
             ->has('guestGroups.data', 3, fn (Assert $page) => $page
                 ->where('id', $guest->group_id)
                 ->where('count', 1)
@@ -43,7 +43,7 @@ test('can search list guests by name', function (string $search) {
     $this->get(route('guests.index', compact('search')))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->component('Guests')
+            ->component('admin/Guests')
             ->has('guestGroups.data', 1, fn (Assert $page) => $page
                 ->where('id', $guest->group_id)
                 ->where('count', 1)
@@ -73,7 +73,7 @@ test('can search list guests by companion name', function (string $search) {
     $this->get(route('guests.index', compact('search')))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->component('Guests')
+            ->component('admin/Guests')
             ->has('guestGroups.data', 1, fn (Assert $page) => $page
                 ->where('id', $companion->group_id)
                 ->has('primary', fn (Assert $page) => $page
@@ -105,7 +105,7 @@ test('can search list guests by mobile', function () {
     $this->get(route('guests.index', ['search' => '059']))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->component('Guests')
+            ->component('admin/Guests')
             ->has('guestGroups.data', 1, fn (Assert $page) => $page
                 ->where('primary.mobile', '+573005999999')
                 ->etc()
@@ -120,7 +120,7 @@ test('can search companion  by mobile', function () {
     $this->get(route('guests.index', ['search' => '059']))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->component('Guests')
+            ->component('admin/Guests')
             ->has('guestGroups.data', 1, fn (Assert $page) => $page
                 ->where('id', $companion->group_id)
                 ->has('primary', fn (Assert $page) => $page
@@ -149,7 +149,7 @@ test('can sort guest list by name', function (string $sortDirection, array $resu
     $this->get(route('guests.index', ['sort' => $sortDirection, 'sortBy' => 'first_name']))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->component('Guests')
+            ->component('admin/Guests')
             ->where('guestGroups.data.0.primary.first_name', $results[0])
             ->where('guestGroups.data.1.primary.first_name', $results[1])
             ->where('guestGroups.data.2.primary.first_name', $results[2])
@@ -171,7 +171,7 @@ test('can sort guest list by lang', function (string $sortDirection, array $resu
     $this->get(route('guests.index', ['sort' => $sortDirection, 'sortBy' => 'lang']))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->component('Guests')
+            ->component('admin/Guests')
             ->where('guestGroups.data.0.primary.lang', $results[0])
             ->where('guestGroups.data.1.primary.lang', $results[1])
             ->where('guestGroups.data.2.primary.lang', $results[2])
@@ -193,7 +193,7 @@ test('can sort guest list by mobile', function (string $sortDirection, array $re
     $this->get(route('guests.index', ['sort' => $sortDirection, 'sortBy' => 'mobile']))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->component('Guests')
+            ->component('admin/Guests')
             ->where('guestGroups.data.0.primary.mobile', $results[0])
             ->where('guestGroups.data.1.primary.mobile', $results[1])
             ->where('guestGroups.data.2.primary.mobile', $results[2])
@@ -215,7 +215,7 @@ test('can sort and search guest list', function () {
     $this->get(route('guests.index', ['search' => 'ama', 'sort' => 'asc', 'sortBy' => 'first_name']))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->component('Guests', 2)
+            ->component('admin/Guests', 2)
             ->where('guestGroups.data.0.primary.first_name', 'Amadeu')
             ->where('guestGroups.data.1.primary.first_name', 'Amanda')
         );

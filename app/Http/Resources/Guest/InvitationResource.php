@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Guest;
 
 use App\Enum\InvitationResponse;
 use App\Models\Guest;

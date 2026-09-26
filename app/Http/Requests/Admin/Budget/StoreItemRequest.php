@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin\Budget;
 
 use App\Enum\Importance;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreBudgetItemRequest extends FormRequest
+class StoreItemRequest extends FormRequest
 {
     protected $stopOnFirstFailure = true;
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { view } from '@/actions/App/Http/Controllers/SaveTheDateController';
+import { view } from '@/actions/App/Http/Controllers/Guest/SaveTheDateController';
 import LanguagePicker from '@/components/LanguagePicker.vue';
 import Envelope from '@/components/guest/SaveTheDate/Envelope.vue';
 import Greeting from '@/components/guest/SaveTheDate/Greeting.vue';

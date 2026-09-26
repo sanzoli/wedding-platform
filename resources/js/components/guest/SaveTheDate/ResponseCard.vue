@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { response } from '@/actions/App/Http/Controllers/SaveTheDateController';
+import { response } from '@/actions/App/Http/Controllers/Guest/SaveTheDateController';
 import { Invitation, type ResponseOption } from '@/types/save-the-date';
 import { vueLang } from '@erag/lang-sync-inertia/vue';
 import { router } from '@inertiajs/vue3';

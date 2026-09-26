@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Api\BudgetController;
-use App\Http\Controllers\Api\BudgetItemController;
+use App\Http\Controllers\Admin\Api\BudgetController;
+use App\Http\Controllers\Admin\Api\BudgetItemController;
 use Illuminate\Support\Facades\Route;
 
 Route::name('api.')->group(fn () => [

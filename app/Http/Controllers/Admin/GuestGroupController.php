@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Actions\Guest\Group\ChangeGuestGroup;
 use App\Actions\Guest\Group\LeaveGuestGroup;
 use App\Actions\Guest\Group\SplitGuestGroup;
+use App\Http\Controllers\Controller;
 use App\Models\Guest;
 use App\Models\GuestGroup;
 
