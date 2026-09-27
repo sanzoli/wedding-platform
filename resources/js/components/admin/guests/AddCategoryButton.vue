@@ -18,7 +18,7 @@ defineProps<{
 </script>
 
 <template>
-    <DropdownMenu>
+    <DropdownMenu v-if="options.length > 0">
         <DropdownMenuTrigger as-child>
             <button
                 type="button"

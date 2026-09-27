@@ -35,7 +35,6 @@ const options = computed(() =>
         />
 
         <AddCategoryButton
-            v-if="options.length"
             @select="$emit('add', $event)"
             :options
         />
