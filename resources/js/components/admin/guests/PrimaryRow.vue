@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import SaveTheDateButton from '@/components/admin/SaveTheDateButton.vue';
-import PrimaryEditor from '@/components/guests/PrimaryEditor.vue';
-import SelectGuestGroup from '@/components/guests/SelectGuestGroup.vue';
+import AddCategoryButton from '@/components/admin/guests/AddCategoryButton.vue';
+import Categories from '@/components/admin/guests/Categories.vue';
 import PrimaryEditor from '@/components/admin/guests/PrimaryEditor.vue';
 import SelectGuestGroup from '@/components/admin/guests/SelectGuestGroup.vue';
+import SaveTheDateButton from '@/components/admin/SaveTheDateButton.vue';
 import HighlightableText from '@/components/HighlightableText.vue';
 import IconButton from '@/components/IconButton.vue';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -12,8 +12,10 @@ import {
     splitGroup,
     updateGuest,
 } from '@/composables/admin/useGuest';
+import { useGuestCategory } from '@/composables/admin/useGuestCategory';
+import { Category } from '@/types';
 import { Guest } from '@/types/guests';
-import { InertiaForm } from '@inertiajs/vue3';
+import { InertiaForm, usePage } from '@inertiajs/vue3';
 import {
     CornerDownRight,
     Pencil,
@@ -24,11 +26,14 @@ import {
 import { ref } from 'vue';
 
 defineEmits(['addCompanion']);
-defineProps<{
+const props = defineProps<{
     guest: Guest;
     members: number;
     query?: string;
 }>();
+
+const categoriesOptions: Category[] = usePage().props.categories;
+const { addCategory, removeCategory } = useGuestCategory(props.guest);
 
 const editing = ref(false);
 const update = (form: InertiaForm<Guest>) =>
@@ -54,10 +59,25 @@ const update = (form: InertiaForm<Guest>) =>
                     </AvatarFallback>
                 </Avatar>
                 <div class="min-w-0 flex-1">
-                    <HighlightableText
-                        :text="guest.full_name"
-                        :query
-                    ></HighlightableText>
+                    <div class="flex items-center">
+                        <HighlightableText
+                            :text="guest.full_name"
+                            :query
+                        ></HighlightableText>
+                        <AddCategoryButton
+                            v-if="guest.categories?.length == 0"
+                            :guest_id="guest.id"
+                            :options="categoriesOptions"
+                            @select="addCategory"
+                        />
+                    </div>
+                    <Categories
+                        :all="categoriesOptions"
+                        :categories="guest.categories"
+                        :guest_id="guest.id"
+                        @add="addCategory"
+                        @remove="removeCategory"
+                    />
                 </div>
             </div>
         </td>

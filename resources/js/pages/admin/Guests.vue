@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { index } from '@/actions/App/Http/Controllers/Admin/GuestController';
 import AddButton from '@/components/admin/AddButton.vue';
-import SearchBar from '@/components/admin/SearchBar.vue';
-import Table from '@/components/admin/Table.vue';
-import TableHeader from '@/components/admin/TableHeader.vue';
 import CountCard from '@/components/admin/guests/CountCard.vue';
 import GroupRow from '@/components/admin/guests/GroupRow.vue';
 import PrimaryEditor from '@/components/admin/guests/PrimaryEditor.vue';
+import SearchBar from '@/components/admin/SearchBar.vue';
+import Table from '@/components/admin/Table.vue';
+import TableHeader from '@/components/admin/TableHeader.vue';
 import Heading from '@/components/Heading.vue';
 import { storeGuest } from '@/composables/admin/useGuest';
 import { useSortOptions } from '@/composables/admin/useSortOptions';

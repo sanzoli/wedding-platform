@@ -10,10 +10,10 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         Category::upsert([
-            ['name' => 'Familia', 'color' => '#deb181'],
-            ['name' => 'Amigos', 'color' => '#8fccc3'],
-            ['name' => 'David', 'color' => '#81bdde'],
-            ['name' => 'Lauana', 'color' => '#d6a0db'],
+            ['name' => 'Familia', 'color' => '#cc8131'],
+            ['name' => 'Amigos', 'color' => '#47baa9'],
+            ['name' => 'David', 'color' => '#5999bd'],
+            ['name' => 'Lauana', 'color' => '#ae5eb5'],
         ], uniqueBy: ['name'], update: ['color']);
     }
 }

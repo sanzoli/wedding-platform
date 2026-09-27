@@ -19,6 +19,7 @@ class GuestResource extends JsonResource
             'mobile' => $this->mobile ?? '',
             'lang' => $this->lang?->value ?? '',
             'flag' => $this->lang?->flag() ?? '-',
+            'categories' => $this->resource->categories,
             'save_the_date' => $this->saveTheDate()?->url,
         ];
     }
