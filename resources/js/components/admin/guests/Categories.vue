@@ -34,9 +34,6 @@ const options = computed(() =>
             can-close
         />
 
-        <AddCategoryButton
-            @select="$emit('add', $event)"
-            :options
-        />
+        <AddCategoryButton @select="$emit('add', $event)" :options />
     </div>
 </template>
