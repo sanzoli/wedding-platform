@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\GuestController;
 use App\Http\Controllers\Admin\GuestGroupController;
 use App\Http\Controllers\Admin\InvitationController;
+use App\Http\Controllers\GuestCategoryController;
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', DashboardController::class)->name('dashboard');
@@ -17,6 +18,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('guests/{guest}/group/leave', 'leave')->name('leave');
             Route::post('guests/group/{group}/split', 'split')->name('split');
             Route::put('guests/{guest}/group/{group}/change', 'change')->name('change');
+        });
+
+    Route::controller(GuestCategoryController::class)
+        ->name('guests.categories.')
+        ->group(function () {
+            Route::post('guests/{guest}/categories/{category}', 'add')->name('add');
+            Route::delete('guests/{guest}/categories/{category}', 'remove')->name('remove');
         });
 
     Route::post('invitations', [InvitationController::class, 'store'])->name('invitations.store');
