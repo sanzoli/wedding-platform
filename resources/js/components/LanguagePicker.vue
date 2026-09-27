@@ -5,8 +5,8 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import type { Language } from '@/types/save-the-date';
 import { Check, ChevronDown } from 'lucide-vue-next';
+import { Language } from '@/types';
 
 const model = defineModel<Language>({ required: true });
 
