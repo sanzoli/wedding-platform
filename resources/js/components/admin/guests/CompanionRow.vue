@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import SaveTheDateButton from '@/components/admin/SaveTheDateButton.vue';
-import CompanionEditor from '@/components/guests/CompanionEditor.vue';
-import SelectGuestGroup from '@/components/guests/SelectGuestGroup.vue';
+import CompanionEditor from '@/components/admin/guests/CompanionEditor.vue';
+import SelectGuestGroup from '@/components/admin/guests/SelectGuestGroup.vue';
 import HighlightableText from '@/components/HighlightableText.vue';
 import IconButton from '@/components/IconButton.vue';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';

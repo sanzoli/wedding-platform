@@ -2,6 +2,8 @@
 import SaveTheDateButton from '@/components/admin/SaveTheDateButton.vue';
 import PrimaryEditor from '@/components/guests/PrimaryEditor.vue';
 import SelectGuestGroup from '@/components/guests/SelectGuestGroup.vue';
+import PrimaryEditor from '@/components/admin/guests/PrimaryEditor.vue';
+import SelectGuestGroup from '@/components/admin/guests/SelectGuestGroup.vue';
 import HighlightableText from '@/components/HighlightableText.vue';
 import IconButton from '@/components/IconButton.vue';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
