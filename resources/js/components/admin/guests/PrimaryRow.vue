@@ -65,7 +65,7 @@ const update = (form: InertiaForm<Guest>) =>
                             :query
                         ></HighlightableText>
                         <AddCategoryButton
-                            v-if="!guest.categories"
+                            v-if="guest.categories?.length == 0"
                             :guest_id="guest.id"
                             :options="categoriesOptions"
                             @select="addCategory"
