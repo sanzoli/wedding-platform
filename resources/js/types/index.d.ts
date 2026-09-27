@@ -55,4 +55,5 @@ export interface QueryOptions extends Record<string, FormDataConvertible> {
     search?: string;
     sort?: 'asc' | 'desc';
     sortBy?: string;
+    categories?: number[];
 }

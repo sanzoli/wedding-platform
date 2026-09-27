@@ -22,7 +22,7 @@ class GuestController extends Controller
     {
         syncLangFiles(['app']);
 
-        $filters = request()->only('search', 'sort', 'sortBy');
+        $filters = request()->only('search', 'sort', 'sortBy', 'categories');
 
         return Inertia::render('admin/Guests', [
             'totalGuests' => Guest::count(),
