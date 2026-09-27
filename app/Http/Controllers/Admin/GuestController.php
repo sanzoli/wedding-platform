@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Guest\StoreGuestRequest;
 use App\Http\Requests\Admin\Guest\UpdateGuestRequest;
 use App\Http\Resources\Admin\GuestGroupResource;
+use App\Models\Category;
 use App\Models\Guest;
 use App\Models\GuestGroup;
 use Inertia\Inertia;
@@ -21,7 +22,7 @@ class GuestController extends Controller
     {
         syncLangFiles(['app']);
 
-        $filters = request()->only('search', 'sort', 'sortBy');
+        $filters = request()->only('search', 'sort', 'sortBy', 'categories');
 
         return Inertia::render('admin/Guests', [
             'totalGuests' => Guest::count(),
@@ -30,6 +31,7 @@ class GuestController extends Controller
             'filters' => $filters,
             'languages' => Language::displayList(),
             'selectableGroups' => GuestGroup::selectableOptions(),
+            'categories' => Category::all(['id', 'name', 'color']),
         ]);
     }
 

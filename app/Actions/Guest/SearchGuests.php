@@ -14,12 +14,15 @@ class SearchGuests
         $search = $filters['search'] ?? null;
         $sortBy = $filters['sortBy'] ?? null;
         $sort = $filters['sort'] ?? null;
+        $categories = $filters['categories'] ?? null;
 
         return Guest::when($search, fn (Builder $query) => $query
             ->whereLike('first_name', '%'.$search.'%')
             ->orWhereLike('last_name', '%'.$search.'%')
             ->orWhereLike('mobile', '%'.$search.'%')
             ->orWhereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ["%{$search}%"])
+        )->when($categories, fn (Builder $query) => $query
+            ->whereHas('categories', fn (Builder $q) => $q->whereIn('categories.id', $categories), '=', count($categories))
         )->when($sortBy, fn (Builder $query) => $query->orderBy($sortBy, $sort))
             ->latest()
             ->orderBy('group_id')

@@ -40,6 +40,12 @@ export type BreadcrumbItemType = BreadcrumbItem;
 
 export type Language = 'en' | 'es' | 'pt';
 
+export interface Category {
+    id: number;
+    name: string;
+    color: string;
+}
+
 export interface SortOptions {
     type?: string | null;
     direction?: 'asc' | 'desc' | null;
@@ -49,4 +55,5 @@ export interface QueryOptions extends Record<string, FormDataConvertible> {
     search?: string;
     sort?: 'asc' | 'desc';
     sortBy?: string;
+    categories?: number[];
 }

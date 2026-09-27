@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import { index } from '@/actions/App/Http/Controllers/Admin/GuestController';
 import AddButton from '@/components/admin/AddButton.vue';
-import SearchBar from '@/components/admin/SearchBar.vue';
+import CountCard from '@/components/admin/guests/CountCard.vue';
+import GroupRow from '@/components/admin/guests/GroupRow.vue';
+import PrimaryEditor from '@/components/admin/guests/PrimaryEditor.vue';
 import Table from '@/components/admin/Table.vue';
 import TableHeader from '@/components/admin/TableHeader.vue';
-import CountCard from '@/components/guests/CountCard.vue';
-import GroupRow from '@/components/guests/GroupRow.vue';
-import PrimaryEditor from '@/components/guests/PrimaryEditor.vue';
 import Heading from '@/components/Heading.vue';
 import { storeGuest } from '@/composables/admin/useGuest';
 import { useSortOptions } from '@/composables/admin/useSortOptions';
 import { useQueryOptions } from '@/composables/useQueryOptions';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { QueryOptions } from '@/types';
+import Filters from '@/pages/admin/Filters.vue';
+import { Category, QueryOptions } from '@/types';
 import { Guest, GuestGroup } from '@/types/guests';
 import { Head, InertiaForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
@@ -21,6 +21,7 @@ const props = defineProps<{
     totalGuests: number;
     totalAnonymous: number;
     filters: QueryOptions;
+    categories: Category[];
     guestGroups: {
         data: GuestGroup[];
     };
@@ -58,7 +59,13 @@ const addGuest = (form: InertiaForm<Guest>) =>
             <Table @add-item="adding = true" :search="queryOptions.search">
                 <template #toolbar>
                     <div class="flex items-center gap-3">
-                        <SearchBar v-model:search-value="queryOptions.search" />
+                        <Filters
+                            :categories="categories"
+                            :query-options="queryOptions"
+                            @update:query-options="
+                                Object.assign(queryOptions, $event)
+                            "
+                        />
                         <div class="ml-auto">
                             <AddButton @add="adding = true"
                                 >Add Guest</AddButton

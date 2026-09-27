@@ -1,3 +1,5 @@
+import { Category } from '@/types/index';
+
 export interface Guest {
     id: number;
     full_name: string;
@@ -8,6 +10,7 @@ export interface Guest {
     lang: 'en' | 'es' | 'pt' | '';
     flag: string;
     group_id: number;
+    categories: Category[] | null;
     save_the_date: string | null;
 }
 

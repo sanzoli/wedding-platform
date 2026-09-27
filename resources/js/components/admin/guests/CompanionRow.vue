@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import AddCategoryButton from '@/components/admin/guests/AddCategoryButton.vue';
+import Categories from '@/components/admin/guests/Categories.vue';
+import CompanionEditor from '@/components/admin/guests/CompanionEditor.vue';
+import SelectGuestGroup from '@/components/admin/guests/SelectGuestGroup.vue';
 import SaveTheDateButton from '@/components/admin/SaveTheDateButton.vue';
-import CompanionEditor from '@/components/guests/CompanionEditor.vue';
-import SelectGuestGroup from '@/components/guests/SelectGuestGroup.vue';
 import HighlightableText from '@/components/HighlightableText.vue';
 import IconButton from '@/components/IconButton.vue';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -10,15 +12,20 @@ import {
     leaveGroup,
     updateGuest,
 } from '@/composables/admin/useGuest';
+import { useGuestCategory } from '@/composables/admin/useGuestCategory';
+import { Category } from '@/types';
 import { Guest } from '@/types/guests';
-import { InertiaForm } from '@inertiajs/vue3';
+import { InertiaForm, usePage } from '@inertiajs/vue3';
 import { ArrowUpDown, CornerLeftUp, Pencil, Trash2 } from 'lucide-vue-next';
 import { ref } from 'vue';
 
-defineProps<{
+const props = defineProps<{
     companion: Guest;
     query?: string;
 }>();
+
+const categoriesOptions: Category[] = usePage().props.categories;
+const { addCategory, removeCategory } = useGuestCategory(props.companion);
 
 const editing = ref(false);
 const update = (form: InertiaForm<Guest>) =>
@@ -43,10 +50,24 @@ const update = (form: InertiaForm<Guest>) =>
                     </AvatarFallback>
                 </Avatar>
                 <div class="type-body text-foreground">
-                    <HighlightableText
-                        :text="companion.full_name"
-                        :query
-                    ></HighlightableText>
+                    <div class="flex items-center" v-if="companion.full_name">
+                        <HighlightableText
+                            :text="companion.full_name"
+                            :query
+                        ></HighlightableText>
+                        <AddCategoryButton
+                            v-if="!companion.categories"
+                            :options="categoriesOptions"
+                            @select="addCategory"
+                        />
+                    </div>
+                    <Categories
+                        :all="categoriesOptions"
+                        :categories="companion.categories"
+                        :guest_id="companion.id"
+                        @add="addCategory"
+                        @remove="removeCategory"
+                    />
                 </div>
             </div>
         </td>
