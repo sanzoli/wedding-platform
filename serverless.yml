@@ -100,6 +100,9 @@ constructs:
             #'/vendor/*': public/vendor # Uncomment if the public/vendor exists
             '/favicon.ico': public/favicon.ico
             '/robots.txt': public/robots.txt
+            '/sello.png': public/sello.png
+            '/envelop/*': public/envelop
+            '/flags/*': public/flags
 
 # Environment-specific parameters
 # See https://github.com/oss-serverless/serverless/blob/main/docs/guides/parameters.md
