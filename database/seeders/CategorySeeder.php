@@ -14,6 +14,7 @@ class CategorySeeder extends Seeder
             ['name' => 'Amigos', 'color' => '#47baa9'],
             ['name' => 'David', 'color' => '#5999bd'],
             ['name' => 'Lauana', 'color' => '#ae5eb5'],
+            ['name' => 'Padrinhos', 'color' => '#b05125'],
         ], uniqueBy: ['name'], update: ['color']);
     }
 }
